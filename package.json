@@ -1,0 +1,40 @@
+{
+    "name": "MercyHos",
+    "version": "1.0.0",
+    "description": "Hospital appointment web application",
+    "main": "app.js",
+    "scripts": {
+        "start": "nodemon server.js",
+        "start:prod": "NODE_ENV=production nodemon server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/tanxufu/MercyHos.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/tanxufu/MercyHos/issues"
+    },
+    "homepage": "https://github.com/tanxufu/MercyHos#readme",
+    "dependencies": {
+        "bcrypt": "^5.1.1",
+        "dotenv": "^16.4.5",
+        "express": "^4.21.1",
+        "mongoose": "^8.7.0",
+        "morgan": "^1.10.0",
+        "nodemon": "^3.1.7",
+        "validator": "^13.12.0"
+    },
+    "devDependencies": {
+        "eslint": "^8.57.1",
+        "eslint-config-airbnb": "^19.0.4",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-import": "^2.31.0",
+        "eslint-plugin-jsx-a11y": "^6.10.0",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-prettier": "^5.2.1",
+        "eslint-plugin-react": "^7.37.1",
+        "prettier": "^3.3.3"
+    }
+}
