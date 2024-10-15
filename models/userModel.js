@@ -5,13 +5,14 @@ const validator = require('validator');
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'Tên là bắt buộc']
+        required: [true, 'Vui lòng nhập tên']
     },
     email: {
         type: String,
-        required: [true, 'Email là bắt buộc'],
+        required: [true, 'Vui lòng nhập địa chỉ Email'],
         unique: true,
-        validate: [validator.isEmail, 'Email cung cấp phải hợp lệ']
+        validate: [validator.isEmail, 'Email cung cấp phải hợp lệ'],
+        lowercase: true
     },
     role: {
         type: String,
@@ -21,13 +22,13 @@ const userSchema = new mongoose.Schema({
     password: {
         // pass doctor: abc123456
         type: String,
-        required: [true, 'Mật khẩu là bắt buộc'],
+        required: [true, 'Vui lòng nhập mật khẩu'],
         minlength: 8,
         select: false
     },
     passwordConfirm: {
         type: String,
-        require: [true, 'Xác nhận mật khẩu là bắt buộc'],
+        require: [true, 'Vui lòng nhập xác nhận mật khẩu'],
         validate: {
             validator: function (el) {
                 return el === this.password;
