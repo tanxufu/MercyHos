@@ -3,6 +3,8 @@ const doctorController = require('../controllers/doctorController');
 
 const router = express.Router();
 
+router.route('/doctor-stats').get(doctorController.getDoctorStats);
+
 router
     .route('/')
     .get(doctorController.getAllDoctors)

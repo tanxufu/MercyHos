@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
         default: 'user'
     },
     password: {
+        // pass doctor: abc123456
         type: String,
         required: [true, 'Mật khẩu là bắt buộc'],
         minlength: 8,

@@ -1,8 +1,18 @@
 const Doctor = require('../models/doctorModel');
+const APIFeatures = require('../utils/APIFeatures');
 
 exports.getAllDoctors = async (req, res) => {
     try {
-        const doctors = await Doctor.find();
+        const features = new APIFeatures(
+            Doctor.find().populate('owner'),
+            req.query
+        )
+            .filter()
+            .sort()
+            .limitFields()
+            .paginate();
+
+        const doctors = await features.query;
 
         res.status(200).json({
             status: 'success',
@@ -22,7 +32,7 @@ exports.getAllDoctors = async (req, res) => {
 
 exports.getDoctor = async (req, res) => {
     try {
-        const doctor = await Doctor.findById(req.params.id);
+        const doctor = await Doctor.findById(req.params.id).populate('owner');
 
         res.status(200).json({
             status: 'success',
@@ -84,6 +94,37 @@ exports.deleteDoctor = async (req, res) => {
         res.status(204).json({
             status: 'success',
             data: null
+        });
+    } catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        });
+    }
+};
+
+exports.getDoctorStats = async (req, res) => {
+    try {
+        const stats = await Doctor.aggregate([
+            {
+                $match: { experience: { $gte: 2 } }
+            },
+            {
+                $group: {
+                    // _id: '$specialty',
+                    _id: null,
+                    totalDoctors: { $sum: 1 },
+                    avgExperience: { $avg: '$experience' },
+                    avgFee: { $avg: '$fee' }
+                }
+            }
+        ]);
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                stats
+            }
         });
     } catch (err) {
         res.status(404).json({
