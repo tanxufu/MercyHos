@@ -1,24 +1,30 @@
+/* eslint-disable no-unused-vars */
 const AppError = require('../utils/appError');
 
 const handleCastErrorDB = (err) => {
-    const message = `Invalid ${err.path}: ${err.value}.`;
+    const message = `Giá trị không hợp lệ ${err.path}: ${err.value}.`;
 
     return new AppError(message, 400);
 };
 
 const handleDuplicateFieldsDB = (err) => {
     const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
-    const message = `Duplicate value: ${value}`;
+    const message = `${value} Đã tồn tại!`;
 
     return new AppError(message, 400);
 };
 
 const handleValidationErrorDB = (err) => {
     const errors = Object.values(err.errors).map((el) => el.message);
-    const message = `Invalid input data. ${errors.join('. ')}`;
+    const message = `Dữ liệu không hợp lệ. ${errors.join('. ')}`;
 
     return new AppError(message, 400);
 };
+
+const handleJWTError = () => new AppError('Token không hợp lệ!', 401);
+
+const handleJWTExpiredError = (xs) =>
+    new AppError('Token hết hạn, Vui lòng đăng nhập lại!', 401);
 
 const sendErrorDev = (err, res) => {
     res.status(err.statusCode).json({
@@ -40,7 +46,7 @@ const sendErrorProd = (err, res) => {
         console.error('Error in server: ', err);
         res.status(500).json({
             status: 'error',
-            message: 'Something went wrong, please try again later.'
+            message: 'Có lỗi xảy ra, vui lòng thử lại!'
         });
     }
 };
@@ -58,6 +64,8 @@ module.exports = (err, req, res, next) => {
         if (error.code === 11000) error = handleDuplicateFieldsDB(error);
         if (error.name === 'ValidationError')
             error = handleValidationErrorDB(error);
+        if (error.name === 'JsonWebTokenError') error = handleJWTError();
+        if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
 
         sendErrorProd(error, res);
     }

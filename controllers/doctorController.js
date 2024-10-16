@@ -26,7 +26,7 @@ exports.getDoctor = catchAsync(async (req, res, next) => {
     const doctor = await Doctor.findById(req.params.id).populate('owner');
 
     if (!doctor) {
-        return next(new AppError('Can not found doctor with that id', 404));
+        return next(new AppError('Không tìm thấy doctor với id này', 404));
     }
 
     res.status(200).json({
@@ -55,7 +55,7 @@ exports.updateDoctor = catchAsync(async (req, res, next) => {
     });
 
     if (!doctor) {
-        return next(new AppError('Can not found doctor with that id', 404));
+        return next(new AppError('Không tìm thấy doctor với id này', 404));
     }
 
     res.status(200).json({
@@ -70,7 +70,7 @@ exports.deleteDoctor = catchAsync(async (req, res, next) => {
     const doctor = await Doctor.findByIdAndDelete(req.params.id);
 
     if (!doctor) {
-        return next(new AppError('Can not found doctor with that id', 404));
+        return next(new AppError('Không tìm thấy doctor với id này', 404));
     }
 
     res.status(204).json({
@@ -86,8 +86,8 @@ exports.getDoctorStats = catchAsync(async (req, res, next) => {
         },
         {
             $group: {
-                // _id: '$specialty',
-                _id: null,
+                _id: '$specialty',
+                // _id: null,
                 totalDoctors: { $sum: 1 },
                 avgExperience: { $avg: '$experience' },
                 avgFee: { $avg: '$fee' }
