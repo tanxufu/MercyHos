@@ -1,5 +1,9 @@
+import './assets/sass/_global.scss';
+import useRouter from './useRouter';
+
 function App() {
-    return <div></div>;
+    const routeElements = useRouter();
+    return <div>{routeElements}</div>;
 }
 
 export default App;
