@@ -28,7 +28,6 @@ function Login() {
     });
 
     const onSubmit = handleSubmit((data) => {
-        console.log(data);
         loginAccountMutation.mutate(data, {
             onSuccess: () => {
                 showNotification(
