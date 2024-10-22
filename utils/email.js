@@ -18,8 +18,8 @@ const sendEmail = async (options) => {
         from: 'MercyHos <admin@mercyhos.com>',
         to: options.email,
         subject: options.subject,
-        text: options.message
-        // html:
+        // text: options.message,
+        html: `${options.message}<a href=${options.resetURL}>tại đây</a>`
     };
 
     // send email

@@ -45,8 +45,8 @@ exports.signup = catchAsync(async (req, res, next) => {
         email: req.body.email,
         role: req.body.role,
         password: req.body.password,
-        passwordConfirm: req.body.passwordConfirm,
-        passwordChangeAt: req.body.passwordChangeAt
+        passwordConfirm: req.body.passwordConfirm
+        // passwordChangeAt: req.body.passwordChangeAt
     });
 
     createSendToken(newUser, 201, res);
@@ -57,13 +57,13 @@ exports.login = catchAsync(async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-        return next(new AppError('Vui lòng nhập mật khẩu và email', 400));
+        return next(new AppError('Vui lòng nhập mật khẩu và email!', 400));
     }
 
     const user = await User.findOne({ email }).select('+password');
 
     if (!user || !(await user.correctPassword(password, user.password))) {
-        return next(new AppError('Mật khẩu hoặc Email không đúng', 401));
+        return next(new AppError('Mật khẩu hoặc Email không đúng!', 401));
     }
 
     createSendToken(user, 200, res);
@@ -95,7 +95,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     // changed pass after send
     if (currentUser.changedPasswordAfter(decode.iat)) {
         return next(
-            new AppError('Mật khẩu đã đổi, vui lòng đăng nhập lại!', 401)
+            new AppError('Mật khẩu đã đổi! Vui lòng đăng nhập lại!', 401)
         );
     }
 
@@ -123,15 +123,17 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
 
-    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+    const resetURL = `${process.env.FRONTEND_URL}/resetPassword?token=${resetToken}`;
 
-    const message = `User reset password: ${resetURL}`;
+    const message = `Chào ${user.name}!
+     Vui lòng thực hiện thay đổi mật khẩu: `;
 
     try {
         await sendEmail({
             email: user.email,
-            subject: 'Reset Password Token (10m)',
-            message
+            subject: `Thay đổi Mật khẩu!! (Hiệu lực 10 phút!)`,
+            message,
+            resetURL
         });
 
         res.status(200).json({
@@ -143,7 +145,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
         user.passwordResetExpiresAt = undefined;
         await user.save({ validateBeforeSave: false });
 
-        return next(new AppError('Lỗi khi gửi email', 500));
+        return next(new AppError('Lỗi khi gửi email!', 500));
     }
 });
 
@@ -159,7 +161,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     });
 
     if (!user) {
-        return next(new AppError('Token không hợp lệ', 400));
+        return next(new AppError('Token không hợp lệ!', 400));
     }
 
     user.password = req.body.password;
@@ -178,7 +180,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
     if (
         !(await user.correctPassword(req.body.passwordCurrent, user.password))
     ) {
-        return next(new AppError('Mật khẩu hiện tại không đúng', 401));
+        return next(new AppError('Mật khẩu hiện tại không đúng!', 401));
     }
 
     user.password = req.body.password;
