@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register/Register';
 import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 function useRouter() {
     const routeElement = useRoutes([
@@ -15,12 +16,16 @@ function useRouter() {
             element: <Login />
         },
         {
-            path: '/login',
+            path: '/register',
             element: <Register />
         },
         {
-            path: '/login',
+            path: '/forgotPassword',
             element: <ForgotPassword />
+        },
+        {
+            path: '/resetPassword',
+            element: <ResetPassword />
         }
     ]);
 
