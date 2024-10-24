@@ -1,6 +1,8 @@
 @use './abstracts';
 @use './base';
 @use './components';
+@use './pages';
+
 
 // font embed
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
@@ -49,4 +51,28 @@ textarea {
 input,
 textarea {
     background: transparent;
+}
+
+.logo{
+    @include abstracts.screen(lg){
+        min-width: 100px;
+        display: block;
+    }
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    &__title{
+        @include abstracts.screen(lg){
+            font-size: 1.6rem;
+        }
+        color:#12263f;
+        font-size: 2.2rem;
+        font-weight: 700;
+        line-height: 145.455%;
+    }
+    &__img{
+        @include abstracts.screen(lg){
+            margin-left: 10px;
+        }
+    }
 }

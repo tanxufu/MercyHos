@@ -1,8 +1,6 @@
 @use '../abstracts';
 
 .home-main {
-    background: #000;
-
     @include abstracts.screen(md) {
         background: red;
     }

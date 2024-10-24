@@ -1,0 +1,73 @@
+@use '../abstracts';
+.footer {
+    background-color: #e8f4fd;
+    // position: fixed;
+    // left: 0;
+    // bottom: 0;
+    // right: 0;
+   
+    .footer-container {
+        display: flex;
+        justify-content: space-between;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .footer-section {
+        flex: 1;
+        margin-right: 20px;
+        h3 {
+            font-size: 1.8rem;
+            color: var(--text-color);
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        a {
+            display: block;
+            color: #888;
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+        a:hover {
+            color: #333;
+        }
+        .footer-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+    }
+    .brand {
+        p {
+            color: var(--text-color);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
+    }
+    .footer-logo {
+        width: 80px;
+        margin-bottom: 8px;
+    }
+    .brand{
+        margin-left: 45px;
+    }
+    .footer-title {
+        margin-right: 4px;
+    }
+    .social-icons a {
+        color: #fff;
+        background-color: #6d44ba; 
+        margin-right: 10px;
+        padding: 8px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .platform-icons a img {
+        width: 32px;
+        margin-right: 10px;
+    }
+
+    .footer-section:last-child {
+        margin-right: 0;
+    }
+}
