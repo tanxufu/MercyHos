@@ -4,43 +4,65 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
-const userSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: [true, 'Vui lòng nhập tên']
-    },
-    email: {
-        type: String,
-        required: [true, 'Vui lòng nhập địa chỉ Email'],
-        unique: true,
-        validate: [validator.isEmail, 'Email cung cấp phải hợp lệ'],
-        lowercase: true
-    },
-    role: {
-        type: String,
-        enum: ['user', 'admin', 'doctor'],
-        default: 'user'
-    },
-    password: {
-        // pass doctor: abc123456
-        type: String,
-        required: [true, 'Vui lòng nhập mật khẩu'],
-        minlength: 8,
-        select: false
-    },
-    passwordConfirm: {
-        type: String,
-        require: [true, 'Vui lòng nhập xác nhận mật khẩu'],
-        validate: {
-            validator: function (el) {
-                return el === this.password;
-            },
-            message: 'Xác nhận mật khẩu không khớp!'
+const userSchema = new mongoose.Schema(
+    {
+        name: {
+            type: String,
+            required: [true, 'Vui lòng nhập tên']
+        },
+        email: {
+            type: String,
+            required: [true, 'Vui lòng nhập địa chỉ Email'],
+            unique: true,
+            validate: [validator.isEmail, 'Email cung cấp phải hợp lệ'],
+            lowercase: true
+        },
+        role: {
+            type: String,
+            enum: ['user', 'admin', 'doctor'],
+            default: 'user'
+        },
+        password: {
+            // pass doctor: abc123456
+            type: String,
+            required: [true, 'Vui lòng nhập mật khẩu'],
+            minlength: 8,
+            select: false
+        },
+        passwordConfirm: {
+            type: String,
+            require: [true, 'Vui lòng nhập xác nhận mật khẩu'],
+            validate: {
+                validator: function (el) {
+                    return el === this.password;
+                },
+                message: 'Xác nhận mật khẩu không khớp!'
+            }
+        },
+        passwordChangeAt: Date,
+        passwordResetToken: String,
+        passwordResetExpiresAt: Date,
+        active: {
+            type: Boolean,
+            default: true
+            // select: false
         }
     },
-    passwordChangeAt: Date,
-    passwordResetToken: String,
-    passwordResetExpiresAt: Date
+    {
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true }
+    }
+);
+
+// userSchema.pre(/^find/, function (next) {
+//     this.find({ active: { $ne: false } });
+//     next();
+// });
+
+userSchema.virtual('patients', {
+    ref: 'Patients',
+    foreignField: 'owner',
+    localField: '_id'
 });
 
 // hash password

@@ -26,7 +26,7 @@ const doctorSchema = new mongoose.Schema(
         gender: {
             type: String,
             required: [true, 'Giới tính là bắt buộc'],
-            enum: ['male', 'female', 'other']
+            enum: ['Nam', 'Nữ', 'Khác']
         },
         specialty: {
             type: String,
@@ -42,8 +42,9 @@ const doctorSchema = new mongoose.Schema(
             required: [true, 'Phí là bắt buộc']
         },
         owner: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Users'
+            type: mongoose.Schema.ObjectId,
+            ref: 'Users',
+            required: [true, 'Must belong to a user']
         },
         availability: {
             type: [String],
@@ -58,8 +59,9 @@ const doctorSchema = new mongoose.Schema(
             default: Date.now(),
             select: false
         },
-        appointments: {
-            type: [Object]
+        active: {
+            type: Boolean,
+            default: true
         }
     },
     {
@@ -68,11 +70,21 @@ const doctorSchema = new mongoose.Schema(
     }
 );
 
-doctorSchema.virtual('user', {
-    ref: 'Users',
-    localField: 'owner',
-    foreignField: '_id',
-    justOne: true
+doctorSchema.virtual('appointments', {
+    ref: 'Appointments',
+    foreignField: 'doctor',
+    localField: '_id'
+});
+
+doctorSchema.pre(/^find/, function (next) {
+    if (!this.options.skipOwner) {
+        this.populate({
+            path: 'owner',
+            select: '-__v -passwordChangedAt'
+        });
+    }
+
+    next();
 });
 
 const Doctor = mongoose.model('Doctors', doctorSchema);

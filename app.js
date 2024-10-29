@@ -10,8 +10,11 @@ const cors = require('cors');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
+
 const doctorRouter = require('./routes/doctorRoutes');
 const userRouter = require('./routes/userRoutes');
+const appointmentRouter = require('./routes/appointmentRoutes');
+const patientRouter = require('./routes/patientRoutes');
 
 const app = express();
 
@@ -53,6 +56,8 @@ app.use((req, res, next) => {
 
 app.use('/api/v1/doctors', doctorRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/appointments', appointmentRouter);
+app.use('/api/v1/patients', patientRouter);
 
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

@@ -62,6 +62,12 @@ exports.login = catchAsync(async (req, res, next) => {
 
     const user = await User.findOne({ email }).select('+password');
 
+    console.log(user);
+
+    if (user.active === false) {
+        return next(new AppError('Tài khoản đã xoá!', 401));
+    }
+
     if (!user || !(await user.correctPassword(password, user.password))) {
         return next(new AppError('Mật khẩu hoặc Email không đúng!', 401));
     }

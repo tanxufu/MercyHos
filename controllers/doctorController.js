@@ -1,76 +1,23 @@
 const Doctor = require('../models/doctorModel');
-const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const factory = require('./handleFactory');
 
-exports.getAllDoctors = catchAsync(async (req, res, next) => {
-    const features = new APIFeatures(Doctor.find(), req.query)
-        .filter()
-        .sort()
-        .limitFields()
-        .paginate();
-
-    const doctors = await features.query;
-
-    res.status(200).json({
-        status: 'success',
-        requestedAt: req.requestTime,
-        total: doctors.length,
-        data: {
-            doctors
-        }
-    });
+exports.getAllDoctors = factory.getAll(Doctor);
+exports.getDoctor = factory.getOne(Doctor, {
+    path: 'appointments',
+    options: { skipDoctorPopulate: true }
 });
-
-exports.getDoctor = catchAsync(async (req, res, next) => {
-    const doctor = await Doctor.findById(req.params.id).populate('owner');
-
-    if (!doctor) {
-        return next(new AppError('Không tìm thấy doctor với id này', 404));
-    }
-
-    res.status(200).json({
-        status: 'success',
-        data: {
-            doctor
-        }
-    });
-});
-
-exports.createDoctor = catchAsync(async (req, res, next) => {
-    const newDoctor = await Doctor.create(req.body);
-
-    res.status(201).json({
-        status: 'success',
-        data: {
-            doctor: newDoctor
-        }
-    });
-});
-
-exports.updateDoctor = catchAsync(async (req, res, next) => {
-    const doctor = await Doctor.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true
-    });
-
-    if (!doctor) {
-        return next(new AppError('Không tìm thấy doctor với id này', 404));
-    }
-
-    res.status(200).json({
-        status: 'success',
-        data: {
-            doctor
-        }
-    });
-});
+exports.createDoctor = factory.createOne(Doctor);
+exports.updateDoctor = factory.updateOne(Doctor);
 
 exports.deleteDoctor = catchAsync(async (req, res, next) => {
-    const doctor = await Doctor.findByIdAndDelete(req.params.id);
+    const doctor = await Doctor.findByIdAndUpdate(req.params.id, {
+        active: false
+    });
 
     if (!doctor) {
-        return next(new AppError('Không tìm thấy doctor với id này', 404));
+        return next(new AppError('Không tìm thấy bác sĩ với id này', 404));
     }
 
     res.status(204).json({
