@@ -1,6 +1,6 @@
 @use '../abstracts';
 .home {
-    background-color: #f8f9fd;
+   background-color: #fff;
 }
 .slideshow {
     margin-left: 50px;
@@ -47,15 +47,13 @@
         gap: 16px;
         width: 20%;
     }
-    &__item:hover {
-        transition: 1s;
-        background-color: #0056b3;
-    }
+   
     &__link {
         display: flex;
         align-items: center;
         gap: 12px;
     }
+   
     &__img {
         height: 40px;
         min-width: 40px;
@@ -67,7 +65,5 @@
         line-height: 20px;
         margin-bottom: 0;
     }
-    h3:hover{
-        color: #fff;
-    }
+    
 }

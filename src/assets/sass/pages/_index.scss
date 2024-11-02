@@ -1,2 +1,6 @@
+@forward './register';
+@forward './login';
+@forward './forgot-password';
+@forward './reset-password';
 @forward './home';
 @forward './profile';

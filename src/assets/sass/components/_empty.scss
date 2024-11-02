@@ -1,0 +1,17 @@
+@use '../abstracts';
+.emptyProfile{
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 30px;
+   &__img{
+        height: 425px;
+        width: 500px;
+   }
+   &__btn{
+    margin-bottom: 80px;
+   }
+}
+.bread{
+   margin-left: 50px;
+}

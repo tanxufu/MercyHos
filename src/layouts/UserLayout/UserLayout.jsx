@@ -1,17 +1,21 @@
-import Footer from "../../components/Footer/Footer";
-import Header from "../../components/Header/Header";
-import Profile from "../../pages/Profile/Profile";
+// import PropTypes from 'prop-types';
+// import Footer from '../../components/Footer/Footer';
+// import Header from '../../components/Header/Header';
+// // import Profile from '../../pages/Profile/Profile';
 
-function UserLayout () {
-    return ( 
-        <>
-        <div>
-        <Header/>
-        <Profile/>
-        <Footer/>
-        </div>
-        </>
-     );
-}
+// function UserLayout({ children }) {
+//     return (
+//         <>
+//             <main>
+//                 <Header />
+//                 { children }
+//                 <Footer />
+//             </main>
+//         </>
+//     );
+// }
+// UserLayout.propTypes = {
+//     children: PropTypes.node,  
+// };
 
-export default UserLayout;
+// export default UserLayout;

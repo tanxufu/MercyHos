@@ -6,10 +6,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from 'react-router-dom';
 
+
 const { Search } = Input;
 const onSearch = (value, _e, info) => console.log(info?.source, value);
 
 function Header() {
+    
     return (
         <>
             <header className='header'>
@@ -59,8 +61,8 @@ function Header() {
                                 />
                             </div>
 
-                            <NavLink to={"/user"} className='top-act__avatar'>
-                                <button className='btn-avatar'>
+                            <NavLink to='/profile' className='top-act__avatar' >
+                                <button className='btn-avatar' >
                                     <Avatar
                                         shape='square'
                                         size='small'

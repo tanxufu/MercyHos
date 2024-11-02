@@ -1,13 +1,25 @@
-import { useRoutes } from 'react-router-dom';
+import { Navigate, Outlet, useRoutes } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register/Register';
 import ForgotPassword from './pages/ForgotPassword';
-import MainLayout from './layouts/MainLayout/MainLayout';
-import Admin from './layouts/AdminLayout/Admin';
-import UserLayout from './layouts/UserLayout/UserLayout';
-import Profile from './pages/Profile/Profile';
+import ResetPassword from './pages/ResetPassword';
+ import Profile from './pages/Profile';
+import MainLayout from './layouts/MainLayout';
+import EmptyPatientProfile from './components/EmptyPatientProfile';
+import SelectProfile from './components/SelectProfile/SelectProfile';
+// import DetailInfo from './components/DetailInfo/DetailInfo';
 
+
+
+const isAuthenticated = true;
+function ProtectedRoute() {
+    return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
+}
+
+function RejectedRoute() {
+    return !isAuthenticated ? <Outlet /> : <Navigate to='/' />;
+}
 
 function useRouter() {
     const routeElement = useRoutes([
@@ -15,35 +27,65 @@ function useRouter() {
             path: '/',
             element: (
                 <MainLayout>
-                    <Home/>
+                    <Home />    
                 </MainLayout>
             )
+            
         },
         {
-            path: '/login',
-            element: <Login />
+            path: '',
+            element: <ProtectedRoute />,
+            children: [
+                {
+                    path: '/profile',
+                    element: (
+                        <MainLayout>
+                            <Profile />
+                        </MainLayout>
+                    )
+                },
+                {
+                    path: '/emptyprofile',
+                    element:(
+                        <MainLayout>
+                        <EmptyPatientProfile/>
+                        </MainLayout>
+                    )
+                },
+                {
+                    path: '/selectprofile',
+                    element: (
+                        <MainLayout>
+                            <SelectProfile/>
+                        </MainLayout>
+                    )
+                }
+            ]
         },
+
+        // Rejected Route
         {
-            path: '/login',
-            element: <Register />
-        },
-        {
-            path: '/login',
-            element: <ForgotPassword />
-        },
-        {
-            path: '/admin',
-            element: <Admin/>
-        },
-        {
-            path: '/user',
-            element:(
-                <UserLayout>
-                    <Profile/>
-                </UserLayout>
-            )
+            path: '',
+            element: <RejectedRoute />,
+            children: [
+                {
+                    path: '/login',
+                    element: <Login />
+                },
+                {
+                    path: '/register',
+                    element: <Register />
+                },
+                {
+                    path: '/forgotPassword',
+                    element: <ForgotPassword />
+                },
+                {
+                    path: '/resetPassword',
+                    element: <ResetPassword />
+                }
+            ]
         }
-       
     ]);
 
     return routeElement;

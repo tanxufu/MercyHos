@@ -1,0 +1,28 @@
+@use '../abstracts';
+.profile-info{
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    background-color: #fff;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    padding: 10px;
+    .profile-item{
+        display: flex;
+        align-items: center;
+        padding: 5px;
+    }
+    .profile-title{
+        display: flex;
+        gap: 8px;
+        width: 200px;
+    }
+    .profile-desc{
+        flex: 1;
+    }
+    .profile-btn-right{
+        margin-left: 70%;
+    }
+    .profile-linkbtn{
+       margin-left: 10px;
+    }
+    
+}
