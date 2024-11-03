@@ -1,10 +1,8 @@
 // import { PhoneOutlined } from "@ant-design/icons";
-
 import {
     BellTwoTone,
     BookTwoTone,
     CloudTwoTone,
-  
     PlusOutlined
 } from '@ant-design/icons';
 import { Button } from 'antd';
@@ -12,13 +10,11 @@ import { NavLink } from 'react-router-dom';
 import ProfileInfo from '../../components/profileInfo/profileInfo';
 // import { useHistory } from 'react-router-dom';
 function Profile() {
-    
     return (
         <div className='container'>
             <div className='profile'>
                 <div className='profile__sidebar '>
                     <NavLink to={'/infor'}>
-                        
                         <Button
                             type='primary'
                             className='profile__button'
@@ -53,7 +49,7 @@ function Profile() {
 
                 <div className='profile__detail'>
                     <h2>Danh sách hồ sơ</h2>
-                    <ProfileInfo/>
+                    <ProfileInfo />
                 </div>
             </div>
         </div>
