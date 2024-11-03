@@ -1,21 +1,39 @@
-import Avatar from 'antd/es/avatar/avatar';
 import logo from '../../../public/logo.svg';
-import { Input } from 'antd';
+import { Dropdown, Input, message } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from 'react-router-dom';
 
-
 const { Search } = Input;
 const onSearch = (value, _e, info) => console.log(info?.source, value);
 
+const handleMenuClick = (e) => {
+    message.info('Click on menu item.');
+    console.log('click', e);
+};
+const items = [
+    {
+        label: 'Hồ sơ',
+        key: '1',
+        icon: <UserOutlined />
+    },
+    {
+        label: 'Đăng xuất',
+        key: '3',
+        icon: <UserOutlined />,
+        danger: true
+    }
+];
+const menuProps = {
+    items,
+    onClick: handleMenuClick
+};
 function Header() {
-    
     return (
         <>
-            <header className='header'>
-                <div className='container'>
+            <div className='container'>
+                <header className='header'>
                     <div className='top-bar'>
                         <div className='logo'>
                             <img src={logo} alt='' className='logo__img' />
@@ -61,26 +79,30 @@ function Header() {
                                 />
                             </div>
 
-                            <NavLink to='/profile' className='top-act__avatar' >
-                                <button className='btn-avatar' >
-                                    <Avatar
-                                        shape='square'
-                                        size='small'
-                                        icon={<UserOutlined />}
-                                        className='btn-avatar__icon'
-                                    />
-                                    Tài khoản
+                            <NavLink to='/profile' className='top-act__avatar'>
+                                <button className='top-act__btn'>
+                                    <Dropdown.Button
+                                        menu={menuProps}
+                                        placement='bottom'
+                                        icon={
+                                            <UserOutlined className='top-act__icon' />
+                                        }
+                                      
+                                    >
+                                        Tài khoản
+                                    </Dropdown.Button>
                                 </button>
-                                <FontAwesomeIcon
-                                    icon={faBell}
-                                    size='xl'
-                                    style={{ color: '#0187e0' }}
-                                />
                             </NavLink>
+                            <FontAwesomeIcon
+                                icon={faBell}
+                                size='xl'
+                                style={{ color: '#00a8ff' }}
+                                className='top-act__noti'
+                            />
                         </div>
                     </div>
-                </div>
-            </header>
+                </header>
+            </div>
         </>
     );
 }

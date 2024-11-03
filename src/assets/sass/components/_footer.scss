@@ -1,20 +1,18 @@
 @use '../abstracts';
 .footer {
-    background-color: #e8f4fd;
+    @include abstracts.screen(lg) {
+        display: flex;
+        flex-direction: column;
+    }
+    display: flex;
+    align-items: center;
     // position: fixed;
     // left: 0;
     // bottom: 0;
     // right: 0;
-   
-    .footer-container {
-        display: flex;
-        justify-content: space-between;
-        margin: 0 auto;
-        padding: 20px;
-    }
+
     .footer-section {
         flex: 1;
-        margin-right: 20px;
         h3 {
             font-size: 1.8rem;
             color: var(--text-color);
@@ -47,15 +45,12 @@
         width: 80px;
         margin-bottom: 8px;
     }
-    .brand{
-        margin-left: 45px;
-    }
     .footer-title {
         margin-right: 4px;
     }
     .social-icons a {
         color: #fff;
-        background-color: #6d44ba; 
+        background-color: #6d44ba;
         margin-right: 10px;
         padding: 8px;
         border-radius: 50%;

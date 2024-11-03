@@ -16,7 +16,7 @@ function ProfileInfo() {
     const [isOpen, setIsOpen] = useState(false);
     // const history = useHistory();
 
-    // // Thông tin bệnh nhân mẫu
+    // // Thông tin bệnh nhân 
     // const patient = {
     //     name: 'NGUYEN QUOC HUY',
     //     phone: '0387350605',
@@ -24,15 +24,15 @@ function ProfileInfo() {
     //         'THAN BINH-XA THAN CUU NGHIA-HUYEN CHAU THANH-TINH TIEN GIANG-VIET NAM'
     // };
 
-    // // Hàm xử lý khi nhấn nút Sửa
+    // // Hàm xử lý khi nhấn nút sửa
     // const handleEdit = () => {
     //     // Điều hướng đến trang sửa thông tin
     //     history.push('/sua-ho-so');
     // };
 
-    // // Hàm xử lý khi nhấn nút Xóa
+    // // Hàm xử lý khi nhấn nút xoá
     // const handleDelete = () => {
-    //     // Thực hiện logic xóa ở đây
+    //     // Thực hiện logic xóa 
     //     console.log('Xóa hồ sơ');
     // };
     return (

@@ -15,17 +15,17 @@ function Profile() {
     
     return (
         <div className='container'>
-            <div className='profile row'>
+            <div className='profile'>
                 <div className='profile__sidebar '>
-                    <NavLink to={''}>
-                        {' '}
+                    <NavLink to={'/infor'}>
+                        
                         <Button
                             type='primary'
                             className='profile__button'
                             icon={<PlusOutlined />}
                         >
                             Thêm hồ sơ
-                        </Button>{' '}
+                        </Button>
                     </NavLink>
                     <nav className='profile__menu'>
                         <ul className='profile__list'>

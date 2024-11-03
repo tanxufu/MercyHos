@@ -6,10 +6,9 @@ import list2 from '../../assets/icon/listgroup2.png';
 import list3 from '../../assets/icon/listgroup3.png';
 import { NavLink } from 'react-router-dom';
 
-
 function Home() {
     return (
-        <div className='container home'>
+        <div className='container'>
             <div className='slideshow'>
                 <div className='slideshow__inner'>
                     <img src={banner1} alt='' className='slideshow__left' />
@@ -31,7 +30,7 @@ function Home() {
                     </div>
                 </div>
             </div>
-            <ul className='listgroup'>
+            <ul className='listgroup '>
                 <li className='listgroup__item'>
                     <NavLink href='#!' className='listgroup__link'>
                         <div className='listgroup__wrapper'>

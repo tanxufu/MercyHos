@@ -8,6 +8,7 @@ import ResetPassword from './pages/ResetPassword';
 import MainLayout from './layouts/MainLayout';
 import EmptyPatientProfile from './components/EmptyPatientProfile';
 import SelectProfile from './components/SelectProfile/SelectProfile';
+import Information from './components/Information/Information';
 // import DetailInfo from './components/DetailInfo/DetailInfo';
 
 
@@ -57,6 +58,14 @@ function useRouter() {
                     element: (
                         <MainLayout>
                             <SelectProfile/>
+                        </MainLayout>
+                    )
+                },
+                {
+                    path: '/infor',
+                    element: (
+                        <MainLayout>
+                            <Information/>
                         </MainLayout>
                     )
                 }
