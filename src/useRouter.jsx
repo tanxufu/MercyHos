@@ -9,6 +9,7 @@ import MainLayout from './layouts/MainLayout';
 import EmptyPatientProfile from './components/EmptyPatientProfile';
 import SelectProfile from './components/SelectProfile/SelectProfile';
 import Information from './components/Information/Information';
+// import ModalInfor from './components/ModalInfor/ModalInfor';
 // import DetailInfo from './components/DetailInfo/DetailInfo';
 
 

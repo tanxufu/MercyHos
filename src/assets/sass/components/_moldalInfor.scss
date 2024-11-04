@@ -1,0 +1,22 @@
+.doctorInfor{
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    width: 500px;
+    &__item{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 5px;
+    }
+    &__title{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 5px;
+    }
+    &__img{
+        width: 20px;
+    }
+    &__desc{
+      width: 200px;
+    }
+}

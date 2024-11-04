@@ -32,7 +32,7 @@ function Home() {
             </div>
             <ul className='listgroup '>
                 <li className='listgroup__item'>
-                    <NavLink href='#!' className='listgroup__link'>
+                    <NavLink to={'/emptyprofile'} className='listgroup__link'>
                         <div className='listgroup__wrapper'>
                             <img
                                 src={list1}
