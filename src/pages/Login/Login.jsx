@@ -1,20 +1,22 @@
-import { Link } from 'react-router-dom';
-import schema from '../../utils/rules';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation } from '@tanstack/react-query';
+import { useContext } from 'react';
 
+import schema from '../../utils/rules';
 import FormGroup from '../../components/FormGroup';
 import RegisterLayoutLogo from '../../components/RegisterLayoutLogo';
-import { useMutation } from '@tanstack/react-query';
 import { loginAccount } from '../../apis/auth.api';
-import { notification } from 'antd';
 import { showNotification } from '../../utils/notification';
 import Button from '../../components/Button';
+import AppContext from '../../contexts/app.context';
 
 const loginSchema = schema.pick(['email', 'password']);
 
 function Login() {
-    const [api, contextHolder] = notification.useNotification();
+    const { setIsAuthenticated, setUser } = useContext(AppContext);
+    const navigate = useNavigate();
 
     const {
         register,
@@ -29,15 +31,15 @@ function Login() {
 
     const onSubmit = handleSubmit((data) => {
         loginAccountMutation.mutate(data, {
-            onSuccess: () => {
-                showNotification(
-                    api,
-                    'success',
-                    'Thành công!',
-                    'Đăng nhập thành công!'
-                );
+            onSuccess: (data) => {
+                setIsAuthenticated(true);
+                setUser(data.data.data.user);
+
+                navigate('/');
+                showNotification('success', 'Đăng nhập thành công!', '');
             },
             onError: (error) => {
+                console.log(error);
                 const errorMessage =
                     error.response?.data?.message ||
                     'Đăng nhập thất bại! Vui lòng thử lại sau!';
@@ -49,7 +51,6 @@ function Login() {
                     });
                 } else {
                     return showNotification(
-                        api,
                         'error',
                         'Lỗi Server!',
                         errorMessage
@@ -61,7 +62,6 @@ function Login() {
 
     return (
         <div className='login'>
-            {contextHolder}
             <RegisterLayoutLogo />
 
             <form className='login-form' noValidate onSubmit={onSubmit}>

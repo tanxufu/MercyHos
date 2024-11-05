@@ -51,3 +51,36 @@ input,
 textarea {
     background: transparent;
 }
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+
+    @include abstracts.screen(xl) {
+        gap: 12px;
+    }
+
+    &__img {
+        @include abstracts.screen(md) {
+            width: 32px;
+            height: 32px;
+        }
+    }
+
+    &__title {
+        color: var(--primary-color);
+        font-size: 2.4rem;
+        font-weight: 500;
+        line-height: 1.25;
+
+        @include abstracts.screen(lg) {
+            font-size: 2rem;
+        }
+
+        &--blue {
+            color: var(--hover-color);
+        }
+    }
+}

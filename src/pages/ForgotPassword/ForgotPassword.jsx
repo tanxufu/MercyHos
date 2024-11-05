@@ -7,14 +7,11 @@ import RegisterLayoutLogo from '../../components/RegisterLayoutLogo';
 import { useMutation } from '@tanstack/react-query';
 import { forgotPassword } from '../../apis/auth.api';
 import { showNotification } from '../../utils/notification';
-import { notification } from 'antd';
 import Button from '../../components/Button';
 
 const forgotPasswordSchema = schema.pick(['email']);
 
 function ForgotPassword() {
-    const [api, contextHolder] = notification.useNotification();
-
     const {
         register,
         handleSubmit,
@@ -32,7 +29,6 @@ function ForgotPassword() {
         forgotPasswordMutation.mutate(data, {
             onSuccess: () => {
                 showNotification(
-                    api,
                     'success',
                     'Thành công!',
                     'Gửi liên kết thành công! Vui lòng kiểm tra Email để thực hiện thay đổi mật khẩu'
@@ -50,7 +46,6 @@ function ForgotPassword() {
                     });
                 } else {
                     return showNotification(
-                        api,
                         'error',
                         'Lỗi Server!',
                         errorMessage
@@ -62,7 +57,6 @@ function ForgotPassword() {
 
     return (
         <div className='forgotpass'>
-            {contextHolder}
             <RegisterLayoutLogo />
 
             <form className='forgotpass-form' noValidate onSubmit={onSubmit}>

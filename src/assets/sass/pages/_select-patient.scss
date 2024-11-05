@@ -1,0 +1,153 @@
+@use '../abstracts';
+
+.select-patient {
+    margin-top: 4px;
+
+    &__main {
+        margin: 40px auto 60px auto;
+        max-width: 450px;
+
+        @include abstracts.screen(md) {
+            margin: 40px auto 20px auto;
+        }
+    }
+
+    &__act {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        margin-top: 30px;
+        padding-top: 10px;
+        border-top: 2px solid var(--border-color);
+    }
+}
+
+.no-patient {
+    text-align: center;
+
+    &__img {
+        width: 400px;
+        height: 295px;
+
+        @include abstracts.screen(md) {
+            width: 290px;
+            height: 185px;
+        }
+    }
+
+    p {
+        margin: 30px 0;
+        line-height: 1.5;
+        color: var(--text-color);
+    }
+}
+
+.create-patient-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    // margin-top: 30px;
+    // min-width: 100%;
+    border-radius: 4px;
+
+    img {
+        margin-top: 2px;
+        width: 18px;
+        height: 15px;
+        filter: brightness(0) saturate(100%) invert(100%) sepia(5%)
+            saturate(7466%) hue-rotate(181deg) brightness(90%) contrast(115%);
+    }
+}
+
+.has-patient {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    h1 {
+        position: relative;
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 400;
+        line-height: 1.25;
+        text-transform: uppercase;
+        color: var(--text-color);
+
+        max-width: 300px;
+
+        &::after {
+            content: '';
+            position: absolute;
+            border-bottom: 5px solid #9bf4cf;
+            bottom: 4px;
+            left: 0;
+            width: 100%;
+            z-index: -1;
+        }
+    }
+}
+
+.move-back {
+    display: flex;
+
+    padding: 20px;
+
+    font-size: 1.4rem;
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+
+    /* HTML: <div class="loader"></div> */
+    .loader {
+        width: 50px;
+        padding: 8px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--primary-color);
+        --_m: conic-gradient(#0000 10%, #000),
+            linear-gradient(#000 0 0) content-box;
+        -webkit-mask: var(--_m);
+        mask: var(--_m);
+        -webkit-mask-composite: source-out;
+        mask-composite: subtract;
+        animation: l3 1s infinite linear;
+    }
+    @keyframes l3 {
+        to {
+            transform: rotate(1turn);
+        }
+    }
+}
+
+.delete-modal {
+    font-family: 'Lexend', sans-serif;
+
+    .ant-modal-title {
+        font-size: 1.6rem;
+        color: #f62c2c;
+    }
+
+    .ant-modal-body p {
+        font-size: 1.8rem;
+        margin-top: 20px;
+    }
+
+    .ant-modal-footer {
+        margin-top: 24px;
+
+        button {
+            padding: 8px 14px;
+            border-radius: 3px;
+        }
+
+        .ant-btn-primary {
+            margin-inline-start: 12px;
+            background: #00a8ff;
+        }
+    }
+}

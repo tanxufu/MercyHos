@@ -1,0 +1,50 @@
+@use '../abstracts';
+
+.breadcrumb {
+    padding: 32px 0;
+    background: linear-gradient(45deg, #6a78d1, #00a4bd);
+
+    @include abstracts.screen(lg) {
+        padding: 0;
+        background: #1da1f2;
+    }
+
+    &__list {
+        display: flex;
+        align-items: center;
+
+        gap: 8px;
+        padding: 10px 0;
+
+        @include abstracts.screen(lg) {
+            padding: 15px 0;
+        }
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        font-weight: 200;
+        color: var(--white);
+        line-height: 1.3;
+
+        &--active {
+            font-weight: 300;
+            pointer-events: none;
+            cursor: default;
+        }
+
+        @include abstracts.screen(lg) {
+            font-size: 1.4rem;
+        }
+    }
+
+    &__icon {
+        width: 12px;
+        height: 12px;
+        filter: brightness(0) saturate(100%) invert(100%) sepia(5%)
+            saturate(7466%) hue-rotate(181deg) brightness(90%) contrast(115%);
+    }
+}

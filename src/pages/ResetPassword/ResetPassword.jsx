@@ -7,7 +7,6 @@ import RegisterLayoutLogo from '../../components/RegisterLayoutLogo';
 import schema from '../../utils/rules';
 import Button from '../../components/Button';
 import { resetPassword } from '../../apis/auth.api';
-import { notification } from 'antd';
 import { useQueryString } from '../../utils/utils';
 import { showNotification } from '../../utils/notification';
 
@@ -16,7 +15,6 @@ const resetPasswordSchema = schema.pick(['password', 'passwordConfirm']);
 function ResetPassword() {
     const queryString = useQueryString();
     const resetToken = queryString.token;
-    const [api, contextHolder] = notification.useNotification();
 
     const {
         register,
@@ -33,7 +31,6 @@ function ResetPassword() {
         ResetPasswordMutation.mutate(data, {
             onSuccess: () => {
                 showNotification(
-                    api,
                     'success',
                     'Thành công!',
                     'Mật khẩu đã được đặt lại thành công!'
@@ -44,19 +41,13 @@ function ResetPassword() {
                     error.response?.data?.message ||
                     'Có lỗi xảy ra! Vui lòng thử lại sau!';
 
-                return showNotification(
-                    api,
-                    'error',
-                    'Lỗi Server!',
-                    errorMessage
-                );
+                return showNotification('error', 'Lỗi Server!', errorMessage);
             }
         });
     });
 
     return (
         <div className='resetpass'>
-            {contextHolder}
             <RegisterLayoutLogo />
 
             <form className='resetpass-form' noValidate onSubmit={onSubmit}>

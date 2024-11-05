@@ -1,15 +1,17 @@
-import { Link } from 'react-router-dom';
-import schema from '../../utils/rules';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
-import { notification } from 'antd';
+
+import schema from '../../utils/rules';
 import { showNotification } from '../../utils/notification';
 
 import RegisterLayoutLogo from '../../components/RegisterLayoutLogo/RegisterLayoutLogo';
 import FormGroup from '../../components/FormGroup';
 import { registerAccount } from '../../apis/auth.api';
 import Button from '../../components/Button';
+import { useContext } from 'react';
+import AppContext from '../../contexts/app.context';
 
 const registerSchema = schema.pick([
     'name',
@@ -19,7 +21,8 @@ const registerSchema = schema.pick([
 ]);
 
 function Register() {
-    const [api, contextHolder] = notification.useNotification();
+    const { setIsAuthenticated, setUser } = useContext(AppContext);
+    const navigate = useNavigate();
 
     const {
         register,
@@ -34,16 +37,14 @@ function Register() {
 
     const onSubmit = handleSubmit((data) => {
         registerAccountMutation.mutate(data, {
-            onSuccess: () => {
-                showNotification(
-                    api,
-                    'success',
-                    'Thành công!',
-                    'Tạo tài khoản thành công!'
-                );
+            onSuccess: (data) => {
+                // console.log(data);
+                setIsAuthenticated(true);
+                setUser(data.data.data.user);
+                navigate('/');
             },
             onError: (error) => {
-                console.log(error);
+                // console.log(error);
                 const errorMessage =
                     error.response?.data?.message ||
                     'Đăng ký thất bại! Vui lòng thử lại sau!';
@@ -55,7 +56,6 @@ function Register() {
                     });
                 } else {
                     return showNotification(
-                        api,
                         'error',
                         'Lỗi Server!',
                         errorMessage
@@ -67,7 +67,6 @@ function Register() {
 
     return (
         <div className='register'>
-            {contextHolder}
             <RegisterLayoutLogo />
 
             <form className='register-form' onSubmit={onSubmit} noValidate>

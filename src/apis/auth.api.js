@@ -8,6 +8,10 @@ export const loginAccount = (body) => {
     return http.post('/v1/users/login', body);
 };
 
+export const logoutAccount = () => {
+    return http.post('/v1/users/logout');
+};
+
 export const forgotPassword = (body) => {
     return http.post('/v1/users/forgotPassword', body);
 };
