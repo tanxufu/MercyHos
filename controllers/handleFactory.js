@@ -27,6 +27,9 @@ exports.getAll = (Model) =>
         let filter = {};
         if (req.params.doctorId) filter = { doctor: req.params.doctorId };
         if (req.params.patientId) filter = { patient: req.params.patientId };
+        if (req.params.userId) filter = { owner: req.params.userId };
+
+        // console.log(filter);
 
         const features = new APIFeatures(Model.find(filter), req.query)
             .filter()
@@ -34,6 +37,10 @@ exports.getAll = (Model) =>
             .limitFields()
             .paginate();
         const document = await features.query;
+
+        if (!document) {
+            return next(new AppError('No documents found', 404));
+        }
 
         res.status(200).json({
             status: 'success',

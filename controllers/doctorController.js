@@ -27,9 +27,16 @@ exports.deleteDoctor = catchAsync(async (req, res, next) => {
 });
 
 exports.getDoctorStats = catchAsync(async (req, res, next) => {
+    const specialty = req.query.specialty || '';
+    // console.log('Requested specialty:', specialty);
+
+    const matchCondition = specialty
+        ? { specialty: { $regex: specialty, $options: 'i' } }
+        : {};
+
     const stats = await Doctor.aggregate([
         {
-            $match: { experience: { $gte: 2 } }
+            $match: matchCondition
         },
         {
             $group: {
@@ -41,6 +48,10 @@ exports.getDoctorStats = catchAsync(async (req, res, next) => {
             }
         }
     ]);
+
+    if (!stats || stats.length === 0) {
+        return next(new AppError('Không tìm thấy kết quả!', 404));
+    }
 
     res.status(200).json({
         status: 'success',

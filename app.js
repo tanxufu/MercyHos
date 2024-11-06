@@ -1,12 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const express = require('express');
 const morgan = require('morgan');
-const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cors = require('cors');
+// const rateLimit = require('express-rate-limit');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -35,12 +35,12 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // rate limiter request
-const limiter = rateLimit({
-    max: 100,
-    windowMs: 60 * 60 * 1000,
-    message: 'Quá nhiều yêu cầu!!'
-});
-app.use(limiter);
+// const limiter = rateLimit({
+//     max: 100,
+//     windowMs: 60 * 60 * 1000,
+//     message: 'Quá nhiều yêu cầu!!'
+// });
+// app.use(limiter);
 
 app.use(express.json());
 

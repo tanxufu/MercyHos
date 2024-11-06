@@ -3,15 +3,15 @@ const authController = require('../controllers/authController');
 const patientController = require('../controllers/patientController');
 const appointmentRouter = require('./appointmentRoutes');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.use('/:patientId/appointments', appointmentRouter);
 
 router.use(authController.protect);
 router
     .route('/')
-    .get(authController.restrictTo('admin'), patientController.getAllPatients)
-    .post(patientController.createPatient);
+    .get(patientController.getAllPatients)
+    .post(patientController.setUserId, patientController.createPatient);
 
 router
     .route('/:id')

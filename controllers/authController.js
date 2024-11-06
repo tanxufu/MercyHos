@@ -62,7 +62,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
     const user = await User.findOne({ email }).select('+password');
 
-    console.log(user);
+    // console.log(user);
 
     if (user.active === false) {
         return next(new AppError('Tài khoản đã xoá!', 401));
@@ -75,16 +75,34 @@ exports.login = catchAsync(async (req, res, next) => {
     createSendToken(user, 200, res);
 });
 
+exports.logout = catchAsync(async (req, res, next) => {
+    res.cookie('jwt', '', {
+        expires: new Date(Date.now()),
+        httpOnly: true
+    });
+
+    res.status(200).json({
+        status: 'success',
+        message: 'Đăng xuất thành công!'
+    });
+});
+
 // protect
 exports.protect = catchAsync(async (req, res, next) => {
+    const cookies = req.headers.cookie;
     let token;
 
-    if (
-        req.headers.authorization &&
-        req.headers.authorization.startsWith('Bearer')
-    ) {
-        token = req.headers.authorization.split(' ')[1];
+    if (cookies) {
+        const cookieObj = cookies.split('; ').reduce((acc, cookie) => {
+            const [name, value] = cookie.split('=');
+            acc[name] = value;
+            return acc;
+        }, {});
+
+        token = cookieObj.jwt;
     }
+
+    // console.log(token);
 
     if (!token) {
         return next(new AppError('Bạn chưa đăng nhập!', 401));

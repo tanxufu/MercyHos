@@ -1,16 +1,21 @@
 const express = require('express');
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
+const patientRouter = require('./patientRoutes');
 
 const router = express.Router();
+
+router.use('/:userId/patients', patientRouter);
 
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
+router.post('/logout', authController.logout);
 // protected below
 router.use(authController.protect);
+
 router.patch('/updateMyPassword', authController.updatePassword);
 router.get('/me', userController.getMe, userController.getUser);
 router.patch('/updateMe', userController.updateMe);

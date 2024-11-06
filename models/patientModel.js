@@ -43,15 +43,15 @@ const patientSchema = mongoose.Schema(
         },
         province: {
             type: String,
-            required: [true, 'Vui lòng chọn tỉnh/thành phố']
+            required: [true, 'Vui lòng nhập tỉnh/thành phố']
         },
         district: {
             type: String,
-            required: [true, 'Vui lòng chọn quận/huyện']
+            required: [true, 'Vui lòng nhập quận/huyện']
         },
         ward: {
             type: String,
-            required: [true, 'Vui lòng chọn phường/xã']
+            required: [true, 'Vui lòng nhập phường/xã']
         },
         address: {
             type: String,
