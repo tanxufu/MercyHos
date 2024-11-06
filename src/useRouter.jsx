@@ -2,7 +2,7 @@
 import { Navigate, Outlet, useRoutes } from 'react-router-dom';
 import { useContext, lazy, Suspense } from 'react';
 
-import AppContext from './contexts/app.context';
+import AppContext from './contexts/app.context.jsx';
 import MainLayout from './layouts/MainLayout';
 
 const Home = lazy(() => import('./pages/Home'));
@@ -14,6 +14,9 @@ const Profile = lazy(() => import('./pages/Profile'));
 const SelectPatient = lazy(() => import('./pages/SelectPatient'));
 const CreateProfile = lazy(() => import('./pages/CreateProfile'));
 const UpdatePatient = lazy(() => import('./pages/UpdatePatient'));
+const SelectSpecialty = lazy(() => import('./pages/SelectSpecialty'));
+const SelectDoctor = lazy(() => import('./pages/SelectDoctor'));
+const SelectService = lazy(() => import('./pages/SelectService'));
 
 function ProtectedRoute() {
     const { isAuthenticated } = useContext(AppContext);
@@ -73,6 +76,36 @@ function useRouter() {
                         <MainLayout>
                             <Suspense>
                                 <UpdatePatient />
+                            </Suspense>
+                        </MainLayout>
+                    )
+                },
+                {
+                    path: '/select-specialty',
+                    element: (
+                        <MainLayout>
+                            <Suspense>
+                                <SelectSpecialty />
+                            </Suspense>
+                        </MainLayout>
+                    )
+                },
+                {
+                    path: '/select-doctor',
+                    element: (
+                        <MainLayout>
+                            <Suspense>
+                                <SelectDoctor />
+                            </Suspense>
+                        </MainLayout>
+                    )
+                },
+                {
+                    path: '/select-service',
+                    element: (
+                        <MainLayout>
+                            <Suspense>
+                                <SelectService />
                             </Suspense>
                         </MainLayout>
                     )

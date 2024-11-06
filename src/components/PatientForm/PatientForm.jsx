@@ -12,7 +12,7 @@ import FormGroup from '../../components/FormGroup';
 import Button from '../../components/Button';
 import createPatient from '../../assets/icons/create-patient.svg';
 import resetIcon from '../../assets/icons/reset.svg';
-import AppContext from '../../contexts/app.context';
+import AppContext from '../../contexts/app.context.jsx';
 import {
     createPatientOnUser,
     getPatient,
@@ -54,6 +54,7 @@ function PatientForm({ title, isEdit = false }) {
         enabled: isEdit
     });
     const patient = data?.data?.data?.data;
+    console.log(patient);
 
     // fill form with data: patient
     useEffect(() => {
@@ -89,7 +90,9 @@ function PatientForm({ title, isEdit = false }) {
             showNotification(
                 'error',
                 'Lỗi Server!',
-                'Tạo hồ sơ thất bại. Vui lòng thử lại sau!'
+                isEdit
+                    ? 'Cập nhật thất bại. Vui lòng thử lại sau!'
+                    : 'Tạo hồ sơ thất bại. Vui lòng thử lại sau!'
             );
         }
     });

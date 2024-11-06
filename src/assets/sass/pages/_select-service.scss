@@ -1,0 +1,46 @@
+.select-service {
+    margin-top: 4px;
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 1.4rem;
+        line-height: 1.5;
+        color: var(--text-color);
+
+        th,
+        td {
+            padding: 16px 12px;
+            font-weight: 300;
+            text-align-last: left;
+            vertical-align: middle;
+
+            span {
+                display: block;
+                margin-top: 6px;
+                font-style: italic;
+                font-weight: 400;
+            }
+        }
+
+        th {
+            // text-transform: uppercase;
+            font-weight: 500;
+            border-bottom: 2px solid #dee2d6;
+            white-space: no-wrap;
+        }
+    }
+
+    &__btn {
+        padding: 4px 20px;
+        border-radius: 3px;
+        background: #f5f6ff;
+        color: #0352cc;
+        transition: 0.3s ease;
+
+        &:hover {
+            opacity: 0.7;
+            background: #f5f6ff;
+        }
+    }
+}

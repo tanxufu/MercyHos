@@ -100,7 +100,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 400px;
+    min-height: 200px;
 
     /* HTML: <div class="loader"></div> */
     .loader {
@@ -128,17 +128,17 @@
     font-family: 'Lexend', sans-serif;
 
     .ant-modal-title {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         color: #f62c2c;
     }
 
     .ant-modal-body p {
-        font-size: 1.8rem;
-        margin-top: 20px;
+        font-size: 1.6rem;
+        margin-top: 16px;
     }
 
     .ant-modal-footer {
-        margin-top: 24px;
+        margin-top: 32px;
 
         button {
             padding: 8px 14px;

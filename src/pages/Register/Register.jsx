@@ -11,7 +11,7 @@ import FormGroup from '../../components/FormGroup';
 import { registerAccount } from '../../apis/auth.api';
 import Button from '../../components/Button';
 import { useContext } from 'react';
-import AppContext from '../../contexts/app.context';
+import AppContext from '../../contexts/app.context.jsx';
 
 const registerSchema = schema.pick([
     'name',

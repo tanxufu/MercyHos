@@ -1,0 +1,47 @@
+.select-doctor {
+    margin-top: 4px;
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        margin: 2px 5px 16px;
+        padding: 10px 20px;
+
+        border-radius: 8px;
+        box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 5px;
+        transition: 0.4s ease;
+
+        &:hover {
+            box-shadow: rgb(29, 161, 242) 0px 0px 5px;
+        }
+
+        div {
+            display: flex;
+            align-items: center;
+
+            margin-bottom: 8px;
+            font-size: 1.4rem;
+            line-height: 1.5;
+            font-weight: 300;
+        }
+
+        &--icon {
+            filter: brightness(0) saturate(100%) invert(12%) sepia(87%)
+                saturate(4649%) hue-rotate(196deg) brightness(100%)
+                contrast(102%) !important;
+        }
+
+        img {
+            height: 16px;
+            width: 14px;
+            margin-right: 12px;
+            filter: brightness(0) saturate(100%) invert(58%) sepia(0%)
+                saturate(0%) hue-rotate(175deg) brightness(91%) contrast(77%);
+        }
+
+        h3 {
+            color: #00559c;
+            font-weight: 500;
+        }
+    }
+}

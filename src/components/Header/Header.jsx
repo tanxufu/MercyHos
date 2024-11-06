@@ -12,7 +12,7 @@ import userProfile from '../../assets/icons/user-profile.svg';
 import logout from '../../assets/icons/logout.svg';
 import ticket from '../../assets/icons/ticket.svg';
 import Button from '../Button';
-import AppContext from '../../contexts/app.context';
+import AppContext from '../../contexts/app.context.jsx';
 
 // import { Input } from 'antd';
 import { useContext, useState } from 'react';

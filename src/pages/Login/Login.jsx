@@ -10,7 +10,7 @@ import RegisterLayoutLogo from '../../components/RegisterLayoutLogo';
 import { loginAccount } from '../../apis/auth.api';
 import { showNotification } from '../../utils/notification';
 import Button from '../../components/Button';
-import AppContext from '../../contexts/app.context';
+import AppContext from '../../contexts/app.context.jsx';
 
 const loginSchema = schema.pick(['email', 'password']);
 

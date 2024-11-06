@@ -3,7 +3,7 @@ import { useContext, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Modal } from 'antd';
 
-import AppContext from '../../contexts/app.context';
+import AppContext from '../../contexts/app.context.jsx';
 import Button from '../../components/Button';
 import patientProfile from '../../assets/images/patientProfile.png';
 import createPatient from '../../assets/icons/create-patient.svg';
@@ -37,6 +37,7 @@ function SelectPatient() {
     // patients
     const patients = data?.data?.data?.data;
     const activePatients = patients?.filter((patient) => patient.active) || [];
+    // console.log(activePatients);
 
     const deletePatientMutation = useMutation({
         mutationFn: () => deletePatient(activePatientCard),
@@ -59,6 +60,16 @@ function SelectPatient() {
         if (activePatientCard !== id) {
             setActivePatientCard(id);
         }
+    };
+
+    const handleSavePatientId = (patientId) => {
+        const apointmentData = {
+            patientId
+        };
+        localStorage.setItem(
+            'appointmentPatient',
+            JSON.stringify(apointmentData)
+        );
     };
 
     return (
@@ -90,7 +101,7 @@ function SelectPatient() {
                         </div>
                     )}
 
-                    {activePatients?.length === 0 && (
+                    {!activePatients && (
                         <div className='no-patient'>
                             <img
                                 src={patientProfile}
@@ -217,7 +228,15 @@ function SelectPatient() {
                                                     Sửa
                                                 </Button>
 
-                                                <Button className='patient-card__btn patient-card__next'>
+                                                <Button
+                                                    to={`/select-specialty`}
+                                                    onClick={() =>
+                                                        handleSavePatientId(
+                                                            activePatientCard
+                                                        )
+                                                    }
+                                                    className='patient-card__btn patient-card__next'
+                                                >
                                                     Tiếp tục
                                                     <img
                                                         src={arrowRight}

@@ -1,4 +1,4 @@
-// import { StrictMode } from 'react';
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import { BrowserRouter } from 'react-router-dom';
@@ -16,14 +16,14 @@ const queryClient = new QueryClient({
 });
 
 createRoot(document.getElementById('root')).render(
-    // <StrictMode>
-    <BrowserRouter>
-        <QueryClientProvider client={queryClient}>
-            <AppProvider>
-                <App />
-            </AppProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-    </BrowserRouter>
-    // </StrictMode>
+    <StrictMode>
+        <BrowserRouter>
+            <QueryClientProvider client={queryClient}>
+                <AppProvider>
+                    <App />
+                </AppProvider>
+                <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
+        </BrowserRouter>
+    </StrictMode>
 );

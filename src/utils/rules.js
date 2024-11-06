@@ -20,25 +20,25 @@ const schema = yup.object({
         .string()
         .required('Vui lòng nhập xác nhận mật khẩu!')
         .oneOf([yup.ref('password')], 'Vui lòng nhập đúng mật khẩu!'),
-    dob: yup.date().required('Vui lòng nhập ngày sinh'),
+    dob: yup.date().required('Vui lòng nhập ngày sinh!'),
     phone: yup
         .string()
-        .required('Vui lòng nhập số điện thoại')
+        .required('Vui lòng nhập số điện thoại!')
         .matches(
             /(84|0[3|5|7|8|9])+([0-9]{8})\b/g,
-            'Vui lòng nhập số điện thoại hợp lệ'
+            'Vui lòng nhập số điện thoại hợp lệ!'
         ),
     gender: yup
         .string()
-        .required('Vui lòng chọn giới tính')
-        .oneOf(['Nam', 'Nữ', 'Khác'], `Vui lòng nhập 'Nam'  'Nữ' hoặc 'Khác'`),
-    occupation: yup.string().required('Vui lòng nhập nghề nghiệp'),
+        .required('Vui lòng chọn giới tính!')
+        .oneOf(['Nam', 'Nữ', 'Khác'], `Vui lòng nhập 'Nam'  'Nữ' hoặc 'Khác'!`),
+    occupation: yup.string().required('Vui lòng nhập nghề nghiệp!'),
     idCard: yup.string().default(''),
     ethnicity: yup.string().default(''),
-    province: yup.string().required('Vui lòng nhập Tỉnh/Thành phố'),
-    district: yup.string().required('Vui lòng nhập Quận/Huyện'),
-    ward: yup.string().required('Vui lòng nhập Phường/Xã'),
-    address: yup.string().required('Vui lòng nhập địa chỉ')
+    province: yup.string().required('Vui lòng nhập Tỉnh/Thành phố!'),
+    district: yup.string().required('Vui lòng nhập Quận/Huyện!'),
+    ward: yup.string().required('Vui lòng nhập Phường/Xã!'),
+    address: yup.string().required('Vui lòng nhập địa chỉ!')
 });
 
 export default schema;
