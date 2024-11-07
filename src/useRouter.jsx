@@ -17,6 +17,8 @@ const UpdatePatient = lazy(() => import('./pages/UpdatePatient'));
 const SelectSpecialty = lazy(() => import('./pages/SelectSpecialty'));
 const SelectDoctor = lazy(() => import('./pages/SelectDoctor'));
 const SelectService = lazy(() => import('./pages/SelectService'));
+const SelectDate = lazy(() => import('./pages/SelectDate'));
+const ConfirmAppointment = lazy(() => import('./pages/ConfirmAppointment'));
 
 function ProtectedRoute() {
     const { isAuthenticated } = useContext(AppContext);
@@ -106,6 +108,26 @@ function useRouter() {
                         <MainLayout>
                             <Suspense>
                                 <SelectService />
+                            </Suspense>
+                        </MainLayout>
+                    )
+                },
+                {
+                    path: '/select-date',
+                    element: (
+                        <MainLayout>
+                            <Suspense>
+                                <SelectDate />
+                            </Suspense>
+                        </MainLayout>
+                    )
+                },
+                {
+                    path: '/confirm-appointment',
+                    element: (
+                        <MainLayout>
+                            <Suspense>
+                                <ConfirmAppointment />
                             </Suspense>
                         </MainLayout>
                     )

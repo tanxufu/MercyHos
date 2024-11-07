@@ -74,37 +74,51 @@ function SelectService() {
                                 <h2>Vui lòng chọn dịch vụ</h2>
                                 <div className='select__wrapper'>
                                     <div className='select__list-group'>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Tên dịch vụ</th>
-                                                    <th>Giá</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>
-                                                        Khám dịch vụ
-                                                        <span>
-                                                            {cacheData.doctorAvailability.join(
-                                                                ', '
-                                                            )}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span>150,000đ</span>
-                                                    </td>
-                                                    <td>
-                                                        <Button className='select-service__btn'>
-                                                            Chọn
-                                                        </Button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        {!cacheData && (
+                                            <div className='select__search-error'>
+                                                Không có dữ liệu!
+                                            </div>
+                                        )}
+
+                                        {cacheData && (
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Tên dịch vụ</th>
+                                                        <th>Giá</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+
+                                                        <td>
+                                                            Khám dịch vụ
+                                                            <span>
+                                                                {cacheData?.doctorAvailability.join(
+                                                                    ', '
+                                                                )}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                150,000đ
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <Button
+                                                                to='/select-date'
+                                                                className='select-service__btn'
+                                                            >
+                                                                Chọn
+                                                            </Button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        )}
                                     </div>
                                 </div>
 

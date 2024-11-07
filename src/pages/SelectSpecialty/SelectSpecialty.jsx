@@ -100,11 +100,17 @@ function SelectSpecialty() {
                                     </div>
                                     <div className='select__list-group'>
                                         <ul className='select-specialty__list'>
+                                            {!patientId && (
+                                                <div className='select__search-error'>
+                                                    Không có dữ liệu!
+                                                </div>
+                                            )}
                                             {isPending && (
                                                 <div className='loading'>
                                                     <div className='loader'></div>
                                                 </div>
                                             )}
+
                                             {specialty?.map((specialty) => {
                                                 return (
                                                     <Link

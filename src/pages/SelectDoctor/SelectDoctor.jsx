@@ -34,7 +34,7 @@ function SelectDoctor() {
                 debouncedSearchQuery || ''
             );
         },
-        enabled: !!cacheData.patientId
+        enabled: !!cacheData?.patientId
     });
     const doctorsBySpecialty = data?.data?.data?.data;
 
@@ -125,6 +125,11 @@ function SelectDoctor() {
                                     </div>
                                     <div className='select__list-group'>
                                         <ul className='select-doctor__list'>
+                                            {!cacheData && (
+                                                <div className='select__search-error'>
+                                                    Không có dữ liệu!
+                                                </div>
+                                            )}
                                             {isPending && (
                                                 <div className='loading'>
                                                     <div className='loader'></div>

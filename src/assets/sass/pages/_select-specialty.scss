@@ -6,6 +6,10 @@
     }
 
     &__main {
+        &--bot {
+            margin-top: 20px;
+        }
+
         h2 {
             padding: 12px 20px;
             line-height: 1.5;

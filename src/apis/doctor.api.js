@@ -7,3 +7,7 @@ export const getDoctorStats = (searchQuery) => {
 export const getDoctorsBySpecialty = (specialty, searchQuery) => {
     return http.get(`/v1/doctors?specialty=${specialty}&search=${searchQuery}`);
 };
+
+export const getAppointmentOnDoctors = (doctorId) => {
+    return http.get(`/v1/doctors/${doctorId}/appointments`);
+};

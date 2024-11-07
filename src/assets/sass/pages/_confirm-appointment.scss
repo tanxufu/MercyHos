@@ -1,0 +1,111 @@
+@use '../abstracts';
+
+.confirm-appointment {
+    margin-top: 4px;
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 1.4rem;
+        line-height: 1.5;
+        color: var(--text-color);
+
+        th,
+        td {
+            padding: 16px 12px;
+            font-weight: 300;
+            text-align-last: left;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        th {
+            // text-transform: uppercase;
+            font-weight: 500;
+            border-bottom: 2px solid #dee2d6;
+            white-space: no-wrap;
+        }
+    }
+
+    &__patient {
+        display: flex;
+        flex-direction: unset;
+        flex-wrap: wrap;
+
+        li {
+            display: flex;
+            align-items: flex-start;
+            width: 50%;
+            margin-bottom: 14px;
+            padding-right: 15px;
+
+            font-size: 1.4rem;
+            font-weight: 300;
+            line-height: 1.5;
+            color: var(--text-color);
+
+            @include abstracts.screen(md) {
+                width: 100%;
+            }
+
+            div {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                min-width: 130px;
+
+                font-weight: 200;
+                color: #627792;
+
+                img {
+                    width: 16px;
+                    height: 18px;
+                    filter: brightness(0) saturate(100%) invert(44%) sepia(45%)
+                        saturate(254%) hue-rotate(173deg) brightness(95%)
+                        contrast(93%);
+                }
+            }
+        }
+    }
+
+    &__act {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 3px;
+
+        img {
+            animation: bounceAlpha 1.3s linear 0.2s infinite;
+            margin-top: 2px;
+            width: 16px;
+            height: 16px;
+            filter: brightness(0) saturate(100%) invert(100%) sepia(0%)
+                saturate(7500%) hue-rotate(127deg) brightness(101%)
+                contrast(100%);
+        }
+    }
+}
+
+@keyframes bounceAlpha {
+    0% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+    25% {
+        opacity: 0;
+        transform: translateX(10px) scale(0.9);
+    }
+    26% {
+        opacity: 0;
+        transform: translateX(-10px) scale(0.9);
+    }
+    55% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}

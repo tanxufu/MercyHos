@@ -1,10 +1,12 @@
 /* eslint-disable react/prop-types */
 import { DatePicker, ConfigProvider } from 'antd';
-import locale from 'antd/lib/locale/vi_VN';
+// import locale from 'antd/lib/locale/vi_VN';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useContext, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import locale from 'antd/locale/vi_VN.js';
 import 'dayjs/locale/vi';
 
 import schema from '../../utils/rules';
@@ -22,6 +24,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { showNotification } from '../../utils/notification';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+dayjs.extend(utc);
 dayjs.locale('vi');
 
 const patientSchema = schema.omit(['password', 'passwordConfirm']);
@@ -54,7 +57,7 @@ function PatientForm({ title, isEdit = false }) {
         enabled: isEdit
     });
     const patient = data?.data?.data?.data;
-    console.log(patient);
+    // console.log(patient);
 
     // fill form with data: patient
     useEffect(() => {
@@ -148,8 +151,21 @@ function PatientForm({ title, isEdit = false }) {
                                 render={({ field: { onChange, value } }) => (
                                     <ConfigProvider locale={locale}>
                                         <DatePicker
-                                            onChange={(date) => onChange(date)}
-                                            value={value}
+                                            onChange={(date) => {
+                                                const normalizedDate = date
+                                                    ? dayjs(date)
+                                                          .utc(true)
+                                                          .startOf('day')
+                                                    : null;
+                                                onChange(normalizedDate);
+                                            }}
+                                            value={
+                                                value
+                                                    ? dayjs(value)
+                                                          .utc(true)
+                                                          .startOf('day')
+                                                    : null
+                                            }
                                             placement='bottomRight'
                                             className='patient-form__date'
                                             format='YYYY-MM-DD'

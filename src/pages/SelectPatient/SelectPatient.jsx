@@ -2,6 +2,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Modal } from 'antd';
+import dayjs from 'dayjs';
 
 import AppContext from '../../contexts/app.context.jsx';
 import Button from '../../components/Button';
@@ -63,12 +64,12 @@ function SelectPatient() {
     };
 
     const handleSavePatientId = (patientId) => {
-        const apointmentData = {
+        const appointmentData = {
             patientId
         };
         localStorage.setItem(
             'appointmentPatient',
-            JSON.stringify(apointmentData)
+            JSON.stringify(appointmentData)
         );
     };
 
@@ -147,7 +148,11 @@ function SelectPatient() {
                                                     <span>Ngày sinh</span>
                                                 </div>
                                                 <div className='patient-card__desc'>
-                                                    {patient.dob.split('T')[0]}
+                                                    {dayjs(
+                                                        patient.dob.split(
+                                                            'T'
+                                                        )[0]
+                                                    ).format('DD-MM-YYYY')}
                                                 </div>
                                             </div>
                                             <div className='patient-card__row'>
