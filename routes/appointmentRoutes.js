@@ -8,12 +8,8 @@ router.use(authController.protect);
 
 router
     .route('/')
-    .get(
-        authController.restrictTo('admin'),
-        appointmentController.getAllAppointments
-    )
+    .get(appointmentController.getAllAppointments)
     .post(
-        authController.restrictTo('admin', 'doctor'),
         appointmentController.setDoctorPatientIds,
         appointmentController.createAppointment
     );
@@ -21,10 +17,7 @@ router
 router
     .route('/:id')
     .get(appointmentController.getAppointment)
-    .patch(
-        authController.restrictTo('admin', 'doctor'),
-        appointmentController.updateAppointment
-    )
+    .patch(appointmentController.updateAppointment)
     .delete(
         authController.restrictTo('admin'),
         appointmentController.deleteAppointment

@@ -8,7 +8,15 @@ const appointmentSchema = mongoose.Schema(
         },
         timeVisit: {
             type: String,
-            required: true
+            required: true,
+            enum: [
+                '8:00 - 9:00',
+                '9:00 - 10:00',
+                '10:00 - 11:00',
+                '13:30 - 14:30',
+                '14:30 - 15:30',
+                '15:30 - 16:30'
+            ]
         },
         patient: {
             type: mongoose.Schema.ObjectId,

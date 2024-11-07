@@ -91,6 +91,23 @@ exports.updateOne = (Model) =>
 
 exports.createOne = (Model) =>
     catchAsync(async (req, res, next) => {
+        const { dateVisit, timeVisit, doctor } = req.body;
+
+        const existingAppointment = await Model.findOne({
+            doctor,
+            dateVisit,
+            timeVisit
+        });
+
+        if (existingAppointment) {
+            return next(
+                new AppError(
+                    'Khung giờ đã có lịch hẹn. Vui lòng đặt lịch mới!',
+                    400
+                )
+            );
+        }
+
         const document = await Model.create(req.body);
 
         res.status(201).json({
