@@ -1,59 +1,193 @@
-import { Button, DatePicker, Form, Input, Radio, Select } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import {
+    Button,
+    DatePicker,
+    Form,
+    Input,
+    notification,
+    Radio,
+    Select
+} from 'antd';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { occupations } from '../../utils/occupations';
 import { ethnicities } from '../../utils/ethnicities';
-import axios from 'axios';
+import { FormOutlined, HomeOutlined } from '@ant-design/icons';
+import Bread from '../Breadcrumb/Breadcrumb';
+import schema from '../../utils/rules';
+import {
+    fetchProvinces,
+    fetchDistricts,
+    fetchWards
+} from '../../services/locationApi';
+import { useNavigate } from 'react-router-dom';
+import { createPatient } from '../../apis/createUser.api';
 
 function Information() {
+    const navigate = useNavigate(); // Để chuyển trang sau khi tạo mới
     const [activeTab, setActiveTab] = useState('oldPatient');
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
-    const [selectedProvince, setSelectedProvince] = useState(null);
-    const [selectedDistrict, setSelectedDistrict] = useState(null);
-    const [selectedOccupation, setSelectedOccupation] = useState(''); //  nghề nghiệp
-    const [selectedEthnicity, setSelectedEthnicity] = useState(''); //  dân tộc
-    // hàm xử lý  nghề nghiệp
-    const handleOccupationChange = (value) => {
-        setSelectedOccupation(value); // Cập nhật trạng thái nghề nghiệp
-    };
-    const handleEthnicityChange = (value) => {
-        setSelectedEthnicity(value); // Cập nhật trạng thái nghề nghiệp
-    };
-    // Lấy danh sách tỉnh/thành phố khi component được mount
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const {
+        control,
+        handleSubmit,
+        reset,
+        setValue,
+        watch,
+        formState: { errors }
+    } = useForm({
+        resolver: yupResolver(schema),
+        mode: 'onChange',
+        defaultValues: {
+            idCard: '',
+            ethnicity: ''
+            // Có thể thêm các giá trị mặc định khác
+        }
+    });
+    const watchProvince = watch('province');
+    const watchDistrict = watch('district');
+    // Lấy danh sách tỉnh/thành phố
     useEffect(() => {
-        axios
-            .get('https://provinces.open-api.vn/api/p/')
-            .then((response) => setProvinces(response.data))
-            .catch((error) => console.error(error));
+        const getProvinces = async () => {
+            try {
+                const data = await fetchProvinces();
+                setProvinces(data);
+            } catch (error) {
+                notification.error({
+                    message: 'Lỗi',
+                    description: error.message
+                });
+            }
+        };
+        getProvinces();
     }, []);
 
-    // Lấy danh sách quận/huyện khi chọn tỉnh
-    const handleProvinceChange = (provinceId) => {
-        setSelectedProvince(provinceId);
-        setSelectedDistrict(null);
-        setWards([]); // Reset danh sách phường
-
-        axios
-            .get(`https://provinces.open-api.vn/api/p/${provinceId}?depth=2`)
-            .then((response) => setDistricts(response.data.districts))
-            .catch((error) => console.error(error));
-    };
+    // Lấy danh sách quận/huyện khi chọn tỉnh/thành
+    useEffect(() => {
+        const getDistricts = async () => {
+            try {
+                const districtsData = await fetchDistricts(watchProvince);
+                setDistricts(districtsData);
+                setValue('district', '');
+                setValue('ward', '');
+                setWards([]);
+            } catch (error) {
+                notification.error({
+                    message: 'Lỗi',
+                    description: error.message
+                });
+            }
+        };
+        if (watchProvince) {
+            getDistricts();
+        }
+    }, [watchProvince, setValue]);
     // Lấy danh sách phường/xã khi chọn quận/huyện
-    const handleDistrictChange = (districtId) => {
-        setSelectedDistrict(districtId);
+    useEffect(() => {
+        const getWards = async () => {
+            try {
+                const wardsData = await fetchWards(watchDistrict);
+                setWards(wardsData);
+                setValue('ward', '');
+            } catch (error) {
+                notification.error({
+                    message: 'Lỗi',
+                    description: error.message
+                });
+            }
+        };
+        if (watchDistrict) {
+            getWards();
+        }
+    }, [watchDistrict, setValue]);
 
-        axios
-            .get(`https://provinces.open-api.vn/api/d/${districtId}?depth=2`)
-            .then((response) => setWards(response.data.wards))
-            .catch((error) => console.error(error));
-    };
-    // Hàm để thay đổi tab
+    const handleCreateProfile = useCallback(
+        async (formData) => {
+            try {
+                setIsSubmitting(true);
+
+                // Format dữ liệu theo cấu trúc API
+                const formattedData = {
+                    name: formData.name,
+                    // Xử lý ngày tháng đúng cách
+                    dob: formData.dob
+                        ? formData.dob.toISOString().split('T')[0]
+                        : null, // Format: YYYY-MM-DD
+                    phone: formData.phone,
+                    gender: formData.gender,
+                    occupation: formData.occupation,
+                    email: formData.email,
+                    province:
+                        provinces.find((p) => p.code === formData.province)
+                            ?.name || '',
+                    district:
+                        districts.find((d) => d.code === formData.district)
+                            ?.name || '',
+                    ward:
+                        wards.find((w) => w.code === formData.ward)?.name || '',
+                    address: formData.address || '',
+                    idCard: formData.idCard || '',
+                    ethnicity: formData.ethnicity || '',
+                    status: 'active'
+                };
+
+                console.log('Sending data:', formattedData); // Log để debug
+
+                const response = await createPatient(formattedData);
+
+                if (response.status === 200 || response.status === 201) {
+                    notification.success({
+                        message: 'Thành công',
+                        description: 'Tạo hồ sơ bệnh nhân thành công'
+                    });
+                    reset();
+                    navigate('/profile');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                notification.error({
+                    message: 'Lỗi',
+                    description:
+                        error.response?.data?.message ||
+                        'Có lỗi xảy ra khi tạo hồ sơ bệnh nhân'
+                });
+            } finally {
+                setIsSubmitting(false);
+            }
+        },
+        [provinces, districts, wards, reset, navigate]
+    );
     const handleTabChange = (tab) => {
         setActiveTab(tab);
+        reset();
     };
+
+    const breadcrumbItems = [
+        {
+            href: '/',
+            title: (
+                <>
+                    <HomeOutlined />
+                    <span>Trang chủ</span>
+                </>
+            )
+        },
+        {
+            title: (
+                <>
+                    <FormOutlined />
+                    <span className='active'>Tạo hồ sơ</span>
+                </>
+            )
+        }
+    ];
+
     return (
         <div className='container'>
+            <Bread items={breadcrumbItems} />
             <div className='infor'>
                 <h1>Tạo mới hồ sơ</h1>
                 <div className='tab'>
@@ -103,113 +237,405 @@ function Information() {
                 {activeTab === 'newPatient' && (
                     <div className='form'>
                         <Form
-                            labelCol={{
-                                span: 10
+                            onFinish={handleSubmit((data) => {
+                                console.log('Form submitted with data:', data);
+                                handleCreateProfile(data);
+                            })}
+                            onFinishFailed={(errorInfo) => {
+                                console.log(
+                                    'Form validation failed:',
+                                    errorInfo
+                                );
+                                notification.error({
+                                    message: 'Lỗi',
+                                    description:
+                                        'Vui lòng kiểm tra lại thông tin'
+                                });
                             }}
-                            wrapperCol={{
-                                span: 14
-                            }}
-                            layout='horizontal'
-                            style={{}}
                         >
                             <h3>Nhập thông tin bệnh nhân*</h3>
                             <div className='form__inner row'>
                                 <div className='form__left'>
-                                    <Form.Item label='Họ và tên'>
-                                        <Input />
+                                    <Form.Item
+                                        label='Họ và tên'
+                                        validateStatus={
+                                            errors.name ? 'error' : ''
+                                        }
+                                        help={errors.name?.message}
+                                    >
+                                        <Controller
+                                            name='name'
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Input {...field} />
+                                            )}
+                                        />
                                     </Form.Item>
-                                    <Form.Item label='Số điện thoại'>
-                                        <Input />
+
+                                    <Form.Item
+                                        label='Số điện thoại'
+                                        validateStatus={
+                                            errors.phone ? 'error' : ''
+                                        }
+                                        help={errors.phone?.message}
+                                    >
+                                        <Controller
+                                            name='phone'
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Input
+                                                    {...field}
+                                                    addonBefore='+84'
+                                                    placeholder='Nhập số điện thoại'
+                                                    onChange={(e) => {
+                                                        // Chỉ cho phép nhập số
+                                                        let phoneValue =
+                                                            e.target.value.replace(
+                                                                /\D/g,
+                                                                ''
+                                                            );
+
+                                                        // Xử lý số 0 ở đầu
+                                                        if (
+                                                            phoneValue.startsWith(
+                                                                '0'
+                                                            )
+                                                        ) {
+                                                            phoneValue =
+                                                                phoneValue.slice(
+                                                                    1
+                                                                ); // Bỏ số 0
+                                                            if (
+                                                                phoneValue.length >
+                                                                0
+                                                            ) {
+                                                                phoneValue =
+                                                                    '84' +
+                                                                    phoneValue;
+                                                            }
+                                                        }
+                                                        // Nếu không có 84 ở đầu và không rỗng, thêm 84
+                                                        else if (
+                                                            !phoneValue.startsWith(
+                                                                '84'
+                                                            ) &&
+                                                            phoneValue.length >
+                                                                0
+                                                        ) {
+                                                            phoneValue =
+                                                                '84' +
+                                                                phoneValue;
+                                                        }
+
+                                                        // Giới hạn độ dài
+                                                        const maxLength =
+                                                            phoneValue.startsWith(
+                                                                '84'
+                                                            )
+                                                                ? 11
+                                                                : 10;
+                                                        phoneValue =
+                                                            phoneValue.slice(
+                                                                0,
+                                                                maxLength
+                                                            );
+
+                                                        field.onChange(
+                                                            phoneValue
+                                                        );
+                                                    }}
+                                                />
+                                            )}
+                                        />
                                     </Form.Item>
-                                    <Form.Item label='Nghề nghiệp'>
-                                        <Select
-                                            value={selectedOccupation}
-                                            onChange={handleOccupationChange}
-                                        >
-                                            {occupations.map((occupation) => (
-                                                <Select.Option
-                                                    key={occupation.id}
-                                                    value={occupation.id}
+
+                                    <Form.Item
+                                        label='Nghề nghiệp'
+                                        validateStatus={
+                                            errors.occupation ? 'error' : ''
+                                        }
+                                        help={errors.occupation?.message}
+                                    >
+                                        <Controller
+                                            name='occupation'
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Select
+                                                    {...field}
+                                                    onChange={(value) =>
+                                                        field.onChange(value)
+                                                    }
+                                                    placeholder='Chọn nghề nghiệp'
                                                 >
-                                                    {occupation.name}
-                                                </Select.Option>
-                                            ))}
-                                        </Select>
+                                                    {occupations.map(
+                                                        (occupation) => (
+                                                            <Select.Option
+                                                                key={
+                                                                    occupation.id
+                                                                }
+                                                                value={
+                                                                    occupation.id
+                                                                }
+                                                            >
+                                                                {
+                                                                    occupation.name
+                                                                }
+                                                            </Select.Option>
+                                                        )
+                                                    )}
+                                                </Select>
+                                            )}
+                                        />
                                     </Form.Item>
-                                    <Form.Item label='Địa chỉ Email'>
-                                        <Input />
+
+                                    <Form.Item
+                                        label='Địa chỉ Email'
+                                        validateStatus={
+                                            errors.email ? 'error' : ''
+                                        }
+                                        help={errors.email?.message}
+                                    >
+                                        <Controller
+                                            name='email'
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Input {...field} />
+                                            )}
+                                        />
                                     </Form.Item>
-                                    <Form.Item label='Tỉnh/Thành'>
-                                        <Select onChange={handleProvinceChange}>
-                                            {provinces.map((province) => (
-                                                <Select.Option
-                                                    key={province.code}
-                                                    value={province.code}
+
+                                    <Form.Item
+                                        label='Tỉnh/Thành'
+                                        validateStatus={
+                                            errors.province ? 'error' : ''
+                                        }
+                                        help={errors.province?.message}
+                                    >
+                                        <Controller
+                                            name='province'
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Select
+                                                    {...field}
+                                                    onChange={(value) =>
+                                                        field.onChange(value)
+                                                    }
+                                                    placeholder='Chọn Tỉnh/Thành phố'
                                                 >
-                                                    {province.name}
-                                                </Select.Option>
-                                            ))}
-                                        </Select>
+                                                    {provinces.map(
+                                                        (province) => (
+                                                            <Select.Option
+                                                                key={
+                                                                    province.code
+                                                                }
+                                                                value={
+                                                                    province.code
+                                                                }
+                                                            >
+                                                                {province.name}
+                                                            </Select.Option>
+                                                        )
+                                                    )}
+                                                </Select>
+                                            )}
+                                        />
                                     </Form.Item>
-                                    <Form.Item label='Phường/Xã'>
-                                        <Select disabled={!selectedDistrict}>
-                                            {wards.map((ward) => (
-                                                <Select.Option
-                                                    key={ward.code}
-                                                    value={ward.code}
+
+                                    <Form.Item
+                                        label='Phường/Xã'
+                                        validateStatus={
+                                            errors.ward ? 'error' : ''
+                                        }
+                                        help={errors.ward?.message}
+                                    >
+                                        <Controller
+                                            name='ward'
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Select
+                                                    {...field}
+                                                    disabled={
+                                                        !watch('district')
+                                                    }
+                                                    placeholder='Chọn Phường/Xã'
                                                 >
-                                                    {ward.name}
-                                                </Select.Option>
-                                            ))}
-                                        </Select>
+                                                    {wards.map((ward) => (
+                                                        <Select.Option
+                                                            key={ward.code}
+                                                            value={ward.code}
+                                                        >
+                                                            {ward.name}
+                                                        </Select.Option>
+                                                    ))}
+                                                </Select>
+                                            )}
+                                        />
                                     </Form.Item>
                                 </div>
-                                <div className='form__right '>
-                                    <Form.Item label='Ngày sinh'>
-                                        <DatePicker />
+                                <div className='form__right'>
+                                    <Form.Item
+                                        label='Ngày sinh'
+                                        validateStatus={
+                                            errors.dob ? 'error' : ''
+                                        }
+                                        help={errors.dob?.message}
+                                    >
+                                        <Controller
+                                            name='dob'
+                                            control={control}
+                                            render={({ field }) => (
+                                                <DatePicker
+                                                    {...field}
+                                                    style={{ width: '100%' }}
+                                                    format='DD/MM/YYYY'
+                                                />
+                                            )}
+                                        />
                                     </Form.Item>
-                                    <Form.Item label='Giới tính'>
-                                        <Radio.Group>
-                                            <Radio value='Nam'> Nam </Radio>
-                                            <Radio value='Nu'> Nữ </Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                    <Form.Item label='Số CCCD/Passport'>
-                                        <Input />
-                                    </Form.Item>
-                                    <Form.Item label='Dân tộc'>
-                                        <Select
-                                            value={selectedEthnicity}
-                                            onChange={handleEthnicityChange}
-                                        >
-                                            {ethnicities.map((ethnicities) => (
-                                                <Select.Option
-                                                    key={ethnicities.id}
-                                                    value={ethnicities.id}
+
+                                    <Form.Item
+                                        label='Giới tính'
+                                        validateStatus={
+                                            errors.gender ? 'error' : ''
+                                        }
+                                        help={errors.gender?.message}
+                                    >
+                                        <Controller
+                                            name='gender'
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Radio.Group
+                                                    {...field}
+                                                    onChange={(e) =>
+                                                        field.onChange(
+                                                            e.target.value
+                                                        )
+                                                    }
                                                 >
-                                                    {ethnicities.name}
-                                                </Select.Option>
-                                            ))}
-                                        </Select>
+                                                    <Radio value='Nam'>
+                                                        {' '}
+                                                        Nam{' '}
+                                                    </Radio>
+                                                    <Radio value='Nữ'>
+                                                        {' '}
+                                                        Nữ{' '}
+                                                    </Radio>
+                                                    <Radio value='Khác'>
+                                                        {' '}
+                                                        Khác{' '}
+                                                    </Radio>
+                                                </Radio.Group>
+                                            )}
+                                        />
                                     </Form.Item>
-                                    <Form.Item label='Quận/Huyện'>
-                                        <Select
-                                            value={selectedDistrict}
-                                            onChange={handleDistrictChange}
-                                            disabled={!selectedProvince}
-                                        >
-                                            {districts.map((district) => (
-                                                <Select.Option
-                                                    key={district.code}
-                                                    value={district.code}
+
+                                    <Form.Item
+                                        label='Số CCCD/Passport'
+                                        validateStatus={
+                                            errors.idCard ? 'error' : ''
+                                        }
+                                        help={errors.idCard?.message}
+                                    >
+                                        <Controller
+                                            name='idCard'
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Input {...field} />
+                                            )}
+                                        />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        label='Dân tộc'
+                                        validateStatus={
+                                            errors.ethnicity ? 'error' : ''
+                                        }
+                                        help={errors.ethnicity?.message}
+                                    >
+                                        <Controller
+                                            name='ethnicity'
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Select
+                                                    {...field}
+                                                    onChange={(value) =>
+                                                        field.onChange(value)
+                                                    }
+                                                    placeholder='Chọn Dân tộc'
                                                 >
-                                                    {district.name}
-                                                </Select.Option>
-                                            ))}
-                                        </Select>
+                                                    {ethnicities.map(
+                                                        (ethnicity) => (
+                                                            <Select.Option
+                                                                key={
+                                                                    ethnicity.id
+                                                                }
+                                                                value={
+                                                                    ethnicity.id
+                                                                }
+                                                            >
+                                                                {ethnicity.name}
+                                                            </Select.Option>
+                                                        )
+                                                    )}
+                                                </Select>
+                                            )}
+                                        />
                                     </Form.Item>
-                                    <Form.Item label='Địa chỉ hiện tại'>
-                                        <Input />
+
+                                    <Form.Item
+                                        label='Quận/Huyện'
+                                        validateStatus={
+                                            errors.district ? 'error' : ''
+                                        }
+                                        help={errors.district?.message}
+                                    >
+                                        <Controller
+                                            name='district'
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Select
+                                                    {...field}
+                                                    onChange={(value) =>
+                                                        field.onChange(value)
+                                                    }
+                                                    disabled={
+                                                        !watch('province')
+                                                    }
+                                                    placeholder='Chọn Quận/Huyện'
+                                                >
+                                                    {districts.map(
+                                                        (district) => (
+                                                            <Select.Option
+                                                                key={
+                                                                    district.code
+                                                                }
+                                                                value={
+                                                                    district.code
+                                                                }
+                                                            >
+                                                                {district.name}
+                                                            </Select.Option>
+                                                        )
+                                                    )}
+                                                </Select>
+                                            )}
+                                        />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        label='Địa chỉ hiện tại'
+                                        validateStatus={
+                                            errors.address ? 'error' : ''
+                                        }
+                                        help={errors.address?.message}
+                                    >
+                                        <Controller
+                                            name='address'
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Input {...field} />
+                                            )}
+                                        />
                                     </Form.Item>
                                 </div>
                             </div>
@@ -220,14 +646,18 @@ function Information() {
                                         color: 'white',
                                         fontSize: '18px'
                                     }}
+                                    onClick={() => reset()}
+                                    disabled={isSubmitting}
                                 >
                                     Nhập lại
                                 </Button>
                                 <Button
                                     style={{ fontSize: '18px' }}
                                     type='primary'
+                                    htmlType='submit'
+                                    loading={isSubmitting}
                                 >
-                                    Tạo mới
+                                    {isSubmitting ? 'Đang xử lý...' : 'Tạo mới'}
                                 </Button>
                             </div>
                         </Form>

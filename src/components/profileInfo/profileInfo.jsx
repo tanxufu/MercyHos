@@ -2,7 +2,6 @@ import {
     ContactsTwoTone,
     DownOutlined,
     EnvironmentTwoTone,
-   
     PhoneTwoTone
 } from '@ant-design/icons';
 import { Button } from 'antd';
@@ -10,37 +9,17 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Modal from '../modal';
 import DetailInfo from '../DetailInfo/DetailInfo';
-// import { useHistory } from 'react-router-dom';
 import showDeleteConfirm from '../ModalDelete/ModalDelete';
+
 function ProfileInfo() {
     const [isOpen, setIsOpen] = useState(false);
-    // const history = useHistory();
 
-    // // Thông tin bệnh nhân 
-    // const patient = {
-    //     name: 'NGUYEN QUOC HUY',
-    //     phone: '0387350605',
-    //     address:
-    //         'THAN BINH-XA THAN CUU NGHIA-HUYEN CHAU THANH-TINH TIEN GIANG-VIET NAM'
-    // };
-
-    // // Hàm xử lý khi nhấn nút sửa
-    // const handleEdit = () => {
-    //     // Điều hướng đến trang sửa thông tin
-    //     history.push('/sua-ho-so');
-    // };
-
-    // // Hàm xử lý khi nhấn nút xoá
-    // const handleDelete = () => {
-    //     // Thực hiện logic xóa 
-    //     console.log('Xóa hồ sơ');
-    // };
     return (
         <div className='profile-info'>
             <div className='profile-item'>
                 <p className='profile-title'>
                     <ContactsTwoTone />
-                    <span>name</span>
+                    <span> name</span>
                 </p>
             </div>
 
@@ -61,14 +40,14 @@ function ProfileInfo() {
             </div>
             <div className='profile-btn-right'>
                 <div className='profile-btn'>
-                        <Button
+                    <Button
                         onClick={showDeleteConfirm}
-                            color='danger'
-                            variant='solid'
-                            className='profile-linkbtn'
-                        >
-                            Xoá
-                        </Button>
+                        color='danger'
+                        variant='solid'
+                        className='profile-linkbtn'
+                    >
+                        Xoá
+                    </Button>
                     <NavLink>
                         <Button
                             color='primary'

@@ -15,7 +15,9 @@ import {
 } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 
+
 function DetailInfo({ onClose }) {
+     
     return (
         <div className='container'>
             <div className='detailInfo'>
@@ -30,7 +32,7 @@ function DetailInfo({ onClose }) {
                         <ContactsTwoTone />
                         <span className='detailInfo__desc'>Họ và tên:</span>
                     </p>
-                    <span className='detailInfo__nd'>342342342</span>
+                    <span className='detailInfo__nd'>fullName</span>
                 </div>
 
                 <div className='detailInfo__item'>

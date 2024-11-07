@@ -3,15 +3,40 @@ import {
     BellTwoTone,
     BookTwoTone,
     CloudTwoTone,
-    PlusOutlined
+    HomeOutlined,
+    PlusOutlined,
+    ProfileOutlined
 } from '@ant-design/icons';
 import { Button } from 'antd';
 import { NavLink } from 'react-router-dom';
 import ProfileInfo from '../../components/profileInfo/profileInfo';
 // import { useHistory } from 'react-router-dom';
+import Bread from '../../components/Breadcrumb/Breadcrumb';
+
 function Profile() {
+    const breadcrumbItems = [
+        {
+            href: '/',
+            title: (
+                <>
+                    <HomeOutlined />
+                    <span>Trang chủ</span>
+                </>
+                
+            )
+        },
+        {
+            title: (
+                <>
+                    <ProfileOutlined />
+                    <span className="active">Hồ sơ bệnh nhân</span>
+                </>
+              )
+        }
+    ];
     return (
         <div className='container'>
+            <Bread items={breadcrumbItems} />
             <div className='profile'>
                 <div className='profile__sidebar '>
                     <NavLink to={'/infor'}>

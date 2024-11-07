@@ -4,15 +4,14 @@
     background-color: #fff;
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 100;
 }
 
 .top-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
-    padding: 20px 0;
+    padding: 15px 0;
     .navbar{
         @include abstracts.screen(lg){
             display: none;
@@ -40,7 +39,7 @@
         display: flex;
         align-items: center;
         
-        gap: 30px;
+        gap: 20px;
 
         &__search {
             @include abstracts.screen(lg) {

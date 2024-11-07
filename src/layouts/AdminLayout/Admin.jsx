@@ -1,78 +1,99 @@
-import  { useState } from 'react';
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from '@ant-design/icons';
-import { Button, Layout, Menu, theme } from 'antd';
-const { Header, Sider, Content } = Layout;
+import { DashboardOutlined, DockerOutlined, UserOutlined } from '@ant-design/icons';
+import { Layout, Menu, theme } from 'antd';
+import PropTypes from 'prop-types';
 
-const Admin = () => {
-    const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
+import { Link } from 'react-router-dom';
+
+
+const { Header, Content, Footer, Sider } = Layout;
+const items = [
+  {
+    key: '1',
+    icon: <DashboardOutlined />,
+    label: <Link to="/admin">Dashboard</Link>,
+  },
+  {
+    key: '2',
+    icon: <UserOutlined />,
+    label: <Link to="/admin/users">Quản lý người dùng</Link>,
+  },
+  {
+    key: '3',
+    icon: <DockerOutlined />,
+    label: <Link to="/admin/doctormanagement">Quản lý bác sĩ</Link>,
+  },
+];
+function AdminLayout({ children }) {
+  
+    const {
+        token: { colorBgContainer, borderRadiusLG }
+    } = theme.useToken();
+
+   
     return (
-        <Layout>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="demo-logo-vertical" />
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={['1']}
-          items={[
-            {
-              key: '1',
-              icon: <UserOutlined />,
-              label: 'nav 1',
-            },
-            {
-              key: '2',
-              icon: <VideoCameraOutlined />,
-              label: 'nav 2',
-            },
-            {
-              key: '3',
-              icon: <UploadOutlined />,
-              label: 'nav 3',
-            },
-          ]}
-        />
-      </Sider>
-      <Layout>
-        <Header
-          style={{
-            padding: 0,
-            background: colorBgContainer,
-          }}
-        >
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: '16px',
-              width: 64,
-              height: 64,
-            }}
-          />
-        </Header>
-        <Content
-          style={{
-            margin: '24px 16px',
-            padding: 24,
-            minHeight: 280,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          Content
-        </Content>
-      </Layout>
-    </Layout>
+        <div>
+            <Layout style={{ width: '100vw', height: '100vh' }}>
+                <Sider
+                    breakpoint='lg'
+                    collapsedWidth='0'
+                    onBreakpoint={(broken) => {
+                        console.log(broken);
+                    }}
+                    onCollapse={(collapsed, type) => {
+                        console.log(collapsed, type);
+                    }}
+                >
+                    <div className='demo-logo-vertical' />
+                    <Menu
+                        theme='dark'
+                        mode='inline'
+                        defaultSelectedKeys={['4']}
+                        items={items}
+                       
+                    />
+                </Sider>
+                <Layout>
+                    <Header
+                        style={{
+                            textAlign: 'center',
+                            fontSize: 24,
+                            fontWeight: 600,
+                            padding: 10,
+                            background: colorBgContainer
+                        }}
+                    >
+                        Trang quản trị
+                    </Header>
+                    <Content
+                        style={{
+                            margin: '24px 16px 0'
+                        }}
+                    >
+                        <div
+                            style={{
+                                padding: 24,
+                                minHeight: 360,
+                                background: colorBgContainer,
+                                borderRadius: borderRadiusLG
+                            }}
+                        >
+                            {children}
+                        </div>
+                    </Content>
+                    <Footer
+                        style={{
+                            textAlign: 'center'
+                        }}
+                    >
+                        Ant Design ©{new Date().getFullYear()} Created by Ant
+                        UED
+                    </Footer>
+                </Layout>
+            </Layout>
+        </div>
     );
 }
-
-export default Admin;
+AdminLayout.propTypes = {
+    children: PropTypes.node
+};
+export default AdminLayout;

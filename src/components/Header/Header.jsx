@@ -3,37 +3,55 @@ import { Dropdown, Input, message } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+
+import PropTypes from 'prop-types';
+import { useContext } from 'react';
+import AppContext from '../../contexts/app.context';
 
 const { Search } = Input;
-const onSearch = (value, _e, info) => console.log(info?.source, value);
 
-const handleMenuClick = (e) => {
-    message.info('Click on menu item.');
-    console.log('click', e);
-};
-const items = [
-    {
-        label: 'Hồ sơ',
-        key: '1',
-        icon: <UserOutlined />
-    },
-    {
-        label: 'Đăng xuất',
-        key: '3',
-        icon: <UserOutlined />,
-        danger: true
-    }
-];
-const menuProps = {
-    items,
-    onClick: handleMenuClick
-};
-function Header() {
+function Header({ onLogout, userName = 'Tai khoan' }) {
+    const { isAuthenticated } = useContext(AppContext);
+    const navigate = useNavigate();
+
+    const handleMenuClick = (e) => {
+        if (e.key === '1') {
+            if (isAuthenticated) {
+                // Nếu người dùng đã đăng nhập, điều hướng đến trang hồ sơ
+                navigate('/profile');
+            } else {
+                // Nếu người dùng chưa đăng nhập, điều hướng đến trang đăng nhập
+                navigate('/login');
+            }
+        } else if (e.key === '3') {
+            onLogout();
+            message.success('Đăng xuất thành công!');
+        }
+    };
+    const items = [
+        {
+            label: <span to='/profile'>Ho so</span>,
+
+            key: '1',
+            icon: <UserOutlined />
+        },
+        {
+            label: 'Đăng xuất',
+            key: '3',
+            icon: <UserOutlined />,
+            danger: true
+        }
+    ];
+    const menuProps = {
+        items,
+        onClick: handleMenuClick
+    };
+
     return (
         <>
-            <div className='container'>
-                <header className='header'>
+            <header className='header'>
+                <div className='container'>
                     <div className='top-bar'>
                         <div className='logo'>
                             <img src={logo} alt='' className='logo__img' />
@@ -75,24 +93,21 @@ function Header() {
                                     allowClear
                                     enterButton
                                     size='large'
-                                    onSearch={onSearch}
                                 />
                             </div>
 
-                            <NavLink to='/profile' className='top-act__avatar'>
-                                <button className='top-act__btn'>
-                                    <Dropdown.Button
-                                        menu={menuProps}
-                                        placement='bottom'
-                                        icon={
-                                            <UserOutlined className='top-act__icon' />
-                                        }
-                                      
-                                    >
-                                        Tài khoản
-                                    </Dropdown.Button>
-                                </button>
-                            </NavLink>
+                            <div className='top-act__avatar'>
+                                <Dropdown.Button
+                                    
+                                    menu={menuProps}
+                                    placement='bottom'
+                                    icon={
+                                        <UserOutlined className='top-act__icon' />
+                                    }
+                                >
+                                    {userName}  
+                                </Dropdown.Button>
+                            </div>
                             <FontAwesomeIcon
                                 icon={faBell}
                                 size='xl'
@@ -101,10 +116,14 @@ function Header() {
                             />
                         </div>
                     </div>
-                </header>
-            </div>
+                </div>
+            </header>
         </>
     );
 }
+Header.propTypes = {
+    onLogout: PropTypes.func.isRequired,
+    userName: PropTypes.string // Không cần .isRequired nếu có giá trị mặc định
+};
 
 export default Header;
