@@ -42,6 +42,11 @@ function Register() {
                 setIsAuthenticated(true);
                 setUser(data.data.data.user);
                 navigate('/');
+                showNotification(
+                    'success',
+                    'Thành công!',
+                    'Bạn đã tạo tài khoản thành công!'
+                );
             },
             onError: (error) => {
                 // console.log(error);
@@ -55,11 +60,7 @@ function Register() {
                         message: 'Email đăng ký đã tồn tại!'
                     });
                 } else {
-                    return showNotification(
-                        'error',
-                        'Lỗi Server!',
-                        errorMessage
-                    );
+                    showNotification('error', 'Lỗi Server!', errorMessage);
                 }
             }
         });

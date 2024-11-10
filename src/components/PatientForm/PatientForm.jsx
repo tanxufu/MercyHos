@@ -82,7 +82,7 @@ function PatientForm({ title, isEdit = false }) {
                 'success',
                 'Thành công!',
                 isEdit
-                    ? 'Bạn đã cập nhập thành công'
+                    ? 'Bạn đã cập nhập hồ sơ thành công!'
                     : 'Bạn đã tạo hồ sơ thành công!'
             );
             queryClient.invalidateQueries(['patients', userId]);

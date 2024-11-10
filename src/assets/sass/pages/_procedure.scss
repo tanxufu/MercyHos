@@ -1,0 +1,130 @@
+@use '../abstracts';
+
+.procedure {
+    margin-top: 4px;
+
+    &__top {
+        background: url('src/assets/images/procedure.jpg');
+        background-attachment: fixed;
+
+        display: flex;
+        align-items: center;
+        height: unset !important;
+        padding-top: 60px !important;
+        padding-bottom: 80px !important;
+        background-position: 50% center !important;
+        background-repeat: no-repeat !important;
+        background-size: cover !important;
+
+        position: relative;
+        overflow: hidden;
+        cursor: default;
+    }
+
+    &__heading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        h1 {
+            position: relative;
+            font-size: 2.8rem;
+            text-transform: uppercase;
+            font-weight: 500;
+            line-height: 1.5;
+            color: var(--white);
+            z-index: 1;
+
+            &::after {
+                content: '';
+                position: absolute;
+                border-bottom: 5px solid #54dd76;
+                bottom: 6px;
+                left: 0;
+                width: 100%;
+                z-index: -1;
+            }
+        }
+    }
+
+    &__content {
+        position: relative;
+        background: rgb(255, 255, 255);
+        margin: -50px auto 40px;
+        border-radius: 10px;
+        min-height: 300px;
+        padding: 30px;
+        max-width: 1140px;
+        border: 1px solid rgb(221, 221, 221);
+
+        @include abstracts.screen(sm) {
+            padding: 10px;
+        }
+    }
+
+    &__timeline {
+        li {
+            display: flex;
+            align-items: start;
+        }
+    }
+
+    &__step {
+        margin-top: 23px;
+        min-width: 110px;
+
+        color: #307be7;
+        line-height: 1.5;
+        text-transform: uppercase;
+        font-weight: 500;
+
+        @include abstracts.screen(sm) {
+            min-width: 80px;
+        }
+    }
+
+    &__info {
+        position: relative;
+        flex-grow: 1;
+        padding: 22px 25px;
+        border-left: 3px solid rgb(233, 236, 242);
+
+        &:not(:last-child) {
+            border-bottom: 1px solid rgb(233, 236, 242);
+        }
+
+        &::before {
+            content: '';
+            width: 15px;
+            height: 15px;
+            background: rgb(48, 123, 231);
+            position: absolute;
+            left: -9px;
+            top: 27px;
+            border-radius: 100%;
+        }
+
+        h3 {
+            margin-bottom: 16px;
+            font-size: 1.8rem;
+            line-height: 1.5;
+            text-transform: uppercase;
+            color: #307be7;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            margin-top: 8px;
+            font-weight: 300;
+            line-height: 1.5;
+
+            img {
+                width: 16px;
+                height: 16px;
+            }
+        }
+    }
+}

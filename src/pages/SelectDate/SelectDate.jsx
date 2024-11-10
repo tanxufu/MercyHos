@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 import { DatePicker, ConfigProvider } from 'antd';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import locale from 'antd/locale/vi_VN';
 import 'dayjs/locale/vi';
+// import { useQuery } from '@tanstack/react-query';
 
 import chevronRight from '../../assets/icons/chevron-right.svg';
 import hospitalIcon from '../../assets/icons/hospital.svg';
@@ -13,7 +13,7 @@ import stethoscopeIcon from '../../assets/icons/stethoscope.svg';
 import doctorIcon from '../../assets/icons/doctor2.svg';
 import medicalIcon from '../../assets/icons/medical.svg';
 import calendar from '../../assets/icons/calendar-date.svg';
-import { getAppointmentOnDoctors } from '../../apis/doctor.api';
+// import { getAppointmentOnDoctors } from '../../apis/doctor.api';
 
 dayjs.extend(utc);
 dayjs.locale('vi');
@@ -24,15 +24,15 @@ function SelectDate() {
     const cacheData = JSON.parse(localStorage.getItem('appointmentPatient'));
 
     const availableDays = cacheData?.doctorAvailability;
-    const doctorId = cacheData?.doctorId;
+    // const doctorId = cacheData?.doctorId;
 
-    const { data } = useQuery({
-        queryKey: ['doctorAppointment', doctorId],
-        queryFn: () => getAppointmentOnDoctors(doctorId),
-        enabled: !!doctorId
-    });
+    // const { data } = useQuery({
+    //     queryKey: ['doctorAppointment', doctorId],
+    //     queryFn: () => getAppointmentOnDoctors(doctorId),
+    //     enabled: !!doctorId
+    // });
 
-    console.log(data);
+    // console.log(data);
 
     const availableWeekdays = availableDays?.map((day) => {
         switch (day) {

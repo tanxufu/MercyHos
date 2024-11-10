@@ -1,0 +1,109 @@
+.contact {
+    margin-top: 4px;
+
+    &__top {
+        background: url('src/assets/images/qa.jpg');
+        background-attachment: fixed;
+
+        display: flex;
+        // align-items: center;
+        // height: 100vh;
+        padding-top: 60px !important;
+        padding-bottom: 100px !important;
+        background-position: 50% center !important;
+        background-repeat: no-repeat !important;
+        background-size: cover !important;
+
+        position: relative;
+        overflow: hidden;
+        cursor: default;
+    }
+
+    &__heading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        // justify-content: center;
+        // gap: 20px;
+
+        h1 {
+            position: relative;
+            margin-bottom: 20px;
+            font-size: 2.8rem;
+            text-transform: uppercase;
+            font-weight: 500;
+            line-height: 1.5;
+            color: var(--white);
+            z-index: 1;
+
+            &::after {
+                content: '';
+                position: absolute;
+                border-bottom: 5px solid #54dd76;
+                bottom: 6px;
+                left: 0;
+                width: 100%;
+                z-index: -1;
+            }
+        }
+
+        p {
+            line-height: 1.5;
+            color: var(--white);
+        }
+    }
+
+    &__content {
+        margin-top: 60px;
+    }
+
+    &__item {
+        width: 100%;
+        height: 100%;
+        padding: 30px 16px;
+        border-radius: 6px;
+        text-align: center;
+        background: var(--white);
+        color: var(--text-color);
+
+        h2 {
+            font-size: 2.2rem;
+            line-height: 1.5;
+        }
+
+        p {
+            margin-top: 8px;
+            line-height: 1.5;
+            font-weight: 300;
+
+            span {
+                display: block;
+                font-weight: 400;
+            }
+        }
+
+        img {
+            cursor: pointer;
+            margin-top: 16px;
+            width: 60px;
+            height: 40px;
+        }
+
+        div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        a {
+            display: block;
+            margin-top: 16px;
+            transition: 0.3s ease;
+
+            &:hover {
+                color: var(--hover-color);
+            }
+        }
+    }
+}

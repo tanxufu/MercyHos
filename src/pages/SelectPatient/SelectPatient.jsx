@@ -48,6 +48,7 @@ function SelectPatient() {
             queryClient.invalidateQueries(['patients', userId]);
             showNotification('success', 'Bạn đã xoá hồ sơ  thành công!', '');
         },
+
         onError: (error) => {
             console.log(error);
         }
@@ -99,27 +100,6 @@ function SelectPatient() {
                     {isPending && (
                         <div className='loading'>
                             <div className='loader'></div>
-                        </div>
-                    )}
-
-                    {!activePatients && (
-                        <div className='no-patient'>
-                            <img
-                                src={patientProfile}
-                                alt=''
-                                className='no-patient__img'
-                            />
-                            <p>
-                                Bạn chưa có hồ sơ bệnh nhân, vui lòng tạo hồ sơ
-                                để được đặt khám.
-                            </p>
-                            <Button
-                                className='create-patient-btn'
-                                to='/create-patient-profile'
-                            >
-                                <img src={createPatient} alt='' />
-                                Tạo hồ sơ
-                            </Button>
                         </div>
                     )}
 
@@ -263,6 +243,27 @@ function SelectPatient() {
                             >
                                 <p>Bạn có chắc muốn xoá hồ sơ bệnh nhân này?</p>
                             </Modal>
+                        </div>
+                    )}
+
+                    {!isPending && activePatients < 1 && (
+                        <div className='no-patient'>
+                            <img
+                                src={patientProfile}
+                                alt=''
+                                className='no-patient__img'
+                            />
+                            <p>
+                                Bạn chưa có hồ sơ bệnh nhân, vui lòng tạo hồ sơ
+                                để được đặt khám.
+                            </p>
+                            <Button
+                                className='create-patient-btn'
+                                to='/create-patient-profile'
+                            >
+                                <img src={createPatient} alt='' />
+                                Tạo hồ sơ
+                            </Button>
                         </div>
                     )}
 

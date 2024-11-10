@@ -237,7 +237,10 @@ function Header() {
                                     </NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to='#' className='navbar__link'>
+                                    <NavLink
+                                        to='/introduction'
+                                        className='navbar__link'
+                                    >
                                         <img
                                             src={informationIcon}
                                             alt=''
@@ -247,7 +250,10 @@ function Header() {
                                     </NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to='#' className='navbar__link'>
+                                    <NavLink
+                                        to='/procedure'
+                                        className='navbar__link'
+                                    >
                                         <img
                                             src={processIcon}
                                             alt=''
@@ -257,7 +263,7 @@ function Header() {
                                     </NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to='#' className='navbar__link'>
+                                    <NavLink to='/qa' className='navbar__link'>
                                         <img
                                             src={questionIcon}
                                             alt=''
@@ -267,7 +273,10 @@ function Header() {
                                     </NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to='#' className='navbar__link'>
+                                    <NavLink
+                                        to='/contact'
+                                        className='navbar__link'
+                                    >
                                         <img
                                             src={phoneIcon}
                                             alt=''

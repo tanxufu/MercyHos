@@ -138,13 +138,11 @@
 
             color: var(--text-color);
             font-size: 1.6rem;
-            font-weight: 500;
             padding: 8px;
             transition: all 0.3s ease;
 
             @include abstracts.screen(lg) {
                 padding: 12px 12px 12px 20px;
-                font-weight: 400;
             }
 
             &--icon {
@@ -214,8 +212,17 @@
 
 .dropdown {
     ul {
+        padding: 10px !important;
         width: 320px;
         border: 1px solid var(--border-color);
+
+        font-family: 'Lexend', sans-serif;
+
+        .ant-dropdown-menu-item {
+            &:hover {
+                background: #fff !important;
+            }
+        }
     }
 
     &__user {
@@ -224,21 +231,22 @@
         width: 100%;
         gap: 22px;
 
-        padding: 12px 0;
+        padding: 16px 0;
         border-bottom: 2px solid #eaeaea;
         cursor: default;
 
         &-avt {
-            width: 40px;
-            height: 40px;
-            filter: brightness(0) saturate(100%) invert(83%) sepia(16%)
-                saturate(520%) hue-rotate(190deg) brightness(89%) contrast(91%);
+            width: 46px;
+            height: 46px;
+            filter: brightness(0) saturate(100%) invert(0%) sepia(100%)
+                saturate(7429%) hue-rotate(261deg) brightness(84%)
+                contrast(116%);
         }
 
         p {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             font-size: 1.6rem;
             font-weight: 300;
             line-height: 1.5;
@@ -246,28 +254,39 @@
         }
 
         &-label {
-            margin-top: 2px;
+            margin-top: 6px;
             font-weight: 600;
+            color: var(--sup-color);
         }
     }
 
     &__link {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 16px;
 
         width: 100%;
-        padding: 10px;
+        padding: 10px 0;
         font-size: 1.6rem;
         font-weight: 300;
         color: var(--text-color);
 
         transition: all 0.3s ease;
+
+        &:hover {
+            color: var(--hover-color) !important;
+        }
+
+        &:hover .dropdown__icon {
+            filter: brightness(0) saturate(100%) invert(32%) sepia(45%)
+                saturate(5592%) hue-rotate(201deg) brightness(104%)
+                contrast(101%);
+        }
     }
 
     &__icon {
-        width: 18px;
-        height: 18px;
+        width: 24px;
+        height: 24px;
     }
 
     &__logout {

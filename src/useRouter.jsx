@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Navigate, Outlet, useRoutes } from 'react-router-dom';
+import { Navigate, Outlet, useRoutes, useLocation } from 'react-router-dom';
 import { useContext, lazy, Suspense } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import AppContext from './contexts/app.context.jsx';
 import MainLayout from './layouts/MainLayout';
@@ -19,6 +20,10 @@ const SelectDoctor = lazy(() => import('./pages/SelectDoctor'));
 const SelectService = lazy(() => import('./pages/SelectService'));
 const SelectDate = lazy(() => import('./pages/SelectDate'));
 const ConfirmAppointment = lazy(() => import('./pages/ConfirmAppointment'));
+const Introduction = lazy(() => import('./pages/Introduction'));
+const Procedure = lazy(() => import('./pages/Procedure'));
+const QandA = lazy(() => import('./pages/QandA'));
+const Contact = lazy(() => import('./pages/Contact'));
 
 function ProtectedRoute() {
     const { isAuthenticated } = useContext(AppContext);
@@ -31,6 +36,8 @@ function RejectedRoute() {
 }
 
 function useRouter() {
+    const location = useLocation();
+
     const routeElement = useRoutes([
         {
             path: '/',
@@ -38,6 +45,46 @@ function useRouter() {
                 <MainLayout>
                     <Suspense>
                         <Home />
+                    </Suspense>
+                </MainLayout>
+            )
+        },
+        {
+            path: '/introduction',
+            element: (
+                <MainLayout>
+                    <Suspense>
+                        <Introduction />
+                    </Suspense>
+                </MainLayout>
+            )
+        },
+        {
+            path: '/procedure',
+            element: (
+                <MainLayout>
+                    <Suspense>
+                        <Procedure />
+                    </Suspense>
+                </MainLayout>
+            )
+        },
+        {
+            path: '/qa',
+            element: (
+                <MainLayout>
+                    <Suspense>
+                        <QandA />
+                    </Suspense>
+                </MainLayout>
+            )
+        },
+        {
+            path: '/contact',
+            element: (
+                <MainLayout>
+                    <Suspense>
+                        <Contact />
                     </Suspense>
                 </MainLayout>
             )
@@ -176,7 +223,19 @@ function useRouter() {
         }
     ]);
 
-    return routeElement;
+    return (
+        <AnimatePresence mode='wait'>
+            <motion.div
+                key={location.pathname}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+            >
+                {routeElement}
+            </motion.div>
+        </AnimatePresence>
+    );
 }
 
 export default useRouter;
