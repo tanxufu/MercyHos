@@ -4,7 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
 exports.setUserId = (req, res, next) => {
-    console.log(req.params);
+    // console.log(req.params);
     if (!req.body.owner) req.body.owner = req.params.userId;
     next();
 };

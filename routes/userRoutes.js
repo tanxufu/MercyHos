@@ -2,10 +2,12 @@ const express = require('express');
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
 const patientRouter = require('./patientRoutes');
+const appointmentRouter = require('./appointmentRoutes');
 
 const router = express.Router();
 
 router.use('/:userId/patients', patientRouter);
+router.use('/:user/appointments', appointmentRouter);
 
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);

@@ -28,8 +28,9 @@ exports.getAll = (Model) =>
         if (req.params.doctorId) filter = { doctor: req.params.doctorId };
         if (req.params.patientId) filter = { patient: req.params.patientId };
         if (req.params.userId) filter = { owner: req.params.userId };
+        if (req.params.user) filter = { user: req.params.user };
 
-        // console.log(filter);
+        console.log(filter);
 
         const features = new APIFeatures(Model.find(filter), req.query)
             .filter()
@@ -91,23 +92,6 @@ exports.updateOne = (Model) =>
 
 exports.createOne = (Model) =>
     catchAsync(async (req, res, next) => {
-        const { dateVisit, timeVisit, doctor } = req.body;
-
-        const existingAppointment = await Model.findOne({
-            doctor,
-            dateVisit,
-            timeVisit
-        });
-
-        if (existingAppointment) {
-            return next(
-                new AppError(
-                    'Khung giờ đã có lịch hẹn. Vui lòng đặt lịch mới!',
-                    400
-                )
-            );
-        }
-
         const document = await Model.create(req.body);
 
         res.status(201).json({

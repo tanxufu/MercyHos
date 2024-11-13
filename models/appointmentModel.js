@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 
 const appointmentSchema = mongoose.Schema(
     {
+        medicalBill: {
+            type: String
+        },
         dateVisit: {
             type: Date,
             required: true
@@ -17,6 +20,11 @@ const appointmentSchema = mongoose.Schema(
                 '14:30 - 15:30',
                 '15:30 - 16:30'
             ]
+        },
+        user: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Users',
+            required: true
         },
         patient: {
             type: mongoose.Schema.ObjectId,
@@ -61,9 +69,53 @@ appointmentSchema.pre(/^find/, function (next) {
     if (!this.options.skipPatientPopulate) {
         this.populate({
             path: 'patient',
-            select: 'name dob phone gender occupation email',
+            select: 'name dob phone gender occupation email province',
             options: { skipOwner: true }
         });
+    }
+
+    next();
+});
+
+appointmentSchema.pre('save', async function (next) {
+    const existingAppointment = await this.constructor.findOne({
+        dateVisit: this.dateVisit,
+        doctor: this.doctor,
+        timeVisit: this.timeVisit
+    });
+
+    if (existingAppointment) {
+        const error = new Error(
+            'Lịch hẹn vào khung giờ đã có người đặt. Vui lòng chọn khung giờ khác!'
+        );
+        error.statusCode = 400;
+        return next(error);
+    }
+
+    // create medicalBill by dateVisit
+    if (!this.medicalBill) {
+        const dateString = this.dateVisit
+            .toISOString()
+            .split('T')[0]
+            .replace(/-/g, '');
+
+        const lastAppointment = await this.constructor
+            .findOne({ dateVisit: this.dateVisit })
+            .sort({ medicalBill: -1 })
+            .select('medicalBill');
+
+        let sequenceNumber = 1;
+
+        if (lastAppointment && lastAppointment.medicalBill) {
+            const lastSequence = parseInt(
+                lastAppointment.medicalBill.split('-')[1],
+                10
+            );
+            sequenceNumber = lastSequence + 1;
+        }
+
+        // YYYYMMDD-****
+        this.medicalBill = `${dateString}-${sequenceNumber.toString().padStart(4, '0')}`;
     }
 
     next();
