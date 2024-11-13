@@ -104,7 +104,7 @@ function SelectService() {
                                                         </td>
                                                         <td>
                                                             <span>
-                                                                150,000đ
+                                                                150.000đ
                                                             </span>
                                                         </td>
                                                         <td>

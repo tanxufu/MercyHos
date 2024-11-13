@@ -188,4 +188,23 @@
             color: var(--white);
         }
     }
+
+    &__note {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        margin-top: 8px;
+
+        font-size: 1.4rem;
+        font-weight: 300;
+        color: #ff0000;
+
+        img {
+            width: 14px;
+            height: 14px;
+            filter: brightness(0) saturate(100%) invert(14%) sepia(80%)
+                saturate(7309%) hue-rotate(2deg) brightness(103%) contrast(118%);
+        }
+    }
 }

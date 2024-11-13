@@ -134,7 +134,7 @@
 
     .ant-modal-body p {
         font-size: 1.6rem;
-        margin-top: 16px;
+        // margin-top: 12px;
     }
 
     .ant-modal-footer {
@@ -145,8 +145,13 @@
             border-radius: 3px;
         }
 
+        .ant-btn-default {
+            border: none;
+            box-shadow: none;
+        }
+
         .ant-btn-primary {
-            margin-inline-start: 12px;
+            margin-inline-start: 16px !important;
             background: #00a8ff;
         }
     }

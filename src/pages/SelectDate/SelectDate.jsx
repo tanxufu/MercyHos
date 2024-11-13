@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { DatePicker, ConfigProvider } from 'antd';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import locale from 'antd/locale/vi_VN';
 import 'dayjs/locale/vi';
-// import { useQuery } from '@tanstack/react-query';
 
 import chevronRight from '../../assets/icons/chevron-right.svg';
 import hospitalIcon from '../../assets/icons/hospital.svg';
+import warnIcon from '../../assets/icons/warn.svg';
 import stethoscopeIcon from '../../assets/icons/stethoscope.svg';
 import doctorIcon from '../../assets/icons/doctor2.svg';
 import medicalIcon from '../../assets/icons/medical.svg';
 import calendar from '../../assets/icons/calendar-date.svg';
-// import { getAppointmentOnDoctors } from '../../apis/doctor.api';
+import { getAppointmentOnDoctors } from '../../apis/doctor.api';
 
 dayjs.extend(utc);
 dayjs.locale('vi');
@@ -24,15 +25,31 @@ function SelectDate() {
     const cacheData = JSON.parse(localStorage.getItem('appointmentPatient'));
 
     const availableDays = cacheData?.doctorAvailability;
-    // const doctorId = cacheData?.doctorId;
+    const doctorId = cacheData?.doctorId;
 
-    // const { data } = useQuery({
-    //     queryKey: ['doctorAppointment', doctorId],
-    //     queryFn: () => getAppointmentOnDoctors(doctorId),
-    //     enabled: !!doctorId
-    // });
+    const { data } = useQuery({
+        queryKey: ['doctorAppointment', doctorId],
+        queryFn: () => getAppointmentOnDoctors(doctorId),
+        enabled: !!doctorId
+    });
 
-    // console.log(data);
+    const appointments = data?.data?.data?.data || [];
+
+    console.log(appointments);
+
+    const appointmentsMap = appointments?.reduce((acc, appointment) => {
+        if (appointment?.visitStatus !== 'Đã huỷ') {
+            const date = dayjs(appointment.dateVisit).format('YYYY-MM-DD');
+            if (!acc[date]) {
+                acc[date] = [];
+            }
+            acc[date].push(appointment.timeVisit);
+        }
+
+        return acc;
+    }, {});
+
+    console.log(appointmentsMap);
 
     const availableWeekdays = availableDays?.map((day) => {
         switch (day) {
@@ -63,12 +80,17 @@ function SelectDate() {
             return true;
         }
 
+        if (current.isSame(dayjs(), 'day')) {
+            return true;
+        }
+
         return !availableWeekdays?.includes(current.day());
     };
 
     const handleDateChange = (date, dateString) => {
         setDate(dateString);
         setIsTimeVisible(true);
+
         if (window.innerWidth <= 992) {
             window.scrollTo({ top: 500, behavior: 'smooth' });
         } else {
@@ -86,6 +108,10 @@ function SelectDate() {
         );
     };
 
+    const pickDate = cacheData?.appointmentDate;
+    const bookedTimeByDate = appointmentsMap[pickDate];
+    // console.log('pick time:', bookedTimeByDate);
+
     const handleSelectTime = (time) => {
         const appointmentData = {
             ...cacheData,
@@ -98,8 +124,25 @@ function SelectDate() {
         );
     };
 
-    const morningTimes = ['8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00'];
-    const afternoonTimes = ['13:30 - 14:30', '14:30 - 15:30', '15:30 - 16:30'];
+    const timeSlots = [
+        {
+            period: 'Buổi sáng',
+            times: ['8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00']
+        },
+        {
+            period: 'Buổi chiều',
+            times: ['13:30 - 14:30', '14:30 - 15:30', '15:30 - 16:30']
+        }
+    ];
+
+    const updatedTimeSlots = timeSlots.map((slot) => {
+        return {
+            ...slot,
+            times: slot.times.filter(
+                (time) => !bookedTimeByDate?.includes(time)
+            )
+        };
+    });
 
     return (
         <div className='select-date'>
@@ -116,7 +159,7 @@ function SelectDate() {
                                 alt=''
                                 className='breadcrumb__icon'
                             />
-                            <NavLink to='#'>Chọn dịch vụ</NavLink>
+                            <NavLink to='#'>Chọn ngày khám</NavLink>
                         </li>
                     </ul>
                 </div>
@@ -213,52 +256,45 @@ function SelectDate() {
                                     </div>
                                 )}
 
+                                {/* select time */}
                                 {isTimeVisible && (
                                     <div className='select-time'>
-                                        <p className='select-time__label'>
-                                            Buổi sáng
-                                        </p>
-                                        <div className='select-time__list'>
-                                            {morningTimes.map((time, index) => {
-                                                return (
-                                                    <Link
-                                                        to='/confirm-appointment'
-                                                        key={index}
-                                                        className='select-time__item'
-                                                        onClick={() =>
-                                                            handleSelectTime(
-                                                                time
-                                                            )
-                                                        }
-                                                    >
-                                                        {time}
-                                                    </Link>
-                                                );
-                                            })}
-                                        </div>
-                                        <p className='select-time__label'>
-                                            Buổi chiều
-                                        </p>
-                                        <div className='select-time__list'>
-                                            {afternoonTimes.map(
-                                                (time, index) => {
-                                                    return (
-                                                        <Link
-                                                            to='/confirm-appointment'
-                                                            key={index}
-                                                            className='select-time__item'
-                                                            onClick={() =>
-                                                                handleSelectTime(
-                                                                    time
-                                                                )
-                                                            }
-                                                        >
-                                                            {time}
-                                                        </Link>
-                                                    );
-                                                }
-                                            )}
-                                        </div>
+                                        {updatedTimeSlots.map((slot, index) => (
+                                            <div key={index}>
+                                                <p className='select-time__label'>
+                                                    {slot.period}
+                                                </p>
+                                                <div className='select-time__list'>
+                                                    {slot?.times < 1 && (
+                                                        <p className='select-time__note'>
+                                                            <img
+                                                                src={warnIcon}
+                                                                alt=''
+                                                            />
+                                                            Đã hết thời gian
+                                                            trống trong khung
+                                                            giờ này của bác sĩ!
+                                                        </p>
+                                                    )}
+                                                    {slot?.times?.map(
+                                                        (time, index) => (
+                                                            <Link
+                                                                to='/confirm-appointment'
+                                                                key={index}
+                                                                className={`select-time__item`}
+                                                                onClick={() =>
+                                                                    handleSelectTime(
+                                                                        time
+                                                                    )
+                                                                }
+                                                            >
+                                                                {time}
+                                                            </Link>
+                                                        )
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 )}
 

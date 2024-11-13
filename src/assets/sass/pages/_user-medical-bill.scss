@@ -1,0 +1,148 @@
+@use '../abstracts';
+
+.user-medical-bill {
+    h1 {
+        font-size: 2.2rem;
+        line-height: 1.5;
+        color: var(--text-color);
+    }
+
+    span {
+        margin-top: 12px;
+        font-size: 1.2rem;
+        font-weight: 300;
+        line-height: 1.3;
+        color: #627792;
+    }
+
+    &__filter {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        border-bottom: 2px solid var(--border-color);
+        margin-top: 24px;
+
+        &-item {
+            position: relative;
+            top: 2px;
+            padding: 12px 20px;
+            font-size: 1.8rem;
+            line-height: 1.5;
+            color: var(--text-color);
+            // border-bottom: 2px solid var(--border-color);
+            opacity: 0.6;
+            cursor: pointer;
+            white-space: nowrap;
+            user-select: none;
+
+            &--active {
+                opacity: 1;
+                color: var(--sup-color);
+                border-bottom: 2px solid var(--sup-color);
+            }
+        }
+    }
+
+    &__list {
+        margin-top: 32px;
+    }
+}
+
+.medical-bill-item {
+    display: flex;
+    flex-direction: column;
+
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+
+    margin-top: 20px;
+    box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 0.2);
+
+    transition: all 0.3s ease;
+
+    &:hover {
+        border: 1px solid #0352cc;
+    }
+
+    @include abstracts.screen(sm) {
+        padding: 10px;
+    }
+
+    &__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        p {
+            line-height: 1.5;
+            color: var(--sup-color);
+
+            span {
+                color: var(--text-color);
+                font-size: 1.4rem;
+            }
+        }
+
+        h2 {
+            margin-top: 8px;
+            line-height: 1.5;
+            font-weight: 500;
+            text-transform: uppercase;
+            color: var(--sup-color);
+        }
+    }
+
+    &__payment {
+        padding: 10px 12px;
+        font-size: 1.2rem;
+        font-weight: 300;
+        line-height: 1.3;
+        color: var(--white);
+
+        background: var(--sup-color);
+        border-radius: 999px;
+
+        &--cancel {
+            background: #ff4d4f;
+        }
+
+        &--pay {
+            background: #52c41a;
+        }
+    }
+
+    &__info {
+        margin-top: 10px;
+        padding-top: 6px;
+
+        border-top: 1px dashed var(--border-color);
+
+        h3 {
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+        p {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 6px;
+            font-weight: 300;
+            line-height: 1.5;
+            color: var(--primary-color);
+
+            span {
+                color: var(--text-color);
+                font-size: 1.4rem;
+            }
+        }
+    }
+}
+
+.no-data {
+    margin: 40px 20px;
+    font-size: 1.6rem;
+    text-align: center;
+    color: var(--sup-color);
+}

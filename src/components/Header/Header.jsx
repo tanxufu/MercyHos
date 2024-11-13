@@ -18,7 +18,7 @@ import AppContext from '../../contexts/app.context.jsx';
 import { useContext, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { UserOutlined } from '@ant-design/icons';
-import { Dropdown } from 'antd';
+import { Dropdown, Badge } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import { Link, NavLink } from 'react-router-dom';
@@ -88,7 +88,7 @@ function Header() {
         {
             key: '3',
             label: (
-                <a className='dropdown__link' href='/profile'>
+                <a className='dropdown__link' href='/user-medical-bill'>
                     <img src={ticket} alt='' className='dropdown__icon' />
                     Phiếu khám bệnh
                 </a>
@@ -188,7 +188,7 @@ function Header() {
                                             className='d-none d-lg-flex'
                                         >
                                             <NavLink
-                                                to='profile'
+                                                to='/profile'
                                                 className='navbar__link'
                                             >
                                                 <img
@@ -204,7 +204,7 @@ function Header() {
                                             className='d-none d-lg-flex'
                                         >
                                             <NavLink
-                                                to='/profile'
+                                                to='/user-medical-bill'
                                                 className='navbar__link navbar__link--user'
                                             >
                                                 <img
@@ -344,17 +344,20 @@ function Header() {
                                 </Dropdown>
                             )}
 
-                            <FontAwesomeIcon
-                                icon={faBell}
-                                size='xl'
-                                style={{
-                                    color: '#00a8ff',
-                                    width: '20px',
-                                    height: '20px',
-                                    padding: '4px',
-                                    cursor: 'pointer'
-                                }}
-                            />
+                            <Badge dot={true}>
+                                <Link to='/user-notifications'>
+                                    <FontAwesomeIcon
+                                        icon={faBell}
+                                        size='xl'
+                                        style={{
+                                            color: '#00a8ff',
+                                            width: '20px',
+                                            height: '20px',
+                                            cursor: 'pointer'
+                                        }}
+                                    />
+                                </Link>
+                            </Badge>
                         </div>
                     </div>
                 </div>

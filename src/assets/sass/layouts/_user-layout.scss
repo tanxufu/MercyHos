@@ -1,0 +1,53 @@
+.profile {
+    margin-top: 4px;
+
+    &__content {
+        padding: 40px 0 200px;
+    }
+}
+
+.profile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        padding: 12px 24px;
+        border-radius: 0 50px 50px 0;
+        color: var(--text-color);
+        background: #fff;
+
+        transition: all 0.3s ease;
+
+        &:hover {
+            opacity: 0.6;
+            background: #0000000a;
+        }
+
+        &--active {
+            background: #e8f0fe;
+            color: #0352cc;
+
+            img {
+                filter: brightness(0) saturate(100%) invert(18%) sepia(77%)
+                    saturate(4152%) hue-rotate(212deg) brightness(89%)
+                    contrast(98%);
+            }
+
+            &:hover {
+                background: #e8f0fe;
+                color: #0352cc;
+                opacity: 1;
+            }
+        }
+
+        img {
+            width: 18px;
+            height: 20px;
+        }
+    }
+}

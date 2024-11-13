@@ -1,0 +1,122 @@
+@use '../abstracts';
+
+.user-notifications {
+    h1 {
+        font-size: 2.2rem;
+        line-height: 1.5;
+        color: var(--text-color);
+    }
+
+    span {
+        margin-top: 12px;
+        font-size: 1.2rem;
+        font-weight: 300;
+        line-height: 1.3;
+        color: #627792;
+    }
+
+    &__list {
+        margin-top: 24px;
+    }
+
+    &__link {
+        display: flex;
+        flex-direction: column;
+
+        margin-top: 12px;
+
+        width: 100%;
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+
+        @include abstracts.screen(sm) {
+            padding: 10px;
+        }
+
+        span {
+            margin-top: 4px;
+            margin-left: auto;
+
+            font-size: 1.4rem;
+            font-weight: 300;
+            line-height: 1.3;
+        }
+
+        &:hover {
+            box-shadow: 1px 10px 10px -10px rgba(0, 0, 24, 0.5);
+        }
+    }
+
+    &__info {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+
+        @include abstracts.screen(sm) {
+            gap: 12px;
+        }
+
+        p {
+            line-height: 1.5;
+
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* Giới hạn 2 dòng */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 400px;
+
+            @include abstracts.screen(lg) {
+                max-width: 360px;
+            }
+
+            @include abstracts.screen(sm) {
+                max-width: 230px;
+            }
+
+            i {
+                margin-left: 4px;
+                font-style: italic;
+                font-size: 1.4rem;
+                font-weight: 300;
+            }
+        }
+    }
+
+    &__message {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #52c41a;
+
+        &-dot {
+            position: absolute;
+            top: 1px;
+            right: 2px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #f62c2c;
+        }
+
+        &--icon {
+            width: 20px;
+            height: 20px;
+            filter: brightness(0) saturate(100%) invert(100%) sepia(0%)
+                saturate(7482%) hue-rotate(27deg) brightness(105%) contrast(99%);
+        }
+    }
+
+    &__icon {
+        margin-left: auto;
+        width: 20px;
+        height: 20px;
+    }
+}

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import AppContext from './contexts/app.context.jsx';
 import MainLayout from './layouts/MainLayout';
+import UserLayout from './layouts/UserLayout';
 
 const Home = lazy(() => import('./pages/Home'));
 const Login = lazy(() => import('./pages/Login'));
@@ -24,6 +25,8 @@ const Introduction = lazy(() => import('./pages/Introduction'));
 const Procedure = lazy(() => import('./pages/Procedure'));
 const QandA = lazy(() => import('./pages/QandA'));
 const Contact = lazy(() => import('./pages/Contact'));
+const UserNotification = lazy(() => import('./pages/UserNotification'));
+const UserMedicalBill = lazy(() => import('./pages/UserMedicalBill'));
 
 function ProtectedRoute() {
     const { isAuthenticated } = useContext(AppContext);
@@ -97,7 +100,33 @@ function useRouter() {
             children: [
                 {
                     path: '/profile',
-                    element: <Profile />
+                    element: (
+                        <UserLayout>
+                            <Suspense>
+                                <Profile />
+                            </Suspense>
+                        </UserLayout>
+                    )
+                },
+                {
+                    path: '/user-medical-bill',
+                    element: (
+                        <UserLayout>
+                            <Suspense>
+                                <UserMedicalBill />
+                            </Suspense>
+                        </UserLayout>
+                    )
+                },
+                {
+                    path: '/user-notifications',
+                    element: (
+                        <UserLayout>
+                            <Suspense>
+                                <UserNotification />
+                            </Suspense>
+                        </UserLayout>
+                    )
                 },
                 {
                     path: '/select-patient-profile',
@@ -230,7 +259,7 @@ function useRouter() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.2, ease: 'easeIn' }}
             >
                 {routeElement}
             </motion.div>

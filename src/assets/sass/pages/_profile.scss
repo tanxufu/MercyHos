@@ -1,0 +1,174 @@
+@use '../abstracts';
+
+.patients-records {
+    h1 {
+        font-size: 2.2rem;
+        line-height: 1.5;
+        color: var(--text-color);
+    }
+
+    span {
+        margin-top: 12px;
+        font-size: 1.2rem;
+        font-weight: 300;
+        line-height: 1.3;
+        color: #627792;
+    }
+
+    &__item {
+        margin-top: 24px;
+        padding: 16px 12px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+
+        &--active {
+            border: 1px solid #0352cc;
+        }
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: unset;
+        flex-wrap: wrap;
+        cursor: pointer;
+
+        div {
+            display: flex;
+            align-items: flex-start;
+            width: 50%;
+            margin-bottom: 14px;
+            padding-right: 15px;
+
+            font-size: 1.4rem;
+            font-weight: 300;
+            line-height: 1.5;
+            color: var(--text-color);
+
+            @include abstracts.screen(md) {
+                width: 100%;
+            }
+
+            label {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                min-width: 130px;
+
+                font-weight: 200;
+                color: #627792;
+
+                img {
+                    width: 16px;
+                    height: 18px;
+                    filter: brightness(0) saturate(100%) invert(44%) sepia(45%)
+                        saturate(254%) hue-rotate(173deg) brightness(95%)
+                        contrast(93%);
+                }
+            }
+        }
+
+        &--name {
+            font-weight: 500 !important;
+            text-transform: uppercase;
+            color: #0352cc !important;
+
+            label {
+                font-weight: 300 !important;
+                color: #0352cc !important;
+                text-transform: none;
+
+                img {
+                    filter: brightness(0) saturate(100%) invert(18%) sepia(77%)
+                        saturate(4152%) hue-rotate(212deg) brightness(89%)
+                        contrast(98%) !important;
+                }
+            }
+        }
+    }
+
+    &__act {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+
+        margin-top: 10px;
+        padding-top: 12px;
+        width: 100%;
+        margin-bottom: 0;
+
+        border-top: 1px solid var(--border-color);
+    }
+
+    &__btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 32px;
+
+        font-size: 1.2rem;
+        line-height: 1.3;
+        background: var(--white);
+        border-radius: 3px;
+
+        &:hover {
+            box-shadow:
+                0 5px 11px 0 rgba(0, 0, 0, 0.18),
+                0 4px 15px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        img {
+            width: 12px;
+            height: 12px;
+        }
+    }
+
+    &__delete {
+        color: #fd397a;
+        transition: all 0.3s ease;
+
+        img {
+            filter: brightness(0) saturate(100%) invert(42%) sepia(30%)
+                saturate(5648%) hue-rotate(316deg) brightness(96%)
+                contrast(108%);
+        }
+
+        &:hover {
+            background: #fd397a;
+            color: var(--white);
+
+            img {
+                filter: brightness(0) saturate(100%) invert(95%) sepia(100%)
+                    saturate(19%) hue-rotate(357deg) brightness(104%)
+                    contrast(108%);
+            }
+        }
+    }
+
+    &__edit {
+        color: #3699ff;
+        transition: all 0.3s ease;
+
+        img {
+            filter: brightness(0) saturate(100%) invert(45%) sepia(90%)
+                saturate(1549%) hue-rotate(192deg) brightness(104%)
+                contrast(101%);
+        }
+
+        &:hover {
+            background: #3699ff;
+            color: var(--white);
+
+            img {
+                filter: brightness(0) saturate(100%) invert(95%) sepia(100%)
+                    saturate(19%) hue-rotate(357deg) brightness(104%)
+                    contrast(108%);
+            }
+        }
+    }
+
+    &__add {
+        margin-top: 24px;
+    }
+}

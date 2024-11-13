@@ -9,17 +9,21 @@ import hospitalIcon from '../../assets/icons/hospital.svg';
 import userNoLine from '../../assets/icons/user-noline.svg';
 import cake from '../../assets/icons/cake.svg';
 import gender from '../../assets/icons/gender.svg';
-import id from '../../assets/icons/id.svg';
+import bagIcon from '../../assets/icons/bag.svg';
 import location from '../../assets/icons/location.svg';
 import mobi from '../../assets/icons/mobi.svg';
 import emailIcon from '../../assets/icons/email.svg';
 import arrowRight from '../../assets/icons/arrow-right.svg';
 import { createAppointment } from '../../apis/appointment.api';
 import { showNotification } from '../../utils/notification';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+import AppContext from '../../contexts/app.context';
 
 function ConfirmAppointment() {
     const navigate = useNavigate();
+    const { user } = useContext(AppContext);
+    const userId = user._id;
+
     const cacheData = JSON.parse(localStorage.getItem('appointmentPatient'));
     const { patientId } = cacheData;
 
@@ -35,6 +39,7 @@ function ConfirmAppointment() {
     }, []);
 
     const createAppointmentMutation = useMutation({
+        mutationKey: ['appointment', patientId],
         mutationFn: (body) => createAppointment(body),
         onSuccess: () => {
             // console.log('success');
@@ -61,6 +66,7 @@ function ConfirmAppointment() {
 
     const handleSubmit = (data) => {
         const appointmentData = {
+            user: userId,
             patient: patientId,
             doctor: data.doctorId,
             dateVisit: dayjs(data.appointmentDate).format('YYYY-MM-DD'),
@@ -144,7 +150,7 @@ function ConfirmAppointment() {
                                                             }
                                                         </td>
                                                         <td>{`${dayjs(cacheData?.appointmentDate).format('DD/MM/YY')} ${cacheData?.appointmentTime?.split(' ')[0]}`}</td>
-                                                        <td>150.000</td>
+                                                        <td>150.000đ</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -197,7 +203,7 @@ function ConfirmAppointment() {
                                         </li>
                                         <li>
                                             <div>
-                                                <img src={id} alt='' />
+                                                <img src={bagIcon} alt='' />
                                                 Nghề nghiệp
                                             </div>
                                             {patient?.occupation}

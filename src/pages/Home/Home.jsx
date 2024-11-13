@@ -15,6 +15,9 @@ import fbqr from '../../assets/icons/fbqr.svg';
 // import AppContext from '../../contexts/app.context';
 
 function Home() {
+    const handleSelectBooking = (type) => {
+        localStorage.setItem('appointmentType', type);
+    };
     return (
         <div className='home'>
             <div className='home__top'>
@@ -58,6 +61,9 @@ function Home() {
                                 <Link
                                     to='/select-patient-profile'
                                     className='listgroup__link'
+                                    onClick={() =>
+                                        handleSelectBooking('specialty')
+                                    }
                                 >
                                     <img
                                         src={list1}
@@ -73,6 +79,9 @@ function Home() {
                                 <NavLink
                                     to='/select-patient-profile'
                                     className='listgroup__link'
+                                    onClick={() =>
+                                        handleSelectBooking('doctor')
+                                    }
                                 >
                                     <img
                                         src={list2}

@@ -10,7 +10,7 @@ function QandA() {
         setActiveQa(qa);
     };
 
-    console.log(activeQa);
+    // console.log(activeQa);
 
     return (
         <div className='qa'>

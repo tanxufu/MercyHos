@@ -134,15 +134,17 @@
             display: flex;
             align-items: center;
             flex-grow: 1;
-            gap: 20px;
+            gap: 16px;
 
             color: var(--text-color);
             font-size: 1.6rem;
+
             padding: 8px;
             transition: all 0.3s ease;
 
             @include abstracts.screen(lg) {
                 padding: 12px 12px 12px 20px;
+                font-weight: 300;
             }
 
             &--icon {
@@ -231,13 +233,14 @@
         width: 100%;
         gap: 22px;
 
-        padding: 16px 0;
+        padding: 8px 0 16px;
         border-bottom: 2px solid #eaeaea;
         cursor: default;
 
         &-avt {
-            width: 46px;
-            height: 46px;
+            width: 42px;
+            height: 42px;
+
             filter: brightness(0) saturate(100%) invert(0%) sepia(100%)
                 saturate(7429%) hue-rotate(261deg) brightness(84%)
                 contrast(116%);
@@ -254,7 +257,7 @@
         }
 
         &-label {
-            margin-top: 6px;
+            margin-top: 4px;
             font-weight: 600;
             color: var(--sup-color);
         }
@@ -263,12 +266,12 @@
     &__link {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 8px;
 
         width: 100%;
         padding: 10px 0;
         font-size: 1.6rem;
-        font-weight: 300;
+        font-weight: 200;
         color: var(--text-color);
 
         transition: all 0.3s ease;
@@ -285,8 +288,8 @@
     }
 
     &__icon {
-        width: 24px;
-        height: 24px;
+        width: 20px;
+        height: 20px;
     }
 
     &__logout {

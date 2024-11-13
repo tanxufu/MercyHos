@@ -1,3 +1,5 @@
+@use '../abstracts';
+
 .select-doctor {
     margin-top: 4px;
 
@@ -42,6 +44,99 @@
         h3 {
             color: #00559c;
             font-weight: 500;
+        }
+    }
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+
+    @include abstracts.screen(md) {
+        flex-wrap: wrap;
+    }
+}
+
+.filter {
+    position: relative;
+
+    &__btn {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        padding: 6px 12px;
+        font-size: 1.4rem;
+        line-height: 1.3;
+        color: var(--white);
+
+        background: #1da1f2;
+        border-radius: 4px;
+        transition: 0.3s ease;
+        box-shadow:
+            0 2px 5px 0 rgba(0, 0, 0, 0.16),
+            0 2px 10px 0 rgba(0, 0, 0, 0.12);
+
+        img {
+            margin-top: 2px;
+            width: 12px;
+            height: 12px;
+            filter: brightness(0) saturate(100%) invert(100%) sepia(0%)
+                saturate(7428%) hue-rotate(8deg) brightness(94%) contrast(116%);
+        }
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    &__dropdown {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        width: 140%;
+        max-height: 300px;
+        z-index: 1;
+        overflow: auto;
+        margin-top: 2px;
+
+        padding: 8px;
+        background: var(--white);
+        border-radius: 4px;
+        border: 1px solid var(--border-color);
+
+        visibility: hidden;
+        opacity: 0;
+        transition:
+            visibility 0.3s ease,
+            opacity 0.3s ease;
+
+        &--active {
+            visibility: visible;
+            opacity: 1;
+            box-shadow:
+                0 6px 16px 0 rgba(0, 0, 0, 0.08),
+                0 3px 6px -4px rgba(0, 0, 0, 0.12),
+                0 9px 28px 8px rgba(0, 0, 0, 0.05);
+        }
+    }
+
+    &__item {
+        width: 100%;
+        padding: 12px 8px;
+        line-height: 1.5;
+        text-align: left;
+        transition: all 0.2s ease;
+
+        &:hover {
+            box-shadow:
+                0 5px 11px 0 rgba(0, 0, 0, 0.18),
+                0 4px 15px 0 rgba(0, 0, 0, 0.15);
+            color: var(--white);
+            background-color: #1da1f2;
+            border-radius: 4px;
         }
     }
 }

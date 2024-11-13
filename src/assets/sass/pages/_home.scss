@@ -83,6 +83,10 @@
         font-weight: 600;
         line-height: 20px;
         margin-bottom: 0;
+
+        @include abstracts.screen(md) {
+            font-weight: 500;
+        }
     }
 }
 
