@@ -86,7 +86,7 @@ function PatientForm({ title, isEdit = false }) {
                     : 'Bạn đã tạo hồ sơ thành công!'
             );
             queryClient.invalidateQueries(['patients', userId]);
-            navigate('/select-patient-profile');
+            navigate('/profile');
         },
         onError: (error) => {
             console.log(error);

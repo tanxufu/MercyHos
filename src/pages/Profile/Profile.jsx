@@ -36,6 +36,7 @@ function Profile() {
     // patients
     const patients = data?.data?.data?.data;
     const activePatients = patients?.filter((patient) => patient.active) || [];
+    console.log(activePatients);
 
     const handlePatientClick = (id) => {
         if (activePatient !== id) {
@@ -110,7 +111,7 @@ function Profile() {
                                     <img src={gender} alt='' />
                                     Giới tính
                                 </label>
-                                Nam
+                                {patient?.gender}
                             </div>
                             <div>
                                 <label>

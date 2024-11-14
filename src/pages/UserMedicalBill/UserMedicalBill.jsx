@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
@@ -75,10 +75,6 @@ function UserMedicalBill() {
         };
         cancelAppointmentMutation.mutate(data);
     };
-
-    useEffect(() => {
-        window.scrollTo(0, 100);
-    }, [appointmentId]);
 
     const filterItems = ['Sắp tới', 'Đã khám', 'Đã huỷ'];
 

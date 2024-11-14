@@ -20,7 +20,7 @@ function UserNotification() {
     // patients
     const appointments = data?.data?.data?.data;
 
-    // console.log(appointments);
+    console.log(appointments);
 
     const today = new Date();
     const formattedToday = new Date(today.setHours(0, 0, 0, 0)).toISOString();
@@ -55,7 +55,9 @@ function UserNotification() {
                                         <div
                                             className={
                                                 appointment?.dateVisit >
-                                                formattedToday
+                                                    formattedToday ||
+                                                appointment?.visitStatus !==
+                                                    'Đã huỷ'
                                                     ? `user-notifications__message-dot`
                                                     : ''
                                             }
@@ -73,9 +75,14 @@ function UserNotification() {
                                                 'T'
                                             )[0]
                                         ).format('DD-MM-YYYY')}
-                                        {appointment?.dateVisit <
-                                        formattedToday ? (
-                                            <i>(Quá hạn)</i>
+                                        {appointment?.visitStatus ===
+                                        'Đã huỷ' ? (
+                                            appointment?.dateVisit <
+                                            formattedToday ? (
+                                                <i>(Quá hạn)</i>
+                                            ) : (
+                                                <i>(Đã huỷ)</i>
+                                            )
                                         ) : (
                                             ''
                                         )}
