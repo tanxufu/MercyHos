@@ -16,6 +16,10 @@ const schema = yup.object({
         .string()
         .required('Vui lòng nhập mật khẩu!')
         .min(8, 'Vui lòng nhập tối thiểu 8 ký tự!'),
+    passwordCurrent: yup
+        .string()
+        .required('Vui lòng nhập mật khẩu hiện tại!')
+        .min(8, 'Vui lòng nhập tối thiểu 8 ký tự!'),
     passwordConfirm: yup
         .string()
         .required('Vui lòng nhập xác nhận mật khẩu!')

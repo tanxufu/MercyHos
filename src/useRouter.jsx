@@ -27,6 +27,7 @@ const QandA = lazy(() => import('./pages/QandA'));
 const Contact = lazy(() => import('./pages/Contact'));
 const UserNotification = lazy(() => import('./pages/UserNotification'));
 const UserMedicalBill = lazy(() => import('./pages/UserMedicalBill'));
+const AccountSetting = lazy(() => import('./pages/AccountSetting'));
 
 function ProtectedRoute() {
     const { isAuthenticated } = useContext(AppContext);
@@ -124,6 +125,16 @@ function useRouter() {
                         <UserLayout>
                             <Suspense>
                                 <UserNotification />
+                            </Suspense>
+                        </UserLayout>
+                    )
+                },
+                {
+                    path: '/account-setting',
+                    element: (
+                        <UserLayout>
+                            <Suspense>
+                                <AccountSetting />
                             </Suspense>
                         </UserLayout>
                     )

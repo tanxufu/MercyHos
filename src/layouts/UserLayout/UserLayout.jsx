@@ -5,6 +5,7 @@ import chevronRight from '../../assets/icons/chevron-right.svg';
 import userProfile from '../../assets/icons/user-profile.svg';
 import ticket from '../../assets/icons/ticket.svg';
 import notification from '../../assets/icons/notification.svg';
+import setting from '../../assets/icons/setting.svg';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 
@@ -76,6 +77,20 @@ function UserLayout({ children }) {
                                         >
                                             <img src={notification} alt='' />
                                             Thông báo
+                                        </NavLink>
+                                    </li>
+
+                                    <li>
+                                        <NavLink
+                                            to='/account-setting'
+                                            className={({ isActive }) =>
+                                                isActive
+                                                    ? 'profile-nav__item profile-nav__item--active'
+                                                    : 'profile-nav__item'
+                                            }
+                                        >
+                                            <img src={setting} alt='' />
+                                            Cài đặt tài khoản
                                         </NavLink>
                                     </li>
                                 </ul>

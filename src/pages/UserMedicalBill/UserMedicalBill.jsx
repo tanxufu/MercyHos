@@ -29,7 +29,7 @@ function UserMedicalBill() {
     const { data, isPending } = useQuery({
         queryKey: ['appointments', userId, visitStatus],
         queryFn: () => {
-            console.log('fetch');
+            // console.log('fetch');
             return getAppointmentsOnUser(userId, visitStatus);
         },
         enabled: !!userId

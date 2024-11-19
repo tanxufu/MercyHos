@@ -11,22 +11,26 @@ import userAvt from '../../assets/icons/user-avt.svg';
 import userProfile from '../../assets/icons/user-profile.svg';
 import logout from '../../assets/icons/logout.svg';
 import ticket from '../../assets/icons/ticket.svg';
+import setting from '../../assets/icons/setting.svg';
 import Button from '../Button';
 import AppContext from '../../contexts/app.context.jsx';
+import { logoutAccount } from '../../apis/auth.api';
+import { showNotification } from '../../utils/notification';
+import { getCurrentUser } from '../../apis/user.api.js';
+import { getAppointmentsOnUser } from '../../apis/appointment.api.js';
 
 // import { Input } from 'antd';
 import { useContext, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { UserOutlined } from '@ant-design/icons';
 import { Dropdown, Badge } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import { Link, NavLink } from 'react-router-dom';
-import { logoutAccount } from '../../apis/auth.api';
-import { showNotification } from '../../utils/notification';
+import dayjs from 'dayjs';
 
 function Header() {
-    const { isAuthenticated, setIsAuthenticated, user, setUser } =
+    const { isAuthenticated, setIsAuthenticated, setUser } =
         useContext(AppContext);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -34,7 +38,29 @@ function Header() {
     const closeMenu = () => setIsMenuOpen(false);
 
     // console.log(isAuthenticated, user);
+    const { data } = useQuery({
+        queryKey: ['user'],
+        queryFn: () => getCurrentUser()
+    });
+    const user = data?.data?.data?.data;
+    // console.log(user);
 
+    const userId = user?.id;
+
+    const { data: appointments } = useQuery({
+        queryKey: ['appointments', userId, ''],
+        queryFn: () => getAppointmentsOnUser(userId, ''),
+        enabled: !!userId
+    });
+    // patients
+    const notifications = appointments?.data?.data?.data;
+
+    const datesArray = notifications
+        ?.filter((appointment) => appointment?.visitStatus !== 'Đã huỷ')
+        ?.map((appointment) => appointment.dateVisit)
+        ?.filter((date, index, self) => self.indexOf(date) === index);
+
+    // logout
     const logoutMutation = useMutation({
         mutationFn: () => logoutAccount()
     });
@@ -97,6 +123,15 @@ function Header() {
         {
             key: '4',
             label: (
+                <a className='dropdown__link' href='/account-setting'>
+                    <img src={setting} alt='' className='dropdown__icon' />
+                    Cài đặt tài khoản
+                </a>
+            )
+        },
+        {
+            key: '5',
+            label: (
                 <button
                     className='dropdown__link dropdown__logout'
                     onClick={handleLogout}
@@ -107,6 +142,14 @@ function Header() {
             )
         }
     ];
+
+    const today = new Date();
+    const formattedToday = new Date(today.setHours(0, 0, 0, 0)).toISOString();
+
+    const hasFutureDate = datesArray?.some((dateStr) => {
+        const date = dayjs(dateStr).format('YYYY-MM-DD');
+        return date > formattedToday;
+    });
 
     return (
         <>
@@ -205,7 +248,7 @@ function Header() {
                                         >
                                             <NavLink
                                                 to='/user-medical-bill'
-                                                className='navbar__link navbar__link--user'
+                                                className='navbar__link'
                                             >
                                                 <img
                                                     src={ticket}
@@ -213,6 +256,22 @@ function Header() {
                                                     className='navbar__link--icon d-none d-lg-block'
                                                 />
                                                 Phiếu khám bệnh
+                                            </NavLink>
+                                        </li>
+                                        <li
+                                            onClick={closeMenu}
+                                            className='d-none d-lg-flex'
+                                        >
+                                            <NavLink
+                                                to='/account-setting'
+                                                className='navbar__link navbar__link--user'
+                                            >
+                                                <img
+                                                    src={setting}
+                                                    alt=''
+                                                    className='navbar__link--icon d-none d-lg-block'
+                                                />
+                                                Cài đặt tài khoản
                                             </NavLink>
                                         </li>
                                     </>
@@ -344,7 +403,9 @@ function Header() {
                                 </Dropdown>
                             )}
 
-                            <Badge dot={true}>
+                            <Badge
+                                dot={datesArray?.length > 0 && hasFutureDate}
+                            >
                                 <Link to='/user-notifications'>
                                     <FontAwesomeIcon
                                         icon={faBell}

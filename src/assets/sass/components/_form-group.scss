@@ -1,3 +1,5 @@
+@use '../abstracts';
+
 .form-group {
     display: flex;
     flex-direction: column;
@@ -16,7 +18,7 @@
     }
 
     &__input {
-        margin-top: 8px;
+        margin-top: 12px;
         padding: 10px 16px;
         width: 100%;
         min-width: 340px;
@@ -28,6 +30,10 @@
         border: 1px solid var(--border-color);
         background: #f9fafb;
         transition: border 0.3s;
+
+        @include abstracts.screen(sm) {
+            min-width: 280px;
+        }
 
         &::placeholder {
             font-weight: 300;

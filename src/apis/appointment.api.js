@@ -11,7 +11,7 @@ export const getAppointmentsOnUser = async (userId, visitStatus) => {
     const queryString = params.toString();
 
     return await http.get(
-        `/v1/users/${userId}/appointments?sort=dateVisit&${queryString}`
+        `/v1/users/${userId}/appointments?sort=visitStatus&${queryString}`
     );
 };
 

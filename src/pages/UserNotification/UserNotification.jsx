@@ -20,7 +20,7 @@ function UserNotification() {
     // patients
     const appointments = data?.data?.data?.data;
 
-    console.log(appointments);
+    // console.log(appointments);
 
     const today = new Date();
     const formattedToday = new Date(today.setHours(0, 0, 0, 0)).toISOString();
@@ -54,12 +54,12 @@ function UserNotification() {
                                     <div className='user-notifications__message'>
                                         <div
                                             className={
-                                                appointment?.dateVisit >
+                                                appointment?.dateVisit <
                                                     formattedToday ||
-                                                appointment?.visitStatus !==
+                                                appointment?.visitStatus ===
                                                     'Đã huỷ'
-                                                    ? `user-notifications__message-dot`
-                                                    : ''
+                                                    ? ''
+                                                    : `user-notifications__message-dot`
                                             }
                                         ></div>
                                         <img
@@ -77,12 +77,13 @@ function UserNotification() {
                                         ).format('DD-MM-YYYY')}
                                         {appointment?.visitStatus ===
                                         'Đã huỷ' ? (
-                                            appointment?.dateVisit <
-                                            formattedToday ? (
-                                                <i>(Quá hạn)</i>
-                                            ) : (
-                                                <i>(Đã huỷ)</i>
-                                            )
+                                            <i>(Đã huỷ)</i>
+                                        ) : appointment?.visitStatus ===
+                                          'Đã khám' ? (
+                                            <i>(Hoàn thành)</i>
+                                        ) : appointment?.dateVisit <
+                                          formattedToday ? (
+                                            <i>(Quá hạn)</i>
                                         ) : (
                                             ''
                                         )}

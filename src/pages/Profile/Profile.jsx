@@ -36,7 +36,7 @@ function Profile() {
     // patients
     const patients = data?.data?.data?.data;
     const activePatients = patients?.filter((patient) => patient.active) || [];
-    console.log(activePatients);
+    // console.log(activePatients);
 
     const handlePatientClick = (id) => {
         if (activePatient !== id) {
