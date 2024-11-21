@@ -56,8 +56,8 @@ const doctorSchema = new mongoose.Schema(
         },
         create_at: {
             type: Date,
-            default: Date.now(),
-            select: false
+            default: Date.now()
+            // select: false
         },
         active: {
             type: Boolean,

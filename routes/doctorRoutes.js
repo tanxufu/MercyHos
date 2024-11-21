@@ -3,7 +3,7 @@ const doctorController = require('../controllers/doctorController');
 const authController = require('../controllers/authController');
 const appointmentRouter = require('./appointmentRoutes');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.use('/:doctorId/appointments', appointmentRouter);
 

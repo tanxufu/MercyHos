@@ -29,14 +29,16 @@ exports.getAll = (Model) =>
         if (req.params.patientId) filter = { patient: req.params.patientId };
         if (req.params.userId) filter = { owner: req.params.userId };
         if (req.params.user) filter = { user: req.params.user };
+        // if (req.params.owner) filter = { owner: req.params.owner };
 
-        console.log(filter);
+        // console.log(filter);
 
         const features = new APIFeatures(Model.find(filter), req.query)
             .filter()
             .sort()
             .limitFields()
             .paginate();
+
         const document = await features.query;
 
         if (!document) {

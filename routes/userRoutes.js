@@ -3,11 +3,13 @@ const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
 const patientRouter = require('./patientRoutes');
 const appointmentRouter = require('./appointmentRoutes');
+const doctorRouter = require('./doctorRoutes');
 
 const router = express.Router();
 
 router.use('/:userId/patients', patientRouter);
 router.use('/:user/appointments', appointmentRouter);
+router.use('/:userId/doctors', doctorRouter);
 
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
