@@ -1,5 +1,20 @@
 import http from '../utils/http';
 
+export const getAllAppointments = async () => {
+    return await http.get(`/v1/appointments`);
+};
+
+export const getAppointmentsOnDoctor = async (doctorId, visitStatus) => {
+    const params = new URLSearchParams();
+
+    if (visitStatus) params.append('visitStatus', visitStatus);
+    const queryString = params.toString();
+
+    return await http.get(
+        `/v1/doctors/${doctorId}/appointments?sort=dateVisit&${queryString}`
+    );
+};
+
 export const createAppointment = async (body) => {
     return await http.post(`/v1/appointments`, body);
 };

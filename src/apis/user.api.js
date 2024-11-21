@@ -1,5 +1,9 @@
 import http from '../utils/http';
 
+export const getAllUsers = async () => {
+    return await http.get('/v1/users');
+};
+
 export const getCurrentUser = async () => {
     return await http.get('/v1/users/me');
 };

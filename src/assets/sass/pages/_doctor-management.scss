@@ -1,0 +1,86 @@
+.management {
+    &__act {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        gap: 20px;
+    }
+
+    &__refetch {
+        margin-right: auto;
+        padding: 8px;
+        border-radius: 8px;
+
+        img {
+            width: 20px;
+            height: 20px;
+            filter: brightness(0) saturate(100%) invert(100%) sepia(6%)
+                saturate(22%) hue-rotate(249deg) brightness(108%) contrast(105%);
+        }
+    }
+
+    &__search {
+        font-family: 'Lexend', sans-serif;
+        input {
+            font-family: 'Lexend', sans-serif;
+            padding: 9px 45px;
+            min-width: 400px;
+        }
+    }
+
+    &__add {
+        font-family: 'Lexend', sans-serif;
+        // margin-left: auto;
+        border-radius: 4px;
+
+        img {
+            width: 18px;
+            height: 18px;
+
+            margin-right: 10px;
+            filter: brightness(0) saturate(100%) invert(100%) sepia(6%)
+                saturate(22%) hue-rotate(249deg) brightness(108%) contrast(105%);
+        }
+    }
+
+    &__table {
+        margin-top: 30px;
+
+        td {
+            font-weight: 300;
+
+            &:first-child {
+                // font-weight: 400;
+                // color: var(--primary-color);
+            }
+        }
+
+        td,
+        th {
+            font-family: 'Lexend', sans-serif !important;
+        }
+
+        .ant-pagination-options {
+            display: none;
+        }
+    }
+
+    &__actions-btn {
+        padding: 8px;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: var(--hover-color);
+        }
+
+        &--delete {
+            background: #ff9c94;
+
+            &:hover {
+                background: #f81d22;
+            }
+        }
+    }
+}

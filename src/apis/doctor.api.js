@@ -4,6 +4,14 @@ export const getDoctorStats = async (searchQuery) => {
     return await http.get(`/v1/doctors/doctor-stats?specialty=${searchQuery}`);
 };
 
+export const getAllDoctors = async (searchQuery) => {
+    return await http.get(`/v1/doctors?search=${searchQuery}`);
+};
+
+export const getDoctor = async (doctorId) => {
+    return await http.get(`/v1/doctors/${doctorId}`);
+};
+
 export const getDoctorsBySpecialty = async (
     specialty,
     availability,
@@ -26,4 +34,8 @@ export const getDoctorsBySpecialty = async (
 
 export const getAppointmentOnDoctors = async (doctorId) => {
     return await http.get(`/v1/doctors/${doctorId}/appointments`);
+};
+
+export const getDoctorOnUser = async (userId) => {
+    return await http.get(`/v1/users/${userId}/doctors`);
 };

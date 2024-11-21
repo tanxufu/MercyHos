@@ -1,0 +1,100 @@
+.doctor-profile {
+    &__bg {
+        border-radius: 8px 8px 0px 0;
+        border: 2px solid rgba(232, 234, 238, 0.4);
+    }
+
+    &__top {
+        img {
+            height: 146px;
+            width: 100%;
+
+            border-radius: 8px;
+        }
+    }
+}
+
+.doctor-profile-header {
+    position: relative;
+    top: -40px;
+    left: 0;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+
+    font-family: 'Lexend', sans-serif;
+    margin: 0 72px;
+
+    &__avt {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: #cdd4de;
+        border-width: 8px;
+        border-style: solid;
+        border-color: rgba(38, 184, 147, 0.5);
+
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+        img {
+            filter: brightness(0) saturate(100%) invert(48%) sepia(93%)
+                saturate(6125%) hue-rotate(172deg) brightness(92%) contrast(98%);
+        }
+    }
+
+    &__name {
+        h1 {
+            font-size: 2.4rem;
+            line-height: 1.5;
+            color: var(--text-color);
+        }
+
+        p {
+            margin-top: 4px;
+            font-weight: 300;
+            line-height: 1.5;
+        }
+    }
+}
+
+.doctor-profile-edit {
+    padding: 0 64px;
+    font-family: 'Lexend', sans-serif;
+
+    h2 {
+        font-size: 2.4rem;
+        line-height: 1.5;
+        text-transform: uppercase;
+        color: var(--sup-color);
+    }
+}
+
+.doctor-profile-form {
+    font-family: 'Lexend', sans-serif;
+
+    &__btn {
+        margin-top: 24px;
+        border-radius: 8px;
+    }
+
+    &__createdAt {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+
+        height: 100%;
+
+        margin-top: auto;
+        line-height: 1.5;
+        color: #7f8f98;
+        font-style: oblique;
+
+        span {
+            color: var(--text-color);
+        }
+    }
+}

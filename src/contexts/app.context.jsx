@@ -7,6 +7,10 @@ const AppContext = createContext({
     setIsAuthenticated: () => {},
     user: getUserFromLS(),
     setUser: () => {},
+    isAdmin: Boolean(getUserFromLS()?.role === 'admin' || false),
+    setIsAdmin: () => {},
+    isDoctor: Boolean(getUserFromLS()?.role === 'doctor' || false),
+    setIsDoctor: () => {},
     reset: () => {}
 });
 
@@ -18,9 +22,13 @@ export const AppProvider = ({
         defaultValue.isAuthenticated
     );
     const [user, setUser] = useState(defaultValue.user);
+    const [isAdmin, setIsAdmin] = useState(defaultValue.isAdmin);
+    const [isDoctor, setIsDoctor] = useState(defaultValue.isDoctor);
 
     const reset = () => {
         setIsAuthenticated(false);
+        setIsAdmin(false);
+        setIsDoctor(false);
         setUser(null);
     };
 
@@ -31,6 +39,10 @@ export const AppProvider = ({
                 setIsAuthenticated,
                 user,
                 setUser,
+                isAdmin,
+                setIsAdmin,
+                isDoctor,
+                setIsDoctor,
                 reset
             }}
         >

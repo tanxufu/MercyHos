@@ -15,7 +15,8 @@ import AppContext from '../../contexts/app.context.jsx';
 const loginSchema = schema.pick(['email', 'password']);
 
 function Login() {
-    const { setIsAuthenticated, setUser } = useContext(AppContext);
+    const { setIsAuthenticated, setUser, setIsAdmin, setIsDoctor } =
+        useContext(AppContext);
     const navigate = useNavigate();
 
     const {
@@ -32,10 +33,24 @@ function Login() {
     const onSubmit = handleSubmit((data) => {
         loginAccountMutation.mutate(data, {
             onSuccess: (data) => {
+                const user = data?.data?.data?.user;
                 setIsAuthenticated(true);
-                setUser(data.data.data.user);
+                setUser(user);
 
-                navigate('/');
+                if (user.role === 'admin') {
+                    setIsAdmin(true);
+                    setTimeout(() => {
+                        navigate('/admin');
+                    }, 500);
+                } else if (user.role === 'doctor') {
+                    setIsDoctor(true);
+                    setTimeout(() => {
+                        navigate('/doctor');
+                    }, 500);
+                } else {
+                    navigate('/');
+                }
+
                 showNotification('success', 'Đăng nhập thành công!', '');
             },
             onError: (error) => {

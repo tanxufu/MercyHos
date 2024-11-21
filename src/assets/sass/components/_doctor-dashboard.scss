@@ -1,0 +1,52 @@
+.doctor-dashboard {
+    &__row {
+        margin: 24px 40px 0;
+    }
+
+    &__activity {
+        font-family: 'Lexend', sans-serif;
+        h2 {
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            color: var(--sup-color);
+        }
+
+        &--row {
+            display: flex;
+            align-items: center;
+
+            width: 100%;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        &--item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 50%;
+            padding: 24px 16px 10px;
+            border-radius: 8px;
+
+            img {
+                width: 42px;
+                height: 42px;
+            }
+
+            span {
+                margin-top: 12px;
+                font-size: 2rem;
+                font-weight: 500;
+                line-height: 1.5;
+                color: #374858;
+            }
+
+            p {
+                margin-top: 6px;
+                line-height: 1.5;
+                font-weight: 300;
+            }
+        }
+    }
+}

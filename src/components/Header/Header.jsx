@@ -22,7 +22,7 @@ import { getAppointmentsOnUser } from '../../apis/appointment.api.js';
 // import { Input } from 'antd';
 import { useContext, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { UserOutlined } from '@ant-design/icons';
+import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Dropdown, Badge } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
@@ -136,7 +136,7 @@ function Header() {
                     className='dropdown__link dropdown__logout'
                     onClick={handleLogout}
                 >
-                    <img src={logout} alt='' className='dropdown__icon' />
+                    <LogoutOutlined style={{ marginLeft: 2 }} />
                     Đăng xuất
                 </button>
             )

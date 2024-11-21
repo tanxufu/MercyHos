@@ -1,5 +1,9 @@
 import http from '../utils/http';
 
+export const getAllPatients = async () => {
+    return await http.get(`/v1/patients`);
+};
+
 export const getPatientsOnUser = async (userId) => {
     return await http.get(`/v1/users/${userId}/patients`);
 };

@@ -4,8 +4,10 @@ import { useContext, lazy, Suspense } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import AppContext from './contexts/app.context.jsx';
+
 import MainLayout from './layouts/MainLayout';
 import UserLayout from './layouts/UserLayout';
+import AdminLayout from './layouts/AdminLayout';
 
 const Home = lazy(() => import('./pages/Home'));
 const Login = lazy(() => import('./pages/Login'));
@@ -28,6 +30,7 @@ const Contact = lazy(() => import('./pages/Contact'));
 const UserNotification = lazy(() => import('./pages/UserNotification'));
 const UserMedicalBill = lazy(() => import('./pages/UserMedicalBill'));
 const AccountSetting = lazy(() => import('./pages/AccountSetting'));
+const Doctor = lazy(() => import('./pages/Doctor'));
 
 function ProtectedRoute() {
     const { isAuthenticated } = useContext(AppContext);
@@ -37,6 +40,34 @@ function ProtectedRoute() {
 function RejectedRoute() {
     const { isAuthenticated } = useContext(AppContext);
     return !isAuthenticated ? <Outlet /> : <Navigate to='/' />;
+}
+
+function AdminRoute() {
+    const { isAuthenticated, isAdmin } = useContext(AppContext);
+
+    if (!isAuthenticated) {
+        return <Navigate to='/login' />;
+    }
+
+    if (!isAdmin) {
+        return <Navigate to='/' />;
+    }
+
+    return <Outlet />;
+}
+
+function DoctorRoute() {
+    const { isAuthenticated, isDoctor } = useContext(AppContext);
+
+    if (!isAuthenticated) {
+        return <Navigate to='/login' />;
+    }
+
+    if (!isDoctor) {
+        return <Navigate to='/' />;
+    }
+
+    return <Outlet />;
 }
 
 function useRouter() {
@@ -256,6 +287,39 @@ function useRouter() {
                     element: (
                         <Suspense>
                             <ResetPassword />
+                        </Suspense>
+                    )
+                }
+            ]
+        },
+
+        // Admin router
+        {
+            path: '',
+            element: <AdminRoute />,
+            children: [
+                {
+                    path: '/admin',
+                    element: (
+                        <AdminLayout>
+                            <Suspense>{/* <DoctorManagement /> */}</Suspense>
+                        </AdminLayout>
+                    )
+                }
+            ]
+        },
+
+        // Doctor router
+        {
+            path: '',
+            element: <DoctorRoute />,
+            children: [
+                {
+                    path: '/doctor',
+                    element: (
+                        <Suspense>
+                            {' '}
+                            <Doctor />{' '}
                         </Suspense>
                     )
                 }

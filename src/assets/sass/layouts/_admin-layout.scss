@@ -1,0 +1,42 @@
+.admin-layout {
+    &__sider {
+        padding: 60px 0 40px;
+        max-height: 100%;
+        min-height: 100vh;
+
+        ul {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        li {
+            margin: 0 !important;
+
+            width: 100% !important;
+            border-radius: 0 !important;
+            height: 48px !important;
+
+            font-size: 1.3rem;
+            font-family: 'Lexend', sans-serif;
+            font-weight: 300;
+
+            svg {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        .ant-menu-item {
+            &:last-child {
+                display: flex;
+                margin-top: 620px !important;
+            }
+        }
+    }
+
+    &__content {
+        margin-bottom: 0 !important;
+        // padding: 16px 24px 0 24px !important;
+    }
+}

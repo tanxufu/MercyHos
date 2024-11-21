@@ -24,8 +24,8 @@
 
         &-item {
             position: relative;
-            top: 2px;
             padding: 12px 20px;
+
             font-size: 1.8rem;
             line-height: 1.5;
             color: var(--text-color);
@@ -38,7 +38,18 @@
             &--active {
                 opacity: 1;
                 color: var(--sup-color);
-                border-bottom: 2px solid var(--sup-color);
+                // border-bottom: 2px solid var(--sup-color);
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -2px;
+                    left: 0;
+                    height: 2px;
+                    width: 100%;
+                    border-radius: 999px;
+                    background: var(--sup-color);
+                }
             }
         }
     }

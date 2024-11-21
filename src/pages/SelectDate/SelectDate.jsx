@@ -35,7 +35,7 @@ function SelectDate() {
 
     const appointments = data?.data?.data?.data || [];
 
-    console.log(appointments);
+    // console.log(appointments);
 
     const appointmentsMap = appointments?.reduce((acc, appointment) => {
         if (appointment?.visitStatus !== 'Đã huỷ') {
@@ -49,7 +49,7 @@ function SelectDate() {
         return acc;
     }, {});
 
-    console.log(appointmentsMap);
+    // console.log(appointmentsMap);
 
     const availableWeekdays = availableDays?.map((day) => {
         switch (day) {

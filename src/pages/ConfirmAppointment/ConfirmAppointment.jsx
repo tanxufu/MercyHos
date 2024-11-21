@@ -43,12 +43,18 @@ function ConfirmAppointment() {
         mutationFn: (body) => createAppointment(body),
         onSuccess: () => {
             // console.log('success');
+
             showNotification(
                 'success',
                 'Thành công!',
                 'Bạn đã đặt lịch khám thành công!'
             );
             navigate('/');
+
+            setTimeout(() => {
+                localStorage.removeItem('appointmentPatient');
+                localStorage.removeItem('appointmentType');
+            }, 500);
         },
         onError: (error) => {
             const errorMessage = error?.response?.data?.message;
