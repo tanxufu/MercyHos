@@ -1,5 +1,13 @@
 /* eslint-disable react/prop-types */
-function FormGroup({ label, name, type, placeHolder, register, errorMessage }) {
+function FormGroup({
+    label,
+    name,
+    type,
+    placeHolder,
+    register,
+    errorMessage,
+    value
+}) {
     return (
         <div className={`form-group ${type === 'hide' && 'd-none'}`}>
             <label>
@@ -8,6 +16,7 @@ function FormGroup({ label, name, type, placeHolder, register, errorMessage }) {
                     className='form-group__input'
                     type={type}
                     name={name}
+                    value={value}
                     placeholder={placeHolder}
                     {...register(name)}
                 />

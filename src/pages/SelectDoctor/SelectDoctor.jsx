@@ -52,7 +52,8 @@ function SelectDoctor() {
         },
         enabled: !!cacheData?.patientId
     });
-    const doctorsBySpecialty = data?.data?.data?.data;
+    const doctors = data?.data?.data?.data;
+    const activeDoctors = doctors?.filter((doctor) => doctor?.active) || [];
 
     // get specialty
     const { data: data2 } = useQuery({
@@ -462,100 +463,88 @@ function SelectDoctor() {
                                             )}
 
                                             {/* doctor list */}
-                                            {doctorsBySpecialty?.map(
-                                                (doctor) => {
-                                                    return (
-                                                        <Link
-                                                            to='/select-service'
-                                                            key={doctor.id}
-                                                            className='select-doctor__item'
-                                                            onClick={() =>
-                                                                handleSelectDoctor(
-                                                                    doctor
-                                                                )
-                                                            }
-                                                        >
-                                                            <div>
-                                                                <img
-                                                                    src={
-                                                                        doctorIcon
-                                                                    }
-                                                                    alt=''
-                                                                    className='select-doctor__item--icon'
-                                                                />
-                                                                <h3>
-                                                                    {
-                                                                        doctor.name
-                                                                    }
-                                                                </h3>
-                                                            </div>
-                                                            <div>
-                                                                <img
-                                                                    src={
-                                                                        stethoscopeIcon
-                                                                    }
-                                                                    alt=''
-                                                                />
-                                                                <p>
-                                                                    Chuyên khoa:
-                                                                    &nbsp;
-                                                                    {
-                                                                        doctor.specialty
-                                                                    }
-                                                                </p>
-                                                            </div>
-                                                            <div>
-                                                                <img
-                                                                    src={
-                                                                        genderIcon
-                                                                    }
-                                                                    alt=''
-                                                                />
-                                                                <p>
-                                                                    Giới tính:
-                                                                    &nbsp;
-                                                                    {doctor.gender ===
-                                                                    'male'
-                                                                        ? 'Nam'
-                                                                        : 'Nữ'}
-                                                                </p>
-                                                            </div>
-                                                            <div>
-                                                                <img
-                                                                    src={
-                                                                        calendarIcon
-                                                                    }
-                                                                    alt=''
-                                                                />
-                                                                <p>
-                                                                    Lịch khám:
-                                                                    &nbsp;
-                                                                    {doctor.availability.join(
-                                                                        ', '
-                                                                    )}
-                                                                </p>
-                                                            </div>
-                                                            <div>
-                                                                <img
-                                                                    src={
-                                                                        moneyIcon
-                                                                    }
-                                                                    alt=''
-                                                                />
-                                                                <p>
-                                                                    Phí khám:
-                                                                    &nbsp;
-                                                                    {doctor.fee}
-                                                                    .000đ
-                                                                </p>
-                                                            </div>
-                                                        </Link>
-                                                    );
-                                                }
-                                            )}
+                                            {activeDoctors?.map((doctor) => {
+                                                return (
+                                                    <Link
+                                                        to='/select-service'
+                                                        key={doctor.id}
+                                                        className='select-doctor__item'
+                                                        onClick={() =>
+                                                            handleSelectDoctor(
+                                                                doctor
+                                                            )
+                                                        }
+                                                    >
+                                                        <div>
+                                                            <img
+                                                                src={doctorIcon}
+                                                                alt=''
+                                                                className='select-doctor__item--icon'
+                                                            />
+                                                            <h3>
+                                                                {doctor.name}
+                                                            </h3>
+                                                        </div>
+                                                        <div>
+                                                            <img
+                                                                src={
+                                                                    stethoscopeIcon
+                                                                }
+                                                                alt=''
+                                                            />
+                                                            <p>
+                                                                Chuyên khoa:
+                                                                &nbsp;
+                                                                {
+                                                                    doctor.specialty
+                                                                }
+                                                            </p>
+                                                        </div>
+                                                        <div>
+                                                            <img
+                                                                src={genderIcon}
+                                                                alt=''
+                                                            />
+                                                            <p>
+                                                                Giới tính:
+                                                                &nbsp;
+                                                                {doctor.gender ===
+                                                                'male'
+                                                                    ? 'Nam'
+                                                                    : 'Nữ'}
+                                                            </p>
+                                                        </div>
+                                                        <div>
+                                                            <img
+                                                                src={
+                                                                    calendarIcon
+                                                                }
+                                                                alt=''
+                                                            />
+                                                            <p>
+                                                                Lịch khám:
+                                                                &nbsp;
+                                                                {doctor.availability.join(
+                                                                    ', '
+                                                                )}
+                                                            </p>
+                                                        </div>
+                                                        <div>
+                                                            <img
+                                                                src={moneyIcon}
+                                                                alt=''
+                                                            />
+                                                            <p>
+                                                                Phí khám: &nbsp;
+                                                                {doctor.fee}
+                                                                .000đ
+                                                            </p>
+                                                        </div>
+                                                    </Link>
+                                                );
+                                            })}
 
-                                            {doctorsBySpecialty?.length ===
-                                                0 && (
+                                            {activeDoctors?.length === 0 && (
                                                 <div className='select__search-error'>
                                                     Không tìm thấy bác sĩ!
                                                 </div>

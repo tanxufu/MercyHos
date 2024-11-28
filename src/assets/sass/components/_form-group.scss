@@ -6,7 +6,7 @@
     margin-top: 16px;
 
     &__label {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         line-height: 1.3;
 
         color: var(--text-color);
@@ -23,6 +23,7 @@
         width: 100%;
         min-width: 340px;
         font-size: 1.4rem;
+        font-weight: 300;
         line-height: 1.572;
 
         color: var(--text-color);
@@ -53,5 +54,96 @@
         font-weight: 300;
 
         color: #ff0000;
+    }
+}
+
+.form {
+    &__col {
+        display: flex;
+        flex-direction: column;
+        margin-top: 16px;
+    }
+
+    &__label {
+        font-size: 1.4rem;
+        line-height: 1.3;
+        color: var(--text-color);
+
+        sup {
+            color: #f62c2c;
+            font-weight: 200;
+        }
+    }
+
+    &__select {
+        margin-top: 12px;
+        height: 44px;
+        width: 100%;
+        min-width: 340px;
+
+        background: #f9fafb;
+        transition: border 0.3s;
+
+        @include abstracts.screen(sm) {
+            min-width: 280px;
+        }
+
+        .ant-select-selector {
+            background: #f9fafb !important;
+            border-radius: 10px !important;
+            border: 1px solid var(--border-color) !important;
+            padding: 0 16px !important;
+
+            &:focus {
+                border: 1px solid var(--hover-color) !important;
+            }
+
+            .ant-select-selection-item {
+                font-family: 'Lexend', sans-serif;
+                font-size: 1.4rem;
+                font-weight: 300;
+                color: var(--text-color);
+            }
+
+            .ant-select-selection-placeholder {
+                font-family: 'Lexend', sans-serif;
+                font-weight: 300;
+                opacity: 0.4;
+                color: var(--text-color);
+            }
+
+            .ant-select-selection-search {
+                font-family: 'Lexend', sans-serif;
+                font-weight: 400;
+                inset-inline-start: 16px;
+            }
+        }
+    }
+}
+
+.ant-select-disabled {
+    .ant-select-selection-item {
+        opacity: 0.4 !important;
+    }
+}
+
+.ant-picker-dropdown {
+    z-index: 9999;
+
+    font-family: 'Lexend', sans-serif;
+    font-weight: 300 !important;
+}
+
+.ant-select-dropdown {
+    z-index: 9999;
+
+    font-family: 'Lexend', sans-serif;
+
+    .ant-select-item-option {
+        font-weight: 300 !important;
+    }
+
+    .ant-select-item-option-selected {
+        font-weight: 400 !important;
     }
 }

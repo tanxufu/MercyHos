@@ -39,7 +39,7 @@ function SelectDate() {
 
     const appointmentsMap = appointments?.reduce((acc, appointment) => {
         if (appointment?.visitStatus !== 'Đã huỷ') {
-            const date = dayjs(appointment.dateVisit).format('YYYY-MM-DD');
+            const date = dayjs(appointment.dateVisit).format('DD-MM-YYYY');
             if (!acc[date]) {
                 acc[date] = [];
             }
@@ -110,7 +110,7 @@ function SelectDate() {
 
     const pickDate = cacheData?.appointmentDate;
     const bookedTimeByDate = appointmentsMap[pickDate];
-    // console.log('pick time:', bookedTimeByDate);
+    // console.log(pickDate, bookedTimeByDate);
 
     const handleSelectTime = (time) => {
         const appointmentData = {
@@ -214,11 +214,7 @@ function SelectDate() {
                                             <img src={calendar} alt='doctor' />
                                             <p>
                                                 Ngày khám:
-                                                <span>
-                                                    {dayjs(date).format(
-                                                        'DD/MM/YYYY'
-                                                    )}
-                                                </span>
+                                                <span>{date}</span>
                                             </p>
                                         </li>
                                     )}
@@ -249,7 +245,7 @@ function SelectDate() {
                                                 // value={}
                                                 placement='bottomRight'
                                                 className='select-date__picker'
-                                                format='YYYY-MM-DD'
+                                                format='DD-MM-YYYY'
                                                 disabledDate={disabledDate}
                                             />
                                         </ConfigProvider>

@@ -191,7 +191,7 @@ function Profile() {
                             </Button>
                             <Modal
                                 className='delete-modal'
-                                title='Cảnh báo!'
+                                title='Xác nhận!'
                                 cancelText='Đóng'
                                 okText='Xoá'
                                 centered

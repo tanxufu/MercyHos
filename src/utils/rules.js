@@ -24,6 +24,7 @@ const schema = yup.object({
         .string()
         .required('Vui lòng nhập xác nhận mật khẩu!')
         .oneOf([yup.ref('password')], 'Vui lòng nhập đúng mật khẩu!'),
+    role: yup.string(),
     dob: yup.date().required('Vui lòng nhập ngày sinh!'),
     phone: yup
         .string()

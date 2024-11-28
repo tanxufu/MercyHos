@@ -78,13 +78,13 @@ function AdminLayout() {
                     items={[
                         {
                             key: '1',
-                            icon: <UsergroupAddOutlined />,
-                            label: 'QL BÁC SĨ'
+                            icon: <CalendarOutlined />,
+                            label: 'QL LỊCH KHÁM'
                         },
                         {
                             key: '2',
-                            icon: <CalendarOutlined />,
-                            label: 'QL LỊCH KHÁM'
+                            icon: <ProfileOutlined />,
+                            label: 'QL HỒ SƠ'
                         },
                         {
                             key: '3',
@@ -94,8 +94,8 @@ function AdminLayout() {
 
                         {
                             key: '4',
-                            icon: <ProfileOutlined />,
-                            label: 'QL HỒ SƠ'
+                            icon: <UsergroupAddOutlined />,
+                            label: 'QL BÁC SĨ'
                         },
 
                         {
@@ -140,10 +140,10 @@ function AdminLayout() {
                         borderRadius: borderRadiusLG
                     }}
                 >
-                    {selectedKey === '1' && <DoctorManagement />}
-                    {selectedKey === '2' && <AppointmentManagement />}
+                    {selectedKey === '1' && <AppointmentManagement />}
+                    {selectedKey === '2' && <PatientManagement />}
                     {selectedKey === '3' && <UserManagement />}
-                    {selectedKey === '4' && <PatientManagement />}
+                    {selectedKey === '4' && <DoctorManagement />}
                 </Content>
             </Layout>
         </Layout>

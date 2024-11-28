@@ -9,7 +9,6 @@ import phoneIcon from '../../assets/icons/phone.svg';
 import closeIcon from '../../assets/icons/close.svg';
 import userAvt from '../../assets/icons/user-avt.svg';
 import userProfile from '../../assets/icons/user-profile.svg';
-import logout from '../../assets/icons/logout.svg';
 import ticket from '../../assets/icons/ticket.svg';
 import setting from '../../assets/icons/setting.svg';
 import Button from '../Button';
@@ -353,10 +352,8 @@ function Header() {
                                             className='navbar__logout-btn navbar__link'
                                             onClick={handleLogout}
                                         >
-                                            <img
-                                                src={logout}
-                                                alt=''
-                                                className='navbar__link--icon d-none d-lg-block'
+                                            <LogoutOutlined
+                                                style={{ marginLeft: 2 }}
                                             />
                                             Đăng xuất
                                         </button>

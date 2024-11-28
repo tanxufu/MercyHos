@@ -2,13 +2,14 @@
 import { useContext, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal } from 'antd';
+import { useLocation } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 
 import userAvt from '../../assets/icons/user-avt.svg';
 import cake from '../../assets/icons/cake.svg';
 import genderIcon from '../../assets/icons/gender.svg';
-import location from '../../assets/icons/location.svg';
+import locationIcon from '../../assets/icons/location.svg';
 import bagIcon from '../../assets/icons/bag.svg';
 import mobi from '../../assets/icons/mobi.svg';
 import edit from '../../assets/icons/edit.svg';
@@ -33,6 +34,7 @@ function PatientCard({
     activePatientCard,
     onPatientClick
 }) {
+    const location = useLocation();
     const { user } = useContext(AppContext);
     const userId = user._id;
     const queryClient = useQueryClient();
@@ -47,7 +49,7 @@ function PatientCard({
             // setActivePatientCard(null);
             setModalOpen(false);
             queryClient.invalidateQueries(['patients', userId]);
-            showNotification('success', 'Bạn đã xoá hồ sơ  thành công!', '');
+            showNotification('success', 'Bạn đã xoá hồ sơ thành công!', '');
         },
 
         onError: (error) => {
@@ -122,7 +124,7 @@ function PatientCard({
                         </div>
                         <div className='patient-card__row'>
                             <div className='patient-card__label'>
-                                <img src={location} alt='' />
+                                <img src={locationIcon} alt='' />
                                 <span>Địa chỉ</span>
                             </div>
                             <div className='patient-card__desc'>
@@ -144,6 +146,7 @@ function PatientCard({
                     </Button>
                     <Button
                         to={`/update-patient-profile?id=${activePatientCard}`}
+                        state={{ prevPath: location.pathname }}
                         className='patient-card__btn patient-card__edit'
                     >
                         <img src={edit} alt='' />
@@ -167,7 +170,7 @@ function PatientCard({
 
             <Modal
                 className='delete-modal'
-                title='Cảnh báo!'
+                title='Xác nhận!'
                 cancelText='Đóng'
                 okText='Xoá'
                 centered

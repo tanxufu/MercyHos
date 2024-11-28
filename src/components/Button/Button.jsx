@@ -8,6 +8,7 @@ function Button(props) {
         disabled,
         children,
         to,
+        state,
         ...rest
     } = props;
 
@@ -21,7 +22,7 @@ function Button(props) {
 
     if (to) {
         return (
-            <Link to={to} className={newClassName} {...rest}>
+            <Link to={to} state={state} className={newClassName} {...rest}>
                 {children}
 
                 {isLoading && <span className='loading-btn__icon'></span>}

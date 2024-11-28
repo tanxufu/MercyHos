@@ -20,8 +20,6 @@ function UserNotification() {
     // patients
     const appointments = data?.data?.data?.data;
 
-    // console.log(appointments);
-
     const today = new Date();
     const formattedToday = new Date(today.setHours(0, 0, 0, 0)).toISOString();
 

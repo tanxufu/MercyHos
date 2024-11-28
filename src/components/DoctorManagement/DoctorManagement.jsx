@@ -9,34 +9,82 @@ import searchIcon from '../../assets/icons/search.svg';
 import refreshIcon from '../../assets/icons/refresh.svg';
 import { getAllDoctors } from '../../apis/doctor.api';
 import { useEffect, useState } from 'react';
+import InfoModal from '../InfoModal';
+import DoctorModal from '../DoctorModal';
+import DeleteModal from '../DeleteModal';
 
 function DoctorManagement() {
     const [searchQuery, setSearchQuery] = useState('');
-    const [debouncedSearchQuery, setDebouncedSearchQuery] =
-        useState(searchQuery);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearchQuery(searchQuery);
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [searchQuery]);
+    const [modalData, setModalData] = useState(null);
+    const [sortedInfo, setSortedInfo] = useState({});
+    const [filteredData, setFilteredData] = useState([]);
 
     const { data, isPending, refetch } = useQuery({
-        queryKey: ['doctors', debouncedSearchQuery],
-        queryFn: () => getAllDoctors(debouncedSearchQuery || '')
+        queryKey: ['doctors'],
+        queryFn: () => getAllDoctors()
     });
 
     let doctors = data?.data?.data?.data || [];
     doctors = doctors.map((doctor, index) => ({
         ...doctor,
         key: index,
-        dob: dayjs(doctor?.dob).format('DD/MM/YYYY'),
-        created_at: dayjs(doctor?.created_at).format('DD/MM/YYYY HH:mm'),
+        dob: dayjs(doctor?.dob).format('DD-MM-YYYY'),
+        created_at: dayjs(doctor?.create_at).format('DD-MM-YYYY HH:mm'),
         gender: doctor?.gender === 'male' ? 'Nam' : 'Nữ',
-        active: doctor?.active === 'false' ? 'OFF' : 'ON'
+        active: doctor?.active === false ? 'OFF' : 'ON'
     }));
+
+    useEffect(() => {
+        setFilteredData(doctors);
+    }, [data]);
+
+    // handle table change
+    const handleTableChange = (pagination, filters, sorter) => {
+        if (!doctors) return;
+        let filtered = doctors;
+
+        setSortedInfo({ order: sorter.order, columnKey: sorter.field });
+
+        Object.keys(filters).forEach((key) => {
+            if (filters[key]) {
+                filtered = filtered.filter((item) =>
+                    filters[key].includes(item[key])
+                );
+            }
+        });
+
+        if (searchQuery) {
+            filtered = filtered.filter(
+                (doctor) =>
+                    doctor.name
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase()) ||
+                    doctor.email
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase())
+            );
+        }
+
+        setFilteredData(filtered);
+    };
+
+    // handle search
+    const handleSearch = (e) => {
+        const value = e.target.value;
+        setSearchQuery(value);
+
+        const filtered = doctors?.filter(
+            (doctor) =>
+                doctor.name.toLowerCase().includes(value.toLowerCase()) ||
+                doctor.email.toLowerCase().includes(value.toLowerCase())
+        );
+
+        setFilteredData(filtered);
+    };
+
+    const handleModal = (modal, id) => {
+        setModalData({ modal, id });
+    };
 
     const columns = [
         {
@@ -45,7 +93,11 @@ function DoctorManagement() {
         },
         {
             title: 'Ngày sinh',
-            dataIndex: 'dob'
+            dataIndex: 'dob',
+            sorter: (a, b) =>
+                dayjs(a.dob, 'DD-MM-YYYY').unix() -
+                dayjs(b.dob, 'DD-MM-YYYY').unix(),
+            sortOrder: sortedInfo.columnKey === 'dob' ? sortedInfo.order : null
         },
         {
             title: 'Giới tính',
@@ -54,7 +106,7 @@ function DoctorManagement() {
                 { text: 'Nam', value: 'Nam' },
                 { text: 'Nữ', value: 'Nữ' }
             ],
-            onFilter: (value, record) => record.gender.includes(value)
+            onFilter: (value, record) => record?.gender.includes(value)
         },
         {
             title: 'Chuyên khoa',
@@ -86,7 +138,7 @@ function DoctorManagement() {
                 { text: 'Khoa tiết niệu', value: 'Khoa tiết niệu"' },
                 { text: 'Khoa nội tiết', value: 'Khoa nội tiết' }
             ],
-            onFilter: (value, record) => record.specialty.includes(value)
+            onFilter: (value, record) => record?.specialty.includes(value)
         },
         {
             title: 'Trạng thái',
@@ -106,11 +158,16 @@ function DoctorManagement() {
                 { text: 'ON', value: 'ON' },
                 { text: 'OFF', value: 'OFF' }
             ],
-            onFilter: (value, record) => record.active.includes(value)
+            onFilter: (value, record) => record?.active.includes(value)
         },
         {
             title: 'Ngày tạo',
-            dataIndex: 'created_at'
+            dataIndex: 'created_at',
+            sorter: (a, b) =>
+                dayjs(a.created_at, 'DD-MM-YYYY HH:mm').unix() -
+                dayjs(b.created_at, 'DD-MM-YYYY HH:mm').unix(),
+            sortOrder:
+                sortedInfo.columnKey === 'created_at' ? sortedInfo.order : null
         },
         {
             title: 'Actions',
@@ -119,22 +176,19 @@ function DoctorManagement() {
                 <Space>
                     <Button
                         className='management__actions-btn'
-                        // onClick={() => showViewModal(record)}
+                        onClick={() => handleModal('doctorInfo', record?.id)}
                     >
                         <EyeOutlined />
                     </Button>
                     <Button
                         className='management__actions-btn'
-                        // onClick={() => showEditModal(record)}
+                        onClick={() => handleModal('doctorModal', record?.id)}
                     >
                         <EditOutlined />
                     </Button>
                     <Button
                         className='management__actions-btn management__actions-btn--delete'
-                        // onClick={() => showEditModal(record)}
-                        onClick={() => {
-                            console.log(record.id);
-                        }}
+                        onClick={() => handleModal('doctorDelete', record?.id)}
                     >
                         <DeleteOutlined />
                     </Button>
@@ -146,7 +200,13 @@ function DoctorManagement() {
     return (
         <div className='doctor-management'>
             <div className='management__act'>
-                <Button className='management__refetch' onClick={refetch}>
+                <Button
+                    className='management__refetch'
+                    onClick={() => {
+                        refetch();
+                        setSearchQuery('');
+                    }}
+                >
                     <img src={refreshIcon} alt='' />
                 </Button>
 
@@ -156,11 +216,14 @@ function DoctorManagement() {
                         type='text'
                         placeholder='Tìm nhanh bác sĩ'
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={handleSearch}
                     />
                 </div>
 
-                <Button className='management__add'>
+                <Button
+                    className='management__add'
+                    onClick={() => handleModal('doctorModal')}
+                >
                     <img src={addUserIcon} alt='' />
                     Thêm Bác Sĩ
                 </Button>
@@ -171,13 +234,38 @@ function DoctorManagement() {
                 // rowSelection={rowSelection}
                 loading={isPending}
                 columns={columns}
-                dataSource={doctors}
+                dataSource={filteredData}
+                onChange={handleTableChange}
                 pagination={{
-                    total: doctors?.length,
+                    total: filteredData?.length,
                     pageSize: 10,
                     hideOnSinglePage: true
                 }}
             />
+
+            {modalData?.modal === 'doctorInfo' && (
+                <InfoModal
+                    modal={modalData.modal}
+                    id={modalData.id}
+                    modalClose={() => setModalData(null)}
+                />
+            )}
+
+            {modalData?.modal === 'doctorModal' && (
+                <DoctorModal
+                    modal={modalData.modal}
+                    id={modalData.id}
+                    modalClose={() => setModalData(null)}
+                />
+            )}
+
+            {modalData?.modal === 'doctorDelete' && (
+                <DeleteModal
+                    modal={modalData.modal}
+                    id={modalData.id}
+                    modalClose={() => setModalData(null)}
+                />
+            )}
         </div>
     );
 }

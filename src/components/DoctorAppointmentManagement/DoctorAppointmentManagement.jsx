@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Space, Table, Layout, theme } from 'antd';
 
-import { CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
 import { getAppointmentsOnDoctor } from '../../apis/appointment.api';
@@ -10,21 +10,20 @@ import addAppointment from '../../assets/icons/add-appointment.svg';
 // import refreshIcon from '../../assets/icons/refresh.svg';
 import searchIcon from '../../assets/icons/search.svg';
 import { useState } from 'react';
+import InfoModal from '../InfoModal';
+import AppointmentModal from '../AppointmentModal';
 
 const { Content } = Layout;
 
 /* eslint-disable react/prop-types */
-function DoctorAppointmentManagement({
-    doctorId,
-    hide = false,
-    pageSize = 10
-}) {
+function DoctorAppointmentManagement({ doctorId, hide = false, pageSize = 8 }) {
     const {
         token: { colorBgContainer }
     } = theme.useToken();
 
     const [sortedInfo, setSortedInfo] = useState({});
     const [visitStatus, setVisitStatus] = useState('Sắp tới');
+    const [modalData, setModalData] = useState(null);
 
     const handleChange = (pagination, filters, sorter) => {
         setSortedInfo({ order: sorter.order, columnKey: sorter.field });
@@ -40,8 +39,8 @@ function DoctorAppointmentManagement({
     let appointments = data?.data?.data?.data;
     appointments = appointments?.map((appointment, index) => ({
         ...appointment,
-        createdAt: dayjs(appointment?.createdAt).format('DD/MM/YYYY HH:mm'),
-        dateVisit: dayjs(appointment?.dateVisit).format('DD/MM/YYYY'),
+        createdAt: dayjs(appointment?.createdAt).format('DD-MM-YYYY HH:mm'),
+        dateVisit: dayjs(appointment?.dateVisit).format('DD-MM-YYYY'),
         patientName: appointment?.patient?.name,
         age:
             new Date().getFullYear() -
@@ -54,14 +53,19 @@ function DoctorAppointmentManagement({
         setVisitStatus(item);
     };
 
+    // handle modal
+    const handleModal = (modal, id) => {
+        setModalData({ modal, id });
+    };
+
     // columns table
     const columns = [
         {
             title: 'Ngày khám',
             dataIndex: 'dateVisit',
             sorter: (a, b) =>
-                dayjs(a.dateVisit, 'DD/MM/YYYY').unix() -
-                dayjs(b.dateVisit, 'DD/MM/YYYY').unix(),
+                dayjs(a.dateVisit, 'DD-MM-YYYY').unix() -
+                dayjs(b.dateVisit, 'DD-MM-YYYY').unix(),
             sortOrder:
                 sortedInfo.columnKey === 'dateVisit' ? sortedInfo.order : null
         },
@@ -76,7 +80,23 @@ function DoctorAppointmentManagement({
         },
         {
             title: 'Tên Bệnh nhân',
-            dataIndex: 'patientName'
+            dataIndex: 'patientName',
+            render: (item, record) => {
+                return (
+                    <span
+                        style={{
+                            textDecoration: 'underline',
+                            cursor: 'pointer',
+                            userSelect: 'none'
+                        }}
+                        onClick={() => {
+                            handleModal('patientInfo', record?.patient?.id);
+                        }}
+                    >
+                        {item}
+                    </span>
+                );
+            }
         },
 
         {
@@ -90,8 +110,8 @@ function DoctorAppointmentManagement({
             title: 'Ngày đặt lịch',
             dataIndex: 'createdAt',
             sorter: (a, b) =>
-                dayjs(a.createdAt, 'DD/MM/YYYY HH:mm').unix() -
-                dayjs(b.createdAt, 'DD/MM/YYYY HH:mm').unix(),
+                dayjs(a.createdAt, 'DD-MM-YYYY HH:mm').unix() -
+                dayjs(b.createdAt, 'DD-MM-YYYY HH:mm').unix(),
             sortOrder:
                 sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null
         },
@@ -102,10 +122,18 @@ function DoctorAppointmentManagement({
                   render: (_, record) => (
                       <Space>
                           <Button
+                              className='management__actions-btn'
+                              onClick={() =>
+                                  handleModal('appointmentModal', record?.id)
+                              }
+                          >
+                              <EditOutlined />
+                          </Button>
+                          <Button
                               className='management__actions-btn management__actions-btn--delete'
-                              onClick={() => {
-                                  console.log(record.id);
-                              }}
+                              onClick={() =>
+                                  handleModal('appointmentCancel', record?.id)
+                              }
                           >
                               <CloseOutlined />
                           </Button>
@@ -150,10 +178,6 @@ function DoctorAppointmentManagement({
         >
             <div className='doctor-appointment-management'>
                 <div className={`management__act ${hide && 'd-none'}`}>
-                    {/* <Button className='management__refetch' onClick={refetch}>
-                    <img src={refreshIcon} alt='' />
-                </Button> */}
-
                     <div className='search-group management__search'>
                         <img src={searchIcon} alt='search-icon' />
                         <input
@@ -203,6 +227,23 @@ function DoctorAppointmentManagement({
                         hideOnSinglePage: true
                     }}
                 />
+
+                {modalData?.modal === 'patientInfo' && (
+                    <InfoModal
+                        modal={modalData.modal}
+                        id={modalData.id}
+                        modalClose={() => setModalData(null)}
+                    />
+                )}
+
+                {modalData?.modal === 'appointmentModal' && (
+                    <AppointmentModal
+                        doctorSite={true}
+                        modal={modalData.modal}
+                        id={modalData.id}
+                        modalClose={() => setModalData(null)}
+                    />
+                )}
             </div>
         </Content>
     );

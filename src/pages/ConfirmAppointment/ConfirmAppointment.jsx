@@ -27,6 +27,7 @@ function ConfirmAppointment() {
     const cacheData = JSON.parse(localStorage.getItem('appointmentPatient'));
     const { patientId } = cacheData;
 
+    // get patient
     const { data } = useQuery({
         queryKey: ['patient', patientId],
         queryFn: () => getPatient(patientId),
@@ -38,6 +39,7 @@ function ConfirmAppointment() {
         window.scrollTo(0, 0);
     }, []);
 
+    // handle create appointment
     const createAppointmentMutation = useMutation({
         mutationKey: ['appointment', patientId],
         mutationFn: (body) => createAppointment(body),
@@ -71,16 +73,20 @@ function ConfirmAppointment() {
     });
 
     const handleSubmit = (data) => {
+        console.log(data);
         const appointmentData = {
             user: userId,
             patient: patientId,
             doctor: data.doctorId,
-            dateVisit: dayjs(data.appointmentDate).format('YYYY-MM-DD'),
+            dateVisit: dayjs(data.appointmentDate, 'DD-MM-YYYY')
+                .utc(true)
+                .startOf('day')
+                .toDate(),
             timeVisit: data.appointmentTime,
             visitStatus: 'Sắp tới',
             feeStatus: 'Chưa thanh toán'
         };
-        // console.log(appointmentData);
+        console.log(appointmentData);
         createAppointmentMutation.mutateAsync(appointmentData);
     };
 
@@ -155,7 +161,11 @@ function ConfirmAppointment() {
                                                                 cacheData?.doctorName
                                                             }
                                                         </td>
-                                                        <td>{`${dayjs(cacheData?.appointmentDate).format('DD/MM/YY')} ${cacheData?.appointmentTime?.split(' ')[0]}`}</td>
+                                                        <td>
+                                                            {`${cacheData?.appointmentDate?.split('-')?.slice(0, 2).join('-')}`}
+                                                            &nbsp;&nbsp;
+                                                            {`${cacheData?.appointmentTime?.split(' ')[0]}`}
+                                                        </td>
                                                         <td>150.000đ</td>
                                                     </tr>
                                                 </tbody>

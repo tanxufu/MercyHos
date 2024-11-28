@@ -14,6 +14,7 @@ import {
 } from '../../apis/user.api';
 import { setUserToLS } from '../../utils/auth';
 import { showNotification } from '../../utils/notification';
+import Modal from '../Modal/Modal';
 
 function AccountModal({ modal, modalClose }) {
     const getUserSchema = (modal) => {
@@ -121,77 +122,74 @@ function AccountModal({ modal, modalClose }) {
     });
 
     return (
-        <div className={`account-modal ${modal ? 'account-modal__show' : ''}`}>
-            <form className='account-modal-content' onSubmit={onSubmit}>
-                <FormGroup
-                    type={`${modal !== 'name' ? 'hide' : 'text'}`}
-                    name='name'
-                    label='Cập nhập Tên người dùng'
-                    register={register}
-                    errorMessage={errors.name?.message}
-                />
-
-                <FormGroup
-                    type={`${modal !== 'email' ? 'hide' : 'text'}`}
-                    name='email'
-                    label='Cập nhập Địa chỉ Email'
-                    register={register}
-                    errorMessage={
-                        errors.email?.message || errors?.errorEmail?.message
-                    }
-                />
-
-                <FormGroup
-                    type={`${modal !== 'password' ? 'hide' : 'password'}`}
-                    name='passwordCurrent'
-                    label='Mật khẩu hiện tại'
-                    placeHolder='Nhập mật khẩu hiện tại của bạn'
-                    register={register}
-                    errorMessage={
-                        errors.passwordCurrent?.message ||
-                        errors?.errorPassword?.message
-                    }
-                />
-
-                <FormGroup
-                    type={`${modal !== 'password' ? 'hide' : 'password'}`}
-                    name='password'
-                    label='Mật khẩu mới'
-                    placeHolder='Nhập mật khẩu mới của bạn'
-                    register={register}
-                    errorMessage={errors.password?.message}
-                />
-
-                <FormGroup
-                    type={`${modal !== 'password' ? 'hide' : 'password'}`}
-                    name='passwordConfirm'
-                    label='Xác nhận mật khẩu mới'
-                    placeHolder='Nhập lại mật khẩu mới của bạn'
-                    register={register}
-                    errorMessage={errors.passwordConfirm?.message}
-                />
-
-                <div className='account-modal-content__act'>
-                    <Button
-                        className='account-modal-content__cancel'
-                        onClick={() => modalClose()}
-                    >
-                        Huỷ
-                    </Button>
-                    <Button
-                        className='account-modal-content__update'
-                        type='submit'
-                    >
-                        Cập nhật
-                    </Button>
-                </div>
-            </form>
-
+        <Modal modalClose={modalClose} modal={modal}>
             <div
-                className='account-modal-overlay'
-                onClick={() => modalClose()}
-            ></div>
-        </div>
+                className='modal-content'
+                style={{ '--content-width': '400px' }}
+            >
+                <form className='account-modal-content' onSubmit={onSubmit}>
+                    <FormGroup
+                        type={`${modal !== 'name' ? 'hide' : 'text'}`}
+                        name='name'
+                        label='Cập nhập Tên người dùng'
+                        register={register}
+                        errorMessage={errors.name?.message}
+                    />
+
+                    <FormGroup
+                        type={`${modal !== 'email' ? 'hide' : 'text'}`}
+                        name='email'
+                        label='Cập nhập Địa chỉ Email'
+                        register={register}
+                        errorMessage={
+                            errors.email?.message || errors?.errorEmail?.message
+                        }
+                    />
+
+                    <FormGroup
+                        type={`${modal !== 'password' ? 'hide' : 'password'}`}
+                        name='passwordCurrent'
+                        label='Mật khẩu hiện tại'
+                        placeHolder='Nhập mật khẩu hiện tại của bạn'
+                        register={register}
+                        errorMessage={
+                            errors.passwordCurrent?.message ||
+                            errors?.errorPassword?.message
+                        }
+                    />
+
+                    <FormGroup
+                        type={`${modal !== 'password' ? 'hide' : 'password'}`}
+                        name='password'
+                        label='Mật khẩu mới'
+                        placeHolder='Nhập mật khẩu mới của bạn'
+                        register={register}
+                        errorMessage={errors.password?.message}
+                    />
+
+                    <FormGroup
+                        type={`${modal !== 'password' ? 'hide' : 'password'}`}
+                        name='passwordConfirm'
+                        label='Xác nhận mật khẩu mới'
+                        placeHolder='Nhập lại mật khẩu mới của bạn'
+                        register={register}
+                        errorMessage={errors.passwordConfirm?.message}
+                    />
+
+                    <div className='modal-content__act'>
+                        <Button
+                            className='modal-content__cancel'
+                            onClick={() => modalClose()}
+                        >
+                            Huỷ
+                        </Button>
+                        <Button className='modal-content__update' type='submit'>
+                            Cập nhật
+                        </Button>
+                    </div>
+                </form>
+            </div>
+        </Modal>
     );
 }
 

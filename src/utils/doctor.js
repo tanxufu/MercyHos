@@ -23,15 +23,24 @@ const doctorSchema = yup.object({
     gender: yup
         .string()
         .required('Vui lòng chọn giới tính!')
-        .oneOf(['Nam', 'Nữ', 'Khác'], `Vui lòng nhập 'Nam'  'Nữ' hoặc 'Khác'!`),
-    specialty: yup.string().required('Vui lòng nhập Chuyên môn(khoa)!'),
+        .oneOf(
+            ['male', 'female', 'other'],
+            `Vui lòng chọn 'Nam'  'Nữ' hoặc 'Khác'!`
+        ),
+    specialty: yup.string().required('Vui lòng nhập Chuyên khoa!'),
     experience: yup
         .number()
-        .required('Vui lòng chọn năm kinh nghiệm!')
+        .typeError('Vui lòng nhập năm kinh nghiệm!')
+        .required('Vui lòng nhập năm kinh nghiệm!')
         .min(0, 'Năm kinh nghiệm phải lớn hơn 0'),
     fee: yup.number().required('Vui lòng nhập phí khám bệnh!'),
-    availability: yup.array().required('Vui lòng chọn ngày làm việc!'),
-    owner: yup.string().required('Vui lòng chọn tài khoản sử dụng!')
+    availability: yup
+        .array()
+        .of(yup.string())
+        .min(1, 'Vui lòng chọn ít nhất một ngày làm việc!')
+        .required('Vui lòng chọn ngày làm việc!'),
+    owner: yup.string().required('Vui lòng chọn tài khoản sử dụng!'),
+    active: yup.boolean()
 });
 
 export default doctorSchema;

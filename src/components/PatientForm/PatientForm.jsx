@@ -4,6 +4,7 @@ import { DatePicker, ConfigProvider } from 'antd';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useContext, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import locale from 'antd/locale/vi_VN.js';
@@ -22,17 +23,22 @@ import {
 } from '../../apis/patient.api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { showNotification } from '../../utils/notification';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 dayjs.extend(utc);
 dayjs.locale('vi');
 
-const patientSchema = schema.omit(['password', 'passwordConfirm']);
+const patientSchema = schema.omit([
+    'password',
+    'passwordConfirm',
+    'passwordCurrent'
+]);
 
 function PatientForm({ title, isEdit = false }) {
     const queryClient = useQueryClient();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
+    const prevPath = location.state?.prevPath;
+
     const patientId = queryParams.get('id');
 
     const navigate = useNavigate();
@@ -72,9 +78,9 @@ function PatientForm({ title, isEdit = false }) {
     const mutation = useMutation({
         mutationFn: (body) => {
             if (isEdit) {
-                updatePatient(patientId, body);
+                return updatePatient(patientId, body);
             } else {
-                createPatientOnUser(userId, body);
+                return createPatientOnUser(userId, body);
             }
         },
         onSuccess: () => {
@@ -86,7 +92,11 @@ function PatientForm({ title, isEdit = false }) {
                     : 'Bạn đã tạo hồ sơ thành công!'
             );
             queryClient.invalidateQueries(['patients', userId]);
-            navigate('/profile');
+            if (prevPath === '/select-patient-profile') {
+                navigate('/select-patient-profile');
+            } else {
+                navigate('/profile');
+            }
         },
         onError: (error) => {
             console.log(error);
@@ -168,7 +178,7 @@ function PatientForm({ title, isEdit = false }) {
                                             }
                                             placement='bottomRight'
                                             className='patient-form__date'
-                                            format='YYYY-MM-DD'
+                                            format='DD-MM-YYYY'
                                             placeholder='Chọn ngày sinh'
                                         />
                                         {submit && errors.dob?.message ? (

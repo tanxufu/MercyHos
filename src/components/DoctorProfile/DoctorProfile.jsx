@@ -25,7 +25,7 @@ const schema = doctorSchema.omit(['experience', 'specialty', 'owner']);
 
 function DoctorProfile({ doctorId }) {
     const {
-        token: { colorBgContainer, borderRadiusLG }
+        token: { colorBgContainer }
     } = theme.useToken();
 
     // hook form
@@ -50,7 +50,8 @@ function DoctorProfile({ doctorId }) {
     useEffect(() => {
         reset({
             ...doctor,
-            dob: dayjs(doctor?.dob)
+            dob: dayjs(doctor?.dob),
+            availability: doctor?.availability.join(', ')
         });
     }, [doctor, reset]);
 
@@ -63,7 +64,7 @@ function DoctorProfile({ doctorId }) {
                 minHeight: 280,
                 height: '100%',
                 background: colorBgContainer,
-                borderRadius: borderRadiusLG
+                borderRadius: 20
             }}
         >
             <div className='doctor-profile'>
@@ -158,7 +159,7 @@ function DoctorProfile({ doctorId }) {
                                                     }
                                                     placement='bottomRight'
                                                     className='patient-form__date'
-                                                    format='YYYY-MM-DD'
+                                                    format='DD-MM-YYYY'
                                                     placeholder='Chọn ngày sinh'
                                                 />
                                                 {/* {submit && errors.dob?.message ? (

@@ -34,6 +34,10 @@ export const getAppointment = async (appointmentId) => {
     return await http.get(`/v1/appointments/${appointmentId}`);
 };
 
+export const deleteAppointment = async (appointmentId) => {
+    return await http.delete(`/v1/appointments/${appointmentId}`);
+};
+
 export const updateAppointment = async (appointmentId, body) => {
     return await http.patch(`/v1/appointments/${appointmentId}`, body);
 };

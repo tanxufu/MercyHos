@@ -128,31 +128,52 @@
     font-family: 'Lexend', sans-serif;
 
     .ant-modal-title {
-        font-size: 1.4rem;
-        color: #f62c2c;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 1.8rem;
+        color: #f15e60;
     }
 
     .ant-modal-body p {
         font-size: 1.6rem;
-        // margin-top: 12px;
+        text-align: center;
+        font-weight: 300;
+        margin-top: 12px;
     }
 
     .ant-modal-footer {
         margin-top: 32px;
+        display: flex;
+        justify-content: center;
 
         button {
-            padding: 8px 14px;
-            border-radius: 3px;
+            height: 42px;
+            padding: 0px 40px;
+            border-radius: 4px;
+            font-family: 'Lexend', sans-serif !important;
         }
 
         .ant-btn-default {
-            border: none;
-            box-shadow: none;
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+
+            &:hover {
+                background: var(--white);
+                color: var(--text-color);
+                border: 1px solid var(--border-color);
+                opacity: 0.7;
+            }
         }
 
         .ant-btn-primary {
             margin-inline-start: 16px !important;
-            background: #00a8ff;
+            background: #f15e5e;
+
+            &:hover {
+                background: #f15e5e;
+                opacity: 0.7;
+            }
         }
     }
 }

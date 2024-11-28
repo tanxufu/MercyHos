@@ -8,8 +8,12 @@ import addUserIcon from '../../assets/icons/create-patient.svg';
 import refreshIcon from '../../assets/icons/refresh.svg';
 import searchIcon from '../../assets/icons/search.svg';
 import { getAllPatients } from '../../apis/patient.api';
+import { useState } from 'react';
+import InfoModal from '../InfoModal';
 
 function PatientManagement() {
+    const [modalData, setModalData] = useState(null);
+
     const { data, isPending, refetch } = useQuery({
         queryKey: ['users'],
         queryFn: () => getAllPatients()
@@ -17,12 +21,15 @@ function PatientManagement() {
     let patients = data?.data?.data?.data || [];
     patients = patients.map((patient, index) => ({
         ...patient,
-        createdAt: dayjs(patient?.createdAt).format('DD/MM/YYYY HH:mm'),
-        dob: dayjs(patient?.dob).format('DD/MM/YYYY'),
-        active: patient?.active === 'false' ? 'OFF' : 'ON',
+        createdAt: dayjs(patient?.createdAt).format('DD-MM-YYYY HH:mm'),
+        dob: dayjs(patient?.dob).format('DD-MM-YYYY'),
+        active: patient?.active === false ? 'OFF' : 'ON',
         key: index
     }));
-    // console.log(patients);
+
+    const handleModal = (modal, id) => {
+        setModalData({ modal, id });
+    };
 
     const columns = [
         {
@@ -81,7 +88,7 @@ function PatientManagement() {
                 <Space>
                     <Button
                         className='management__actions-btn'
-                        // onClick={() => showViewModal(record)}
+                        onClick={() => handleModal('patientInfo', record?.id)}
                     >
                         <EyeOutlined />
                     </Button>
@@ -139,6 +146,14 @@ function PatientManagement() {
                     hideOnSinglePage: true
                 }}
             />
+
+            {modalData?.modal === 'patientInfo' && (
+                <InfoModal
+                    modal={modalData.modal}
+                    id={modalData.id}
+                    modalClose={() => setModalData(null)}
+                />
+            )}
         </div>
     );
 }

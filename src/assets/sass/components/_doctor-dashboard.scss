@@ -1,10 +1,9 @@
 .doctor-dashboard {
-    &__row {
-        margin: 24px 40px 0;
-    }
+    margin-left: 40px;
 
     &__activity {
         font-family: 'Lexend', sans-serif;
+
         h2 {
             margin-bottom: 30px;
             font-size: 1.8rem;
@@ -15,6 +14,7 @@
         &--row {
             display: flex;
             align-items: center;
+            justify-content: center;
 
             width: 100%;
             gap: 24px;
@@ -23,29 +23,31 @@
 
         &--item {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            width: 50%;
-            padding: 24px 16px 10px;
+            gap: 20px;
+
+            margin-top: 24px;
+            width: 100%;
+            padding: 24px 20px;
             border-radius: 8px;
 
             img {
-                width: 42px;
-                height: 42px;
+                width: 32px;
+                height: 32px;
             }
 
             span {
-                margin-top: 12px;
-                font-size: 2rem;
+                font-size: 1.8rem;
                 font-weight: 500;
                 line-height: 1.5;
                 color: #374858;
             }
 
             p {
-                margin-top: 6px;
+                min-width: 170px;
                 line-height: 1.5;
-                font-weight: 300;
+                font-size: 1.6rem;
+                font-weight: 350;
             }
         }
     }

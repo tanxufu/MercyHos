@@ -1,22 +1,22 @@
 .doctor-profile {
     &__bg {
-        border-radius: 8px 8px 0px 0;
+        border-radius: 20px 20px 0px 0;
         border: 2px solid rgba(232, 234, 238, 0.4);
     }
 
     &__top {
         img {
-            height: 146px;
+            height: 166px;
             width: 100%;
 
-            border-radius: 8px;
+            border-radius: 20px;
         }
     }
 }
 
 .doctor-profile-header {
     position: relative;
-    top: -40px;
+    top: -55px;
     left: 0;
     display: flex;
     align-items: center;
