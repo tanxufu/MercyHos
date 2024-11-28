@@ -22,10 +22,7 @@ router
     .patch(
         authController.restrictTo('admin', 'doctor'),
         doctorController.updateDoctor
-    );
-
-router
-    .route('/deleteDoctor/:id')
-    .patch(authController.restrictTo('admin'), doctorController.deleteDoctor);
+    )
+    .delete(doctorController.deleteDoctor);
 
 module.exports = router;

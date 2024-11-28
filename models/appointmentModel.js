@@ -46,10 +46,49 @@ const appointmentSchema = mongoose.Schema(
             required: true,
             enum: ['Đã thanh toán', 'Chưa thanh toán']
         },
+        note: String,
         createdAt: {
             type: Date,
             default: Date.now
-        }
+        },
+        changeRequest: {
+            newDoctor: {
+                type: mongoose.Schema.ObjectId,
+                ref: 'Doctors'
+            },
+            newDateVisit: Date,
+            newTimeVisit: {
+                type: String,
+                enum: [
+                    '8:00 - 9:00',
+                    '9:00 - 10:00',
+                    '10:00 - 11:00',
+                    '13:30 - 14:30',
+                    '14:30 - 15:30',
+                    '15:30 - 16:30'
+                ]
+            },
+            requestedBy: {
+                type: String,
+                enum: ['doctor', 'admin']
+            },
+            status: {
+                type: String,
+                enum: ['pending', 'approved', 'rejected']
+            }
+        },
+        cancelRequest: {
+            requestedBy: {
+                type: String,
+                enum: ['doctor', 'admin']
+            },
+
+            status: {
+                type: String,
+                enum: ['pending', 'approved', 'rejected']
+            }
+        },
+        updateAt: Date
     },
     {
         toJSON: { virtuals: true },
@@ -66,6 +105,11 @@ appointmentSchema.pre(/^find/, function (next) {
         });
     }
 
+    this.populate({
+        path: 'changeRequest.newDoctor',
+        select: 'name gender specialty fee availability'
+    });
+
     if (!this.options.skipPatientPopulate) {
         this.populate({
             path: 'patient',
@@ -77,7 +121,17 @@ appointmentSchema.pre(/^find/, function (next) {
     next();
 });
 
+// appointmentSchema.pre('findByIdAndUpdate', function (next) {
+//     this.set({ updateAt: Date.now() });
+
+//     next();
+// });
+
 appointmentSchema.pre('save', async function (next) {
+    if (this.isModified()) {
+        this.updateAt = Date.now();
+    }
+
     const existingAppointment = await this.constructor.findOne({
         dateVisit: this.dateVisit,
         doctor: this.doctor,

@@ -11,20 +11,7 @@ exports.getDoctor = factory.getOne(Doctor, {
 exports.createDoctor = factory.createOne(Doctor);
 exports.updateDoctor = factory.updateOne(Doctor);
 
-exports.deleteDoctor = catchAsync(async (req, res, next) => {
-    const doctor = await Doctor.findByIdAndUpdate(req.params.id, {
-        active: false
-    });
-
-    if (!doctor) {
-        return next(new AppError('Không tìm thấy bác sĩ với id này', 404));
-    }
-
-    res.status(204).json({
-        status: 'success',
-        data: null
-    });
-});
+exports.deleteDoctor = factory.deleteOne(Doctor);
 
 exports.getDoctorStats = catchAsync(async (req, res, next) => {
     const specialty = req.query.specialty || '';

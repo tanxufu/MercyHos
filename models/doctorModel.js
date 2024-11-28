@@ -15,7 +15,6 @@ const doctorSchema = new mongoose.Schema(
         email: {
             type: String,
             required: [true, 'Email là bắt buộc'],
-            unique: true,
             lowercase: true,
             validate: [validator.isEmail, 'Email cung cấp phải hợp lệ']
         },
@@ -26,7 +25,7 @@ const doctorSchema = new mongoose.Schema(
         gender: {
             type: String,
             required: [true, 'Giới tính là bắt buộc'],
-            enum: ['Nam', 'Nữ', 'Khác']
+            enum: ['male', 'female', 'other']
         },
         specialty: {
             type: String,
@@ -44,6 +43,7 @@ const doctorSchema = new mongoose.Schema(
         owner: {
             type: mongoose.Schema.ObjectId,
             ref: 'Users',
+            unique: true,
             required: [true, 'Must belong to a user']
         },
         availability: {
