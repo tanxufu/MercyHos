@@ -87,12 +87,15 @@ const appointmentSchema = mongoose.Schema(
                 type: String,
                 enum: ['pending', 'approved', 'rejected']
             }
-        },
-        updateAt: Date
+        }
     },
     {
         toJSON: { virtuals: true },
-        toObject: { virtuals: true }
+        toObject: { virtuals: true },
+        timestamps: {
+            // createdAt: 'created_at',
+            updatedAt: 'updatedAt'
+        }
     }
 );
 
@@ -121,17 +124,12 @@ appointmentSchema.pre(/^find/, function (next) {
     next();
 });
 
-// appointmentSchema.pre('findByIdAndUpdate', function (next) {
-//     this.set({ updateAt: Date.now() });
-
+// appointmentSchema.pre('findOneAndUpdate', function (next) {
+//     this.updateAt = Date.now();
 //     next();
 // });
 
 appointmentSchema.pre('save', async function (next) {
-    if (this.isModified()) {
-        this.updateAt = Date.now();
-    }
-
     const existingAppointment = await this.constructor.findOne({
         dateVisit: this.dateVisit,
         doctor: this.doctor,
