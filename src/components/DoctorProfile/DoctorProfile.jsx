@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import { ConfigProvider, DatePicker, Layout, theme } from 'antd';
+import { ConfigProvider, DatePicker, Layout, Select, theme } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import locale from 'antd/locale/vi_VN.js';
@@ -11,19 +11,28 @@ import doctorBg from '../../assets/images/doctor-bg.png';
 import doctorAvt from '../../assets/icons/doctor-avt.svg';
 import doctorAvtFemale from '../../assets/icons/doctor-avt-female.svg';
 import Button from '../Button';
-import { getDoctor } from '../../apis/doctor.api';
+import { editDoctor, getDoctor } from '../../apis/doctor.api';
 import FormGroup from '../FormGroup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import doctorSchema from '../../utils/doctor';
 import { useEffect } from 'react';
+import { showNotification } from '../../utils/notification';
 
 dayjs.extend(utc);
 dayjs.locale('vi');
 
 const { Content } = Layout;
-const schema = doctorSchema.omit(['experience', 'specialty', 'owner']);
+const schema = doctorSchema.omit([
+    'experience',
+    'specialty',
+    'owner',
+    'gender',
+    'active'
+]);
 
 function DoctorProfile({ doctorId }) {
+    const queryClient = useQueryClient();
+
     const {
         token: { colorBgContainer }
     } = theme.useToken();
@@ -32,7 +41,7 @@ function DoctorProfile({ doctorId }) {
     const {
         register,
         control,
-        // handleSubmit,
+        handleSubmit,
         reset,
         // setError,
         formState: { errors }
@@ -50,10 +59,38 @@ function DoctorProfile({ doctorId }) {
     useEffect(() => {
         reset({
             ...doctor,
-            dob: dayjs(doctor?.dob),
-            availability: doctor?.availability.join(', ')
+            dob: dayjs(doctor?.dob)
         });
     }, [doctor, reset]);
+
+    // handle edit form
+
+    const mutation = useMutation({
+        mutationFn: (body) => {
+            return editDoctor(doctorId, body);
+        },
+        onSuccess: () => {
+            showNotification(
+                'success',
+                'Thành công!',
+                'Cập nhật Hồ sơ thành công!'
+            );
+            queryClient.invalidateQueries(['doctor', doctorId]);
+        },
+        onError: (error) => {
+            console.log(error);
+            showNotification(
+                'error',
+                'Lỗi Server!',
+                'Cập nhật Hồ sơ thất bại. Vui lòng thử lại sau!'
+            );
+        }
+    });
+
+    const onSubmit = handleSubmit((data) => {
+        console.log(data);
+        mutation.mutate(data);
+    });
 
     return (
         <Content
@@ -95,7 +132,7 @@ function DoctorProfile({ doctorId }) {
                 <div className='doctor-profile-edit'>
                     <h2>Chỉnh sửa hồ sơ</h2>
 
-                    <form className='doctor-profile-form'>
+                    <form className='doctor-profile-form' onSubmit={onSubmit}>
                         <div className='row gx-5'>
                             <div className='col-6'>
                                 <FormGroup
@@ -200,14 +237,66 @@ function DoctorProfile({ doctorId }) {
                             </div>
 
                             <div className='col-6'>
-                                <FormGroup
-                                    type='text'
-                                    name='availability'
-                                    label='Lịch khám'
-                                    placeHolder='Nhập lịch khám'
-                                    register={register}
-                                    errorMessage={errors.availability?.message}
-                                />
+                                <div className='form__col'>
+                                    <label className='form__label'>
+                                        Lịch khám
+                                    </label>
+                                    <Controller
+                                        name='availability'
+                                        control={control}
+                                        register={register}
+                                        render={({ field }) => (
+                                            <>
+                                                <Select
+                                                    {...field}
+                                                    mode='multiple'
+                                                    className='form__select'
+                                                    placeholder='Chọn lịch khám'
+                                                    value={field.value}
+                                                    onChange={(value) =>
+                                                        field.onChange(value)
+                                                    }
+                                                    options={[
+                                                        {
+                                                            value: 'Thứ 2',
+                                                            label: 'Thứ 2'
+                                                        },
+                                                        {
+                                                            value: 'Thứ 3',
+                                                            label: 'Thứ 3'
+                                                        },
+                                                        {
+                                                            value: 'Thứ 4',
+                                                            label: 'Thứ 4'
+                                                        },
+                                                        {
+                                                            value: 'Thứ 5',
+                                                            label: 'Thứ 5'
+                                                        },
+                                                        {
+                                                            value: 'Thứ 6',
+                                                            label: 'Thứ 6'
+                                                        },
+                                                        {
+                                                            value: 'Thứ 7',
+                                                            label: 'Thứ 7'
+                                                        }
+                                                    ]}
+                                                />
+                                                {errors?.availability ? (
+                                                    <p className='form-group__error'>
+                                                        {
+                                                            errors.availability
+                                                                ?.message
+                                                        }
+                                                    </p>
+                                                ) : (
+                                                    <p className='form-group__error'></p>
+                                                )}
+                                            </>
+                                        )}
+                                    />
+                                </div>
                             </div>
                         </div>
 

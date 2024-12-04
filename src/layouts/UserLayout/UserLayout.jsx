@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { NavLink } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import chevronRight from '../../assets/icons/chevron-right.svg';
 import userProfile from '../../assets/icons/user-profile.svg';
@@ -96,7 +97,22 @@ function UserLayout({ children }) {
                                 </ul>
                             </div>
 
-                            <div className='col-8 col-lg-12'>{children}</div>
+                            <div className='col-8 col-lg-12'>
+                                <AnimatePresence mode='wait'>
+                                    <motion.div
+                                        key={location.pathname}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{
+                                            duration: 0.35,
+                                            ease: 'easeOut'
+                                        }}
+                                    >
+                                        {children}
+                                    </motion.div>
+                                </AnimatePresence>
+                            </div>
                         </div>
                     </div>
                 </div>

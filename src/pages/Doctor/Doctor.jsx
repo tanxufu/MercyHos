@@ -10,6 +10,7 @@ import { Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import { showNotification } from '../../utils/notification';
 import { logoutAccount } from '../../apis/auth.api';
@@ -151,13 +152,30 @@ function Doctor() {
                         </div>
                     </div>
                 </Header>
-                {selectedKey === '1' && (
-                    <DoctorDashboard doctorId={doctor?.id} />
-                )}
-                {selectedKey === '2' && (
-                    <DoctorAppointmentManagement doctorId={doctor?.id} />
-                )}
-                {selectedKey === '3' && <DoctorProfile doctorId={doctor?.id} />}
+                <AnimatePresence mode='wait'>
+                    <motion.div
+                        key={selectedKey}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                            duration: 0.3,
+                            ease: 'easeOut'
+                        }}
+                    >
+                        {selectedKey === '1' && (
+                            <DoctorDashboard doctorId={doctor?.id} />
+                        )}
+                        {selectedKey === '2' && (
+                            <DoctorAppointmentManagement
+                                doctorId={doctor?.id}
+                            />
+                        )}
+                        {selectedKey === '3' && (
+                            <DoctorProfile doctorId={doctor?.id} />
+                        )}
+                    </motion.div>
+                </AnimatePresence>
             </Layout>
         </Layout>
     );

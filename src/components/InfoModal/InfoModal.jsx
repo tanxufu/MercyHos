@@ -29,7 +29,7 @@ function InfoModal({ modal, id, modalClose }) {
         enabled: !!id
     });
     const info = data?.data?.data?.data;
-    // console.log(info);
+    console.log(info);
 
     return (
         <Modal modal={true} modalClose={modalClose}>
@@ -256,7 +256,7 @@ function InfoModal({ modal, id, modalClose }) {
 
                         <div>
                             <label>Cập nhật</label>
-                            {dayjs(info?.updateAt).format('DD-MM-YYYY HH:mm')}
+                            {dayjs(info?.updatedAt).format('DD-MM-YYYY HH:mm')}
                         </div>
                     </article>
                 )}

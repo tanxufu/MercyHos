@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Space, Table, Layout, theme } from 'antd';
-
+import { AnimatePresence, motion } from 'framer-motion';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
@@ -215,18 +215,31 @@ function DoctorAppointmentManagement({ doctorId, hide = false, pageSize = 8 }) {
                     </div>
                 </nav>
 
-                <Table
-                    className='management__table'
-                    loading={isPending}
-                    columns={columns}
-                    dataSource={appointments}
-                    onChange={handleChange}
-                    pagination={{
-                        total: appointments?.length,
-                        pageSize: pageSize,
-                        hideOnSinglePage: true
-                    }}
-                />
+                <AnimatePresence mode='wait'>
+                    <motion.div
+                        key={appointments}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                            duration: 0.3,
+                            ease: 'easeOut'
+                        }}
+                    >
+                        <Table
+                            className='management__table'
+                            loading={isPending}
+                            columns={columns}
+                            dataSource={appointments}
+                            onChange={handleChange}
+                            pagination={{
+                                total: appointments?.length,
+                                pageSize: pageSize,
+                                hideOnSinglePage: true
+                            }}
+                        />
+                    </motion.div>
+                </AnimatePresence>
 
                 {modalData?.modal === 'patientInfo' && (
                     <InfoModal

@@ -4,7 +4,7 @@ export const showNotification = (
     type,
     message,
     description,
-    placement = 'topRight'
+    placement = 'top'
 ) => {
     let style = {};
     const duration = 4;

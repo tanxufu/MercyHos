@@ -18,6 +18,7 @@ import PatientManagement from '../../components/PatientManagement';
 import { showNotification } from '../../utils/notification';
 import { logoutAccount } from '../../apis/auth.api';
 import AppContext from '../../contexts/app.context';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const { Header, Sider, Content } = Layout;
 
@@ -140,10 +141,23 @@ function AdminLayout() {
                         borderRadius: borderRadiusLG
                     }}
                 >
-                    {selectedKey === '1' && <AppointmentManagement />}
-                    {selectedKey === '2' && <PatientManagement />}
-                    {selectedKey === '3' && <UserManagement />}
-                    {selectedKey === '4' && <DoctorManagement />}
+                    <AnimatePresence mode='wait'>
+                        <motion.div
+                            key={selectedKey}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{
+                                duration: 0.4,
+                                ease: 'easeOut'
+                            }}
+                        >
+                            {selectedKey === '1' && <AppointmentManagement />}
+                            {selectedKey === '2' && <PatientManagement />}
+                            {selectedKey === '3' && <UserManagement />}
+                            {selectedKey === '4' && <DoctorManagement />}
+                        </motion.div>
+                    </AnimatePresence>
                 </Content>
             </Layout>
         </Layout>

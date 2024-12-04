@@ -76,7 +76,7 @@ function SelectDate() {
             return true;
         }
 
-        if (current > dayjs().endOf('month').add(2, 'week')) {
+        if (current > dayjs().add(4, 'week')) {
             return true;
         }
 

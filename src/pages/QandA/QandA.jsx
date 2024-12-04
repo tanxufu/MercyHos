@@ -30,7 +30,7 @@ function QandA() {
                 <div className='qa__content'>
                     <div className='row gy-md-3'>
                         <div className='col-3 col-md-12'>
-                            <ul>
+                            <ul className='qa__content--nav'>
                                 <li
                                     className={`qa__link ${activeQa === 'common' ? 'qa__link--active' : ''}`}
                                     onClick={() => handleClick('common')}

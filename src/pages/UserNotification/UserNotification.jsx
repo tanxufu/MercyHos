@@ -55,7 +55,9 @@ function UserNotification() {
                                                 appointment?.dateVisit <
                                                     formattedToday ||
                                                 appointment?.visitStatus ===
-                                                    'Đã huỷ'
+                                                    'Đã huỷ' ||
+                                                appointment?.visitStatus ===
+                                                    'Đã khám'
                                                     ? ''
                                                     : `user-notifications__message-dot`
                                             }
@@ -66,26 +68,39 @@ function UserNotification() {
                                             className='user-notifications__message--icon'
                                         />
                                     </div>
-                                    <p>
-                                        Bạn có lịch khám vào ngày&nbsp;
-                                        {dayjs(
-                                            appointment?.dateVisit?.split(
-                                                'T'
-                                            )[0]
-                                        ).format('DD-MM-YYYY')}
-                                        {appointment?.visitStatus ===
-                                        'Đã huỷ' ? (
-                                            <i>(Đã huỷ)</i>
-                                        ) : appointment?.visitStatus ===
-                                          'Đã khám' ? (
-                                            <i>(Hoàn thành)</i>
-                                        ) : appointment?.dateVisit <
-                                          formattedToday ? (
-                                            <i>(Quá hạn)</i>
-                                        ) : (
-                                            ''
-                                        )}
-                                    </p>
+                                    {appointment?.changeRequest?.status ===
+                                        'pending' && (
+                                        <p>
+                                            Bạn có yêu cầu thay đổi lịch
+                                            khám!&nbsp;
+                                            <i>Nhấn xem chi tiết</i>
+                                        </p>
+                                    )}
+
+                                    {appointment?.changeRequest?.status !==
+                                        'pending' && (
+                                        <p>
+                                            Bạn có lịch khám vào ngày&nbsp;
+                                            {dayjs(
+                                                appointment?.dateVisit?.split(
+                                                    'T'
+                                                )[0]
+                                            ).format('DD-MM-YYYY')}
+                                            {appointment?.visitStatus ===
+                                            'Đã huỷ' ? (
+                                                <i>(Đã huỷ)</i>
+                                            ) : appointment?.visitStatus ===
+                                              'Đã khám' ? (
+                                                <i>(Hoàn thành)</i>
+                                            ) : appointment?.dateVisit <
+                                              formattedToday ? (
+                                                <i>(Quá hạn)</i>
+                                            ) : (
+                                                ''
+                                            )}
+                                        </p>
+                                    )}
+
                                     <img
                                         className='user-notifications__icon'
                                         src={chevronRight}

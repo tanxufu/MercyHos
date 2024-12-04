@@ -55,13 +55,14 @@
 
         p {
             margin-top: 4px;
-            font-weight: 300;
+            font-weight: 350;
             line-height: 1.5;
         }
     }
 }
 
 .doctor-profile-edit {
+    margin-top: -20px;
     padding: 0 64px;
     font-family: 'Lexend', sans-serif;
 
@@ -77,7 +78,7 @@
     font-family: 'Lexend', sans-serif;
 
     &__btn {
-        margin-top: 24px;
+        margin-top: 12px;
         border-radius: 8px;
     }
 

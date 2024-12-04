@@ -46,7 +46,7 @@
         background: #cce5ff;
         color: #004085;
 
-        font-weight: 200;
+        font-weight: 300;
         line-height: 1.5;
 
         border-radius: 4px;
@@ -57,7 +57,7 @@
         display: block;
         margin: 24px 0 8px;
         font-size: 1.2rem;
-        font-weight: 300;
+        font-weight: 350;
         color: red;
     }
 
@@ -65,11 +65,15 @@
         display: flex;
         flex-direction: column;
         margin-top: 16px;
+
+        .ant-picker-disabled {
+            background: #f9fafb;
+        }
     }
 
     &__label {
-        font-size: 1.4rem;
-        line-height: 1.3;
+        font-size: 1.6rem;
+        line-height: 1.5;
         color: var(--text-color);
 
         sup {
@@ -79,11 +83,12 @@
     }
 
     &__date {
-        margin-top: 12px;
+        margin-top: 8px;
         padding: 10px 16px;
         width: 100%;
+        height: 45px;
         min-width: 340px;
-        font-size: 1.4rem;
+        font-size: 1.6rem;
 
         color: var(--text-color);
         border-radius: 10px;
@@ -93,8 +98,8 @@
 
         .ant-picker-input input {
             font-family: 'Lexend', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 300;
+            font-size: 1.6rem;
+            font-weight: 350;
 
             &::placeholder {
                 font-weight: 300;

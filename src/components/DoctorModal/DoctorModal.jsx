@@ -391,7 +391,7 @@ function DoctorModal({ modalClose, id }) {
                                                     },
                                                     {
                                                         value: 'Thứ 4',
-                                                        label: 'Thứ 5'
+                                                        label: 'Thứ 4'
                                                     },
                                                     {
                                                         value: 'Thứ 5',

@@ -215,7 +215,7 @@ function AppointmentManagement() {
             onFilter: (value, record) => record?.request?.includes(value),
             render: (_, record) =>
                 record?.changeRequest && (
-                    <Space>
+                    <Space style={{ alignItems: 'flex-end', gap: 12 }}>
                         <Button
                             className='management__actions-btn '
                             onClick={() =>
@@ -229,9 +229,9 @@ function AppointmentManagement() {
                                 Đang đợi...
                             </span>
                         ) : record?.changeRequest?.status === 'approved' ? (
-                            <span>Đã duyệt</span>
+                            <span style={{ color: '#389e0d' }}>Đã duyệt</span>
                         ) : (
-                            <span>Từ chối</span>
+                            <span style={{ color: '#d4380d' }}>Từ chối</span>
                         )}
                     </Space>
                 )

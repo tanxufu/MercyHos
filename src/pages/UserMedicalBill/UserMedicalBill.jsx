@@ -1,11 +1,12 @@
 import { useContext, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 
 import AppContext from '../../contexts/app.context';
 import chevronRight from '../../assets/icons/chevron-right.svg';
 import cancelIcon from '../../assets/icons/cancel.svg';
+import arrowRight from '../../assets/icons/arrow-right.svg';
 import logo from '../../../public/logo.svg';
 import Button from '../../components/Button';
 import {
@@ -14,10 +15,11 @@ import {
     updateAppointment
 } from '../../apis/appointment.api';
 import { showNotification } from '../../utils/notification';
+import { AnimatePresence, motion } from 'framer-motion';
 
 function UserMedicalBill() {
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const appointmentId = queryParams.get('id');
@@ -45,9 +47,10 @@ function UserMedicalBill() {
             enabled: !!appointmentId
         });
     const appointment = appointmentData?.data?.data?.data;
+    console.log(appointment);
 
-    // cancel appointment
-    const cancelAppointmentMutation = useMutation({
+    // handle
+    const mutation = useMutation({
         mutationFn: (body) => {
             updateAppointment(appointmentId, body);
         },
@@ -55,25 +58,54 @@ function UserMedicalBill() {
             showNotification(
                 'success',
                 'Thành công!',
-                'Bạn đã huỷ lịch hẹn thành công!'
+                'Bạn đã thực hiện thay đổi thành công!'
             );
-            setVisitStatus('Đã huỷ');
 
             setTimeout(() => {
-                queryClient.invalidateQueries(['appointments', userId]);
-                navigate('/user-medical-bill');
-            }, 1000);
+                queryClient.invalidateQueries(['appointment', appointmentId]);
+            }, 500);
         },
         onError: (error) => {
             showNotification('error', 'Thất bại!', error?.message);
         }
     });
 
+    // cancel appointment
     const handleCancelAppointment = () => {
         const data = {
             visitStatus: 'Đã huỷ'
         };
-        cancelAppointmentMutation.mutate(data);
+        mutation.mutate(data);
+    };
+
+    // reject appointment
+    const handleRejectRequest = () => {
+        const data = {
+            changeRequest: {
+                ...appointment?.changeRequest,
+                status: 'rejected'
+            }
+        };
+
+        mutation.mutate(data);
+    };
+
+    // approve appointment
+    // when approve change request changeRequest filed will save the pre appointment
+    const handleApproveAppointment = () => {
+        const data = {
+            doctor: appointment?.changeRequest?.newDoctor,
+            dateVisit: appointment?.changeRequest?.newDateVisit,
+            timeVisit: appointment?.changeRequest?.newTimeVisit,
+            changeRequest: {
+                newDoctor: appointment?.doctor,
+                newTimeVisit: appointment?.timeVisit,
+                newDateVisit: appointment?.dateVisit,
+                status: 'approved'
+            }
+        };
+
+        mutation.mutate(data);
     };
 
     const filterItems = ['Sắp tới', 'Đã khám', 'Đã huỷ'];
@@ -98,6 +130,31 @@ function UserMedicalBill() {
                         <img src={chevronRight} alt='' />
                     </span>
                     <h1>Phiếu khám bệnh</h1>
+
+                    {appointment?.changeRequest?.status === 'pending' && (
+                        <p className='user-medical-bill-info__note'>
+                            (*) Vì lý do nội bộ. Bệnh viện đã gửi yêu cầu thay
+                            đổi lịch hẹn của bạn. Chân thành xin lỗi vì sự bất
+                            tiện này.
+                            <br />
+                            <span>
+                                Vui lòng phê duyệt hoặc từ chối yêu cầu này
+                                trước ngày khám 1 ngày!
+                            </span>
+                            <b>
+                                <img src={arrowRight} alt='' />
+                                Là thông tin được yêu cầu thay đổi, mọi thông
+                                tin khác giữ nguyên.
+                            </b>
+                        </p>
+                    )}
+
+                    {appointment?.changeRequest?.status === 'approved' && (
+                        <p className='user-medical-bill-info__note'>
+                            (*) Lịch hẹn của bạn đã thay đổi theo yêu cầu phía
+                            Bệnh viện.
+                        </p>
+                    )}
                 </>
             ) : (
                 <>
@@ -106,6 +163,7 @@ function UserMedicalBill() {
                 </>
             )}
 
+            {/* bill info */}
             {appointmentId ? (
                 <>
                     <article className='medical-bill-card'>
@@ -132,29 +190,99 @@ function UserMedicalBill() {
 
                                 <div className='medical-bill-card__content'>
                                     <h2>Phiếu khám bệnh</h2>
-                                    <p>
-                                        <span>Chuyên khoa: </span>
-                                        {appointment?.doctor?.specialty}
-                                    </p>
-                                    <p>
-                                        <span>Bác sĩ: </span>
-                                        {appointment?.doctor?.name}
-                                    </p>
+                                    <div className='medical-bill-card__col'>
+                                        <p>
+                                            <span>Chuyên khoa: </span>
+                                            {appointment?.doctor?.specialty}
+                                        </p>
+                                        {/* has request */}
+                                        {appointment?.changeRequest?.status ===
+                                            'pending' &&
+                                            appointment?.changeRequest
+                                                ?.newDoctor?.specialty !==
+                                                appointment?.doctor
+                                                    ?.specialty && (
+                                                <p className='medical-bill-card__change'>
+                                                    {/* <img
+                                                        src={arrowRight}
+                                                        alt=''
+                                                    /> */}
+                                                    <span>Chuyên khoa: </span>
+                                                    {
+                                                        appointment
+                                                            ?.changeRequest
+                                                            ?.newDoctor
+                                                            ?.specialty
+                                                    }
+                                                </p>
+                                            )}
+                                    </div>
+                                    <div className='medical-bill-card__col'>
+                                        <p>
+                                            <span>Bác sĩ: </span>
+                                            {appointment?.doctor?.name}
+                                        </p>
+                                        {/* has request */}
+                                        {appointment?.changeRequest?.status ===
+                                            'pending' &&
+                                            appointment?.changeRequest
+                                                ?.newDoctor?.id !==
+                                                appointment?.doctor?.id && (
+                                                <p className='medical-bill-card__change'>
+                                                    <span>Bác sĩ: </span>
+                                                    {
+                                                        appointment
+                                                            ?.changeRequest
+                                                            ?.newDoctor?.name
+                                                    }
+                                                </p>
+                                            )}
+                                    </div>
+
                                     <span className='medical-bill-card__number'>
                                         {appointment?.medicalBill}
                                     </span>
                                     <p className='medical-bill-card__info'>
                                         <span>Ngày khám:&nbsp;</span>
-
                                         {dayjs(
                                             appointment?.dateVisit?.split(
                                                 'T'
                                             )[0]
                                         ).format('DD-MM-YYYY')}
+
+                                        {/* has request */}
+                                        {appointment?.changeRequest?.status ===
+                                            'pending' &&
+                                            appointment?.changeRequest
+                                                ?.newDateVisit !==
+                                                appointment?.dateVisit && (
+                                                <p className='medical-bill-card__change'>
+                                                    {dayjs(
+                                                        appointment?.changeRequest?.newDateVisit?.split(
+                                                            'T'
+                                                        )[0]
+                                                    ).format('DD-MM-YYYY')}
+                                                </p>
+                                            )}
                                     </p>
                                     <p className='medical-bill-card__info'>
                                         <span>Giờ khám:&nbsp;</span>
                                         {appointment?.timeVisit}
+
+                                        {/* has request */}
+                                        {appointment?.changeRequest?.status ===
+                                            'pending' &&
+                                            appointment?.changeRequest
+                                                ?.newTimeVisit !==
+                                                appointment?.timeVisit && (
+                                                <p className='medical-bill-card__change'>
+                                                    {
+                                                        appointment
+                                                            ?.changeRequest
+                                                            ?.newTimeVisit
+                                                    }
+                                                </p>
+                                            )}
                                     </p>
                                     <p className='medical-bill-card__info'>
                                         <span>Họ tên:&nbsp;</span>
@@ -194,20 +322,42 @@ function UserMedicalBill() {
                             </>
                         )}
                     </article>
+                    {appointment?.changeRequest?.status === 'pending' &&
+                        appointment?.visitStatus === 'Sắp tới' && (
+                            <div className='medical-bill-card__act'>
+                                <Button
+                                    className={`medical-bill-card__approve`}
+                                    onClick={() => handleApproveAppointment()}
+                                >
+                                    Đồng ý thay đổi
+                                </Button>
+                                <Button
+                                    className={`medical-bill-card__cancel`}
+                                    onClick={() => handleRejectRequest()}
+                                >
+                                    Giữ lịch hẹn cũ
+                                </Button>
+                            </div>
+                        )}
+
                     {!appointmentDataPending &&
+                        appointment?.changeRequest?.status !== 'pending' &&
                         (appointment?.visitStatus !== 'Sắp tới' ? (
                             <></>
                         ) : (
-                            <Button
-                                className={`medical-bill-card__cancel `}
-                                onClick={() => handleCancelAppointment()}
-                            >
-                                <img src={cancelIcon} alt='' />
-                                Huỷ lịch hẹn
-                            </Button>
+                            <div className='medical-bill-card__act'>
+                                <Button
+                                    className={`medical-bill-card__cancel `}
+                                    onClick={() => handleCancelAppointment()}
+                                >
+                                    <img src={cancelIcon} alt='' />
+                                    Huỷ lịch hẹn
+                                </Button>
+                            </div>
                         ))}
                 </>
             ) : (
+                // list bill
                 <>
                     <nav className='user-medical-bill__filter'>
                         {filterItems.map((item, index) => (
@@ -224,84 +374,111 @@ function UserMedicalBill() {
                             </div>
                         ))}
                     </nav>
-                    <ul className='user-medical-bill__list'>
-                        {isPending && (
-                            <div className='loading'>
-                                <div className='loader'></div>
-                            </div>
-                        )}
+                    <AnimatePresence mode='wait'>
+                        <motion.div
+                            key={appointments}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{
+                                duration: 0.3,
+                                ease: 'easeOut'
+                            }}
+                        >
+                            <ul className='user-medical-bill__list'>
+                                {isPending && (
+                                    <div className='loading'>
+                                        <div className='loader'></div>
+                                    </div>
+                                )}
 
-                        {appointments?.length < 1 && (
-                            <div className='no-data'>
-                                <p>Bạn chưa có thông tin phiếu khám.</p>
-                            </div>
-                        )}
+                                {appointments?.length < 1 && (
+                                    <div className='no-data'>
+                                        <p>Bạn chưa có thông tin phiếu khám.</p>
+                                    </div>
+                                )}
 
-                        {appointments?.map((appointment) => {
-                            return (
-                                <li key={appointment?._id}>
-                                    <Link
-                                        to={`/user-medical-bill?id=${appointment?._id}`}
-                                        className='medical-bill-item'
-                                    >
-                                        <div className='medical-bill-item__top'>
-                                            <div>
-                                                <p>
-                                                    <span>Mã phiếu: </span>
-                                                    {appointment?.medicalBill}
-                                                </p>
-                                                <h2>
-                                                    {appointment?.patient?.name}
-                                                </h2>
-                                            </div>
-                                            <div
-                                                className={`medical-bill-item__payment ${appointment?.visitStatus === 'Đã huỷ' ? 'medical-bill-item__payment--cancel' : ''}  ${
-                                                    appointment?.feeStatus !==
-                                                    'Chưa thanh toán'
-                                                        ? 'medical-bill-item__payment--pay'
-                                                        : ''
-                                                }`}
+                                {appointments?.map((appointment) => {
+                                    return (
+                                        <li key={appointment?._id}>
+                                            <Link
+                                                to={`/user-medical-bill?id=${appointment?._id}`}
+                                                className='medical-bill-item'
                                             >
-                                                {appointment?.feeStatus ===
-                                                    'Chưa thanh toán' &&
-                                                appointment?.visitStatus ===
-                                                    'Đã huỷ'
-                                                    ? 'Đã huỷ'
-                                                    : appointment?.feeStatus ===
-                                                        'Chưa thanh toán'
-                                                      ? 'Chưa thanh toán'
-                                                      : 'Đã thanh toán'}
-                                            </div>
-                                        </div>
+                                                <div className='medical-bill-item__top'>
+                                                    <div>
+                                                        <p>
+                                                            <span>
+                                                                Mã phiếu:{' '}
+                                                            </span>
+                                                            {
+                                                                appointment?.medicalBill
+                                                            }
+                                                        </p>
+                                                        <h2>
+                                                            {
+                                                                appointment
+                                                                    ?.patient
+                                                                    ?.name
+                                                            }
+                                                        </h2>
+                                                    </div>
+                                                    <div
+                                                        className={`medical-bill-item__payment ${appointment?.visitStatus === 'Đã huỷ' ? 'medical-bill-item__payment--cancel' : ''}  ${
+                                                            appointment?.feeStatus !==
+                                                            'Chưa thanh toán'
+                                                                ? 'medical-bill-item__payment--pay'
+                                                                : ''
+                                                        }`}
+                                                    >
+                                                        {appointment?.feeStatus ===
+                                                            'Chưa thanh toán' &&
+                                                        appointment?.visitStatus ===
+                                                            'Đã huỷ'
+                                                            ? 'Đã huỷ'
+                                                            : appointment?.feeStatus ===
+                                                                'Chưa thanh toán'
+                                                              ? 'Chưa thanh toán'
+                                                              : 'Đã thanh toán'}
+                                                    </div>
+                                                </div>
 
-                                        <div className='medical-bill-item__info'>
-                                            <h3>
-                                                {appointment?.doctor?.specialty}
-                                            </h3>
-                                            <p>
-                                                <span>Bác sĩ: </span>
-                                                {appointment?.doctor?.name}
-                                            </p>
+                                                <div className='medical-bill-item__info'>
+                                                    <h3>
+                                                        {
+                                                            appointment?.doctor
+                                                                ?.specialty
+                                                        }
+                                                    </h3>
+                                                    <p>
+                                                        <span>Bác sĩ: </span>
+                                                        {
+                                                            appointment?.doctor
+                                                                ?.name
+                                                        }
+                                                    </p>
 
-                                            <p>
-                                                <span>Ngày khám: </span>
-                                                {dayjs(
-                                                    appointment?.dateVisit?.split(
-                                                        'T'
-                                                    )[0]
-                                                ).format('DD-MM-YYYY')}
-                                            </p>
+                                                    <p>
+                                                        <span>Ngày khám: </span>
+                                                        {dayjs(
+                                                            appointment?.dateVisit?.split(
+                                                                'T'
+                                                            )[0]
+                                                        ).format('DD-MM-YYYY')}
+                                                    </p>
 
-                                            <p>
-                                                <span>Giờ khám: </span>
-                                                {appointment?.timeVisit}
-                                            </p>
-                                        </div>
-                                    </Link>
-                                </li>
-                            );
-                        })}
-                    </ul>
+                                                    <p>
+                                                        <span>Giờ khám: </span>
+                                                        {appointment?.timeVisit}
+                                                    </p>
+                                                </div>
+                                            </Link>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </motion.div>
+                    </AnimatePresence>
                 </>
             )}
         </div>

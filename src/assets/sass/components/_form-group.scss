@@ -6,8 +6,8 @@
     margin-top: 16px;
 
     &__label {
-        font-size: 1.4rem;
-        line-height: 1.3;
+        font-size: 1.6rem;
+        line-height: 1.5;
 
         color: var(--text-color);
 
@@ -18,13 +18,14 @@
     }
 
     &__input {
-        margin-top: 12px;
+        margin-top: 8px;
         padding: 10px 16px;
         width: 100%;
         min-width: 340px;
-        font-size: 1.4rem;
-        font-weight: 300;
-        line-height: 1.572;
+        font-size: 1.6rem;
+        font-weight: 350;
+        line-height: 1.5;
+        height: 45px;
 
         color: var(--text-color);
         border-radius: 10px;
@@ -51,7 +52,7 @@
         margin: 6px 0 0 6px;
         height: 14px;
         font-size: 1.2rem;
-        font-weight: 300;
+        font-weight: 350;
 
         color: #ff0000;
     }
@@ -65,8 +66,8 @@
     }
 
     &__label {
-        font-size: 1.4rem;
-        line-height: 1.3;
+        font-size: 1.6rem;
+        line-height: 1.5;
         color: var(--text-color);
 
         sup {
@@ -76,12 +77,11 @@
     }
 
     &__select {
-        margin-top: 12px;
-        height: 44px;
+        margin-top: 8px;
+        height: 45px;
         width: 100%;
         min-width: 340px;
 
-        background: #f9fafb;
         transition: border 0.3s;
 
         @include abstracts.screen(sm) {
@@ -89,25 +89,30 @@
         }
 
         .ant-select-selector {
-            background: #f9fafb !important;
             border-radius: 10px !important;
+            background: #f9fafb !important;
             border: 1px solid var(--border-color) !important;
             padding: 0 16px !important;
 
-            &:focus {
+            &:focus-within {
                 border: 1px solid var(--hover-color) !important;
+            }
+
+            &:active {
+                // border: 1px solid var(--hover-color) !important;
             }
 
             .ant-select-selection-item {
                 font-family: 'Lexend', sans-serif;
-                font-size: 1.4rem;
-                font-weight: 300;
+                font-size: 1.6rem;
+                font-weight: 350;
                 color: var(--text-color);
             }
 
             .ant-select-selection-placeholder {
                 font-family: 'Lexend', sans-serif;
                 font-weight: 300;
+                font-size: 1.6rem;
                 opacity: 0.4;
                 color: var(--text-color);
             }
@@ -131,7 +136,7 @@
     z-index: 9999;
 
     font-family: 'Lexend', sans-serif;
-    font-weight: 300 !important;
+    font-weight: 350 !important;
 }
 
 .ant-select-dropdown {
@@ -140,7 +145,7 @@
     font-family: 'Lexend', sans-serif;
 
     .ant-select-item-option {
-        font-weight: 300 !important;
+        font-weight: 350 !important;
     }
 
     .ant-select-item-option-selected {

@@ -64,6 +64,7 @@ function AppointmentModal({ id, modalClose, doctorSite }) {
         enabled: !!id
     });
     const appointment = data?.data?.data?.data || {};
+    const doneAppointment = appointment?.visitStatus === 'Đã khám';
 
     // get patients
     const { data: patientsData } = useQuery({
@@ -357,7 +358,10 @@ function AppointmentModal({ id, modalClose, doctorSite }) {
                                                     field.onChange(value);
                                                     handleDoctorChange(value);
                                                 }}
-                                                disabled={doctorSite}
+                                                disabled={
+                                                    doctorSite ||
+                                                    doneAppointment
+                                                }
                                                 optionFilterProp='label'
                                                 filterSort={(
                                                     optionA,
@@ -429,6 +433,7 @@ function AppointmentModal({ id, modalClose, doctorSite }) {
                                                               .startOf('day')
                                                         : null
                                                 }
+                                                disabled={doneAppointment}
                                                 disabledDate={disabledDate}
                                                 placement='bottomRight'
                                                 className='patient-form__date'
@@ -468,6 +473,7 @@ function AppointmentModal({ id, modalClose, doctorSite }) {
                                                 onChange={(value) => {
                                                     field.onChange(value);
                                                 }}
+                                                disabled={doneAppointment}
                                                 optionFilterProp='label'
                                                 filterSort={(
                                                     optionA,

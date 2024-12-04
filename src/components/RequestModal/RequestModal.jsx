@@ -13,7 +13,6 @@ function RequestModal({ id, modalClose }) {
         enabled: !!id
     });
     const appointment = data?.data?.data?.data || {};
-    console.log(appointment);
 
     return (
         <Modal modal={true} modalClose={modalClose}>
@@ -23,7 +22,9 @@ function RequestModal({ id, modalClose }) {
             >
                 <h2>
                     <img src={informationIcon} alt='' />
-                    Thông tin lịch đổi
+                    {appointment?.changeRequest?.status === 'approved'
+                        ? 'Thông tin lịch cũ'
+                        : 'Thông tin lịch đổi'}
                 </h2>
 
                 {isPending && (
@@ -70,7 +71,7 @@ function RequestModal({ id, modalClose }) {
 
                         <div>
                             <label>Cập nhật</label>
-                            {dayjs(appointment?.updateAt).format(
+                            {dayjs(appointment?.updatedAt).format(
                                 'DD-MM-YYYY HH:mm'
                             )}
                         </div>

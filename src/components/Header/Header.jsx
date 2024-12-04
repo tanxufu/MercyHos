@@ -55,7 +55,11 @@ function Header() {
     const notifications = appointments?.data?.data?.data;
 
     const datesArray = notifications
-        ?.filter((appointment) => appointment?.visitStatus !== 'Đã huỷ')
+        ?.filter(
+            (appointment) =>
+                appointment?.visitStatus !== 'Đã huỷ' &&
+                appointment?.visitStatus !== 'Đã khám'
+        )
         ?.map((appointment) => appointment.dateVisit)
         ?.filter((date, index, self) => self.indexOf(date) === index);
 
@@ -135,7 +139,9 @@ function Header() {
                     className='dropdown__link dropdown__logout'
                     onClick={handleLogout}
                 >
-                    <LogoutOutlined style={{ marginLeft: 2 }} />
+                    <LogoutOutlined
+                        style={{ marginLeft: 2, width: 22, height: 22 }}
+                    />
                     Đăng xuất
                 </button>
             )
@@ -353,7 +359,9 @@ function Header() {
                                             onClick={handleLogout}
                                         >
                                             <LogoutOutlined
-                                                style={{ marginLeft: 2 }}
+                                                style={{
+                                                    marginLeft: 2
+                                                }}
                                             />
                                             Đăng xuất
                                         </button>
