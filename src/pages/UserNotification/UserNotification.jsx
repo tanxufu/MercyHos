@@ -3,25 +3,33 @@ import dayjs from 'dayjs';
 
 import envelopeIcon from '../../assets/icons/envelope.svg';
 import chevronRight from '../../assets/icons/chevron-right.svg';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import AppContext from '../../contexts/app.context';
 import { getAppointmentsOnUser } from '../../apis/appointment.api';
 import { useQuery } from '@tanstack/react-query';
+import { Pagination } from 'antd';
 
 function UserNotification() {
     const { user } = useContext(AppContext);
     const userId = user._id;
+    const [currentPage, setCurrentPage] = useState(1);
 
     const { data, isPending } = useQuery({
-        queryKey: ['appointments', userId, ''],
-        queryFn: () => getAppointmentsOnUser(userId, ''),
+        queryKey: ['appointments', userId, '', currentPage],
+        queryFn: () => getAppointmentsOnUser(userId, '', currentPage, 6),
         enabled: !!userId
     });
     // patients
     const appointments = data?.data?.data?.data;
+    const totalPages = data?.data?.total || 0;
 
     const today = new Date();
     const formattedToday = new Date(today.setHours(0, 0, 0, 0)).toISOString();
+
+    // Pagination
+    const handlePaginationChange = (page) => {
+        setCurrentPage(page);
+    };
 
     return (
         <div className='user-notifications'>
@@ -117,6 +125,15 @@ function UserNotification() {
                     );
                 })}
             </ul>
+
+            <Pagination
+                className='user-medical-bill__pagination'
+                align='end'
+                pageSize={6}
+                total={appointments?.length > 1 ? totalPages : 0}
+                onChange={handlePaginationChange}
+                hideOnSinglePage={true}
+            />
         </div>
     );
 }

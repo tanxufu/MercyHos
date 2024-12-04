@@ -16,6 +16,7 @@ import {
 } from '../../apis/appointment.api';
 import { showNotification } from '../../utils/notification';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Pagination } from 'antd';
 
 function UserMedicalBill() {
     const queryClient = useQueryClient();
@@ -27,17 +28,20 @@ function UserMedicalBill() {
     const userId = user._id;
     const [visitStatus, setVisitStatus] = useState('Sắp tới');
 
+    const [currentPage, setCurrentPage] = useState(1);
+
     // list appointments
     const { data, isPending } = useQuery({
-        queryKey: ['appointments', userId, visitStatus],
+        queryKey: ['appointments', userId, visitStatus, currentPage],
         queryFn: () => {
             // console.log('fetch');
-            return getAppointmentsOnUser(userId, visitStatus);
+            return getAppointmentsOnUser(userId, visitStatus, currentPage, 3);
         },
         enabled: !!userId
     });
-    // patients
+    // appointments
     const appointments = data?.data?.data?.data;
+    const totalPages = data?.data?.total || 0;
 
     // appointment
     const { data: appointmentData, isPending: appointmentDataPending } =
@@ -47,7 +51,6 @@ function UserMedicalBill() {
             enabled: !!appointmentId
         });
     const appointment = appointmentData?.data?.data?.data;
-    console.log(appointment);
 
     // handle
     const mutation = useMutation({
@@ -72,6 +75,19 @@ function UserMedicalBill() {
 
     // cancel appointment
     const handleCancelAppointment = () => {
+        const today = new Date();
+        const oneDayInMs = 24 * 60 * 60 * 1000;
+        const dateVisit = new Date(appointment?.dateVisit);
+
+        if (dateVisit - today <= oneDayInMs) {
+            showNotification(
+                'error',
+                'Thông báo!',
+                'Không thể huỷ lịch hẹn trước ngày khám 1 ngày!'
+            );
+            return;
+        }
+
         const data = {
             visitStatus: 'Đã huỷ'
         };
@@ -110,6 +126,7 @@ function UserMedicalBill() {
 
     const filterItems = ['Sắp tới', 'Đã khám', 'Đã huỷ'];
 
+    // filter
     const handleFilter = (item) => {
         setVisitStatus(item);
         document
@@ -119,6 +136,11 @@ function UserMedicalBill() {
                 block: 'center',
                 inline: 'center'
             });
+    };
+
+    // Pagination
+    const handlePaginationChange = (page) => {
+        setCurrentPage(page);
     };
 
     return (
@@ -479,6 +501,14 @@ function UserMedicalBill() {
                             </ul>
                         </motion.div>
                     </AnimatePresence>
+                    <Pagination
+                        className='user-medical-bill__pagination'
+                        align='end'
+                        pageSize={3}
+                        total={appointments?.length > 1 ? totalPages : 0}
+                        onChange={handlePaginationChange}
+                        hideOnSinglePage={true}
+                    />
                 </>
             )}
         </div>

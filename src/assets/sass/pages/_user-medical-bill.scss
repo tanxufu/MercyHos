@@ -57,6 +57,14 @@
     &__list {
         margin-top: 32px;
     }
+
+    &__pagination {
+        margin-top: 32px;
+
+        span {
+            margin-top: 0;
+        }
+    }
 }
 
 .medical-bill-item {
