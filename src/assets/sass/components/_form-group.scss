@@ -48,6 +48,37 @@
         }
     }
 
+    &__area {
+        display: block;
+
+        height: 160px;
+
+        margin: 8px 0;
+        padding: 10px 16px;
+        width: 100%;
+        min-width: 340px;
+        font-size: 1.6rem;
+        font-weight: 350;
+        line-height: 1.5;
+
+        color: var(--text-color);
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        background: #f9fafb;
+        transition: border 0.3s;
+        cursor: text;
+        resize: none;
+
+        &::placeholder {
+            font-weight: 300;
+            opacity: 0.6;
+        }
+
+        &:focus {
+            border: 1px solid var(--hover-color);
+        }
+    }
+
     &__error {
         margin: 6px 0 0 6px;
         height: 14px;

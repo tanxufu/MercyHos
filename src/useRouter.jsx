@@ -31,6 +31,7 @@ const UserNotification = lazy(() => import('./pages/UserNotification'));
 const UserMedicalBill = lazy(() => import('./pages/UserMedicalBill'));
 const AccountSetting = lazy(() => import('./pages/AccountSetting'));
 const Doctor = lazy(() => import('./pages/Doctor'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 function ProtectedRoute() {
     const { isAuthenticated } = useContext(AppContext);
@@ -330,6 +331,15 @@ function useRouter() {
                     )
                 }
             ]
+        },
+
+        {
+            path: '*',
+            element: (
+                <MainLayout>
+                    <NotFound />
+                </MainLayout>
+            )
         }
     ]);
 

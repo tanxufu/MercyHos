@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
-import { DatePicker, ConfigProvider } from 'antd';
-// import locale from 'antd/lib/locale/vi_VN';
+
+import { DatePicker, ConfigProvider, Select } from 'antd';
+import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useContext, useEffect, useState } from 'react';
@@ -30,7 +31,9 @@ dayjs.locale('vi');
 const patientSchema = schema.omit([
     'password',
     'passwordConfirm',
-    'passwordCurrent'
+    'passwordCurrent',
+    'active',
+    'owner'
 ]);
 
 function PatientForm({ title, isEdit = false }) {
@@ -45,6 +48,13 @@ function PatientForm({ title, isEdit = false }) {
     const [submit, setSubmit] = useState(false);
     const { user } = useContext(AppContext);
     const userId = user._id;
+
+    const [provinces, setProvinces] = useState([]);
+    const [districts, setDistricts] = useState([]);
+    const [wards, setWards] = useState([]);
+
+    const [selectedProvince, setSelectedProvince] = useState(null);
+    const [selectedDistrict, setSelectedDistrict] = useState(null);
 
     // hook form
     const {
@@ -75,6 +85,8 @@ function PatientForm({ title, isEdit = false }) {
         }
     }, [isEdit, patient, reset]);
 
+    console.log(prevPath);
+
     const mutation = useMutation({
         mutationFn: (body) => {
             if (isEdit) {
@@ -92,6 +104,7 @@ function PatientForm({ title, isEdit = false }) {
                     : 'Bạn đã tạo hồ sơ thành công!'
             );
             queryClient.invalidateQueries(['patients', userId]);
+
             if (prevPath === '/select-patient-profile') {
                 navigate('/select-patient-profile');
             } else {
@@ -119,6 +132,40 @@ function PatientForm({ title, isEdit = false }) {
         reset();
         setSubmit(false);
     };
+
+    // get provinces
+    useEffect(() => {
+        axios.get('https://provinces.open-api.vn/api/').then((res) => {
+            setProvinces(res.data);
+        });
+    }, []);
+
+    // get districts
+    useEffect(() => {
+        if (selectedProvince) {
+            axios
+                .get(
+                    `https://provinces.open-api.vn/api/p/${selectedProvince}?depth=2`
+                )
+                .then((res) => {
+                    setDistricts(res.data.districts);
+                    setWards([]);
+                });
+        }
+    }, [selectedProvince]);
+
+    // get wards
+    useEffect(() => {
+        if (selectedDistrict) {
+            axios
+                .get(
+                    `https://provinces.open-api.vn/api/d/${selectedDistrict}?depth=2`
+                )
+                .then((res) => {
+                    setWards(res.data.wards);
+                });
+        }
+    }, [selectedDistrict]);
 
     return (
         <form className='patient-form' noValidate onSubmit={onSubmit}>
@@ -210,14 +257,48 @@ function PatientForm({ title, isEdit = false }) {
                     </div>
 
                     <div className='col-6 col-md-12'>
-                        <FormGroup
-                            type='text'
-                            name='gender'
-                            label={<>Giới tính{<sup>*</sup>}</>}
-                            placeHolder={`Vui lòng nhập 'Nam'  'Nữ' hoặc 'Khác'`}
-                            register={register}
-                            errorMessage={submit && errors.gender?.message}
-                        />
+                        <div className='form__col'>
+                            <label className='form__label'>Giới tính</label>
+                            <Controller
+                                name='gender'
+                                control={control}
+                                register={register}
+                                render={({ field }) => (
+                                    <>
+                                        <Select
+                                            {...field}
+                                            className='form__select'
+                                            placeholder='Chọn giới tính'
+                                            value={field.value}
+                                            onChange={(value) =>
+                                                field.onChange(value)
+                                            }
+                                            options={[
+                                                {
+                                                    value: 'Nam',
+                                                    label: 'Nam'
+                                                },
+                                                {
+                                                    value: 'Nữ',
+                                                    label: 'Nữ'
+                                                },
+                                                {
+                                                    value: 'Khác',
+                                                    label: 'Khác'
+                                                }
+                                            ]}
+                                        />
+                                        {errors?.gender ? (
+                                            <p className='form-group__error'>
+                                                {errors.gender?.message}
+                                            </p>
+                                        ) : (
+                                            <p className='form-group__error'></p>
+                                        )}
+                                    </>
+                                )}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -277,25 +358,105 @@ function PatientForm({ title, isEdit = false }) {
             <div className='patient-form__row'>
                 <div className='row'>
                     <div className='col-6 col-md-12'>
-                        <FormGroup
-                            type='text'
-                            name='province'
-                            label={<>Tỉnh/Thành{<sup>*</sup>}</>}
-                            placeHolder='Nhập tỉnh thành phố'
-                            register={register}
-                            errorMessage={submit && errors.province?.message}
-                        />
+                        <div className='form__col'>
+                            <label className='form__label'>
+                                Tỉnh / Thành<sup>*</sup>
+                            </label>
+                            <Controller
+                                name='province'
+                                control={control}
+                                register={register}
+                                render={({ field }) => (
+                                    <>
+                                        <Select
+                                            showSearch
+                                            {...field}
+                                            className='form__select'
+                                            placeholder='Chọn tỉnh thành'
+                                            value={field.value}
+                                            onChange={(value, option) => {
+                                                setSelectedProvince(value);
+                                                field.onChange(option.label);
+                                            }}
+                                            optionFilterProp='label'
+                                            filterSort={(optionA, optionB) =>
+                                                (optionA?.label ?? '')
+                                                    .toLowerCase()
+                                                    .localeCompare(
+                                                        (
+                                                            optionB?.label ?? ''
+                                                        ).toLowerCase()
+                                                    )
+                                            }
+                                            options={provinces.map(
+                                                (province) => ({
+                                                    value: province.code,
+                                                    label: province.name
+                                                })
+                                            )}
+                                        />
+                                        {errors?.province ? (
+                                            <p className='form-group__error'>
+                                                {errors.province?.message}
+                                            </p>
+                                        ) : (
+                                            <p className='form-group__error'></p>
+                                        )}
+                                    </>
+                                )}
+                            />
+                        </div>
                     </div>
 
                     <div className='col-6 col-md-12'>
-                        <FormGroup
-                            type='text'
-                            name='district'
-                            label={<>Quận/Huyện{<sup>*</sup>}</>}
-                            placeHolder='Nhập quận huyện'
-                            register={register}
-                            errorMessage={submit && errors.district?.message}
-                        />
+                        <div className='form__col'>
+                            <label className='form__label'>
+                                Quận / Huyện<sup>*</sup>
+                            </label>
+                            <Controller
+                                name='district'
+                                control={control}
+                                register={register}
+                                render={({ field }) => (
+                                    <>
+                                        <Select
+                                            showSearch
+                                            {...field}
+                                            className='form__select'
+                                            placeholder='Chọn quận huyện'
+                                            value={field.value}
+                                            onChange={(value, option) => {
+                                                setSelectedDistrict(value);
+                                                field.onChange(option.label);
+                                            }}
+                                            optionFilterProp='label'
+                                            filterSort={(optionA, optionB) =>
+                                                (optionA?.label ?? '')
+                                                    .toLowerCase()
+                                                    .localeCompare(
+                                                        (
+                                                            optionB?.label ?? ''
+                                                        ).toLowerCase()
+                                                    )
+                                            }
+                                            options={districts.map(
+                                                (district) => ({
+                                                    value: district.code,
+                                                    label: district.name
+                                                })
+                                            )}
+                                        />
+                                        {errors?.district ? (
+                                            <p className='form-group__error'>
+                                                {errors.district?.message}
+                                            </p>
+                                        ) : (
+                                            <p className='form-group__error'></p>
+                                        )}
+                                    </>
+                                )}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -303,14 +464,52 @@ function PatientForm({ title, isEdit = false }) {
             <div className='patient-form__row'>
                 <div className='row'>
                     <div className='col-6 col-md-12'>
-                        <FormGroup
-                            type='text'
-                            name='ward'
-                            label={<>Phường/Xã{<sup>*</sup>}</>}
-                            placeHolder='Nhập phường xã'
-                            register={register}
-                            errorMessage={submit && errors.ward?.message}
-                        />
+                        {/* address */}
+                        <div className='form__col'>
+                            <label className='form__label'>
+                                Phường / Xã<sup>*</sup>
+                            </label>
+                            <Controller
+                                name='ward'
+                                control={control}
+                                register={register}
+                                render={({ field }) => (
+                                    <>
+                                        <Select
+                                            showSearch
+                                            {...field}
+                                            className='form__select'
+                                            placeholder='Chọn phường xã'
+                                            value={field.value}
+                                            onChange={(value, option) =>
+                                                field.onChange(option.label)
+                                            }
+                                            optionFilterProp='label'
+                                            filterSort={(optionA, optionB) =>
+                                                (optionA?.label ?? '')
+                                                    .toLowerCase()
+                                                    .localeCompare(
+                                                        (
+                                                            optionB?.label ?? ''
+                                                        ).toLowerCase()
+                                                    )
+                                            }
+                                            options={wards.map((ward) => ({
+                                                value: ward.code,
+                                                label: ward.name
+                                            }))}
+                                        />
+                                        {errors?.ward ? (
+                                            <p className='form-group__error'>
+                                                {errors.ward?.message}
+                                            </p>
+                                        ) : (
+                                            <p className='form-group__error'></p>
+                                        )}
+                                    </>
+                                )}
+                            />
+                        </div>
                     </div>
 
                     <div className='col-6 col-md-12'>

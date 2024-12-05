@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { Space, Table, Tag } from 'antd';
@@ -8,14 +9,17 @@ import addUserIcon from '../../assets/icons/create-patient.svg';
 import refreshIcon from '../../assets/icons/refresh.svg';
 import searchIcon from '../../assets/icons/search.svg';
 import { getAllPatients } from '../../apis/patient.api';
-import { useState } from 'react';
 import InfoModal from '../InfoModal';
+import PatientModal from '../PatientModal';
+import DeleteModal from '../DeleteModal';
 
 function PatientManagement() {
     const [modalData, setModalData] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sortedInfo, setSortedInfo] = useState({});
 
     const { data, isPending, refetch } = useQuery({
-        queryKey: ['users'],
+        queryKey: ['patients'],
         queryFn: () => getAllPatients()
     });
     let patients = data?.data?.data?.data || [];
@@ -27,6 +31,61 @@ function PatientManagement() {
         key: index
     }));
 
+    useEffect(() => {
+        setFilteredData(patients);
+    }, [data]);
+    // handle filter
+    const [filteredData, setFilteredData] = useState(patients);
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        if (!patients.length) return;
+        let filtered = patients;
+
+        setSortedInfo({ order: sorter.order, columnKey: sorter.field });
+
+        Object.keys(filters).forEach((key) => {
+            if (filters[key]) {
+                filtered = filtered.filter((item) =>
+                    filters[key].includes(item[key])
+                );
+            }
+        });
+
+        if (searchQuery) {
+            filtered = filtered.filter(
+                (patient) =>
+                    patient.name
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase()) ||
+                    patient.email
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase()) ||
+                    patient.phone
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase())
+            );
+        }
+
+        setFilteredData(filtered);
+    };
+
+    // search handle
+    const handleSearch = (e) => {
+        const value = e.target.value;
+
+        setSearchQuery(value);
+
+        const filtered = patients?.filter(
+            (patient) =>
+                patient.name.toLowerCase().includes(value.toLowerCase()) ||
+                patient.email.toLowerCase().includes(value.toLowerCase()) ||
+                patient.phone.toLowerCase().includes(value.toLowerCase())
+        );
+
+        setFilteredData(filtered);
+    };
+
+    // handle modal
     const handleModal = (modal, id) => {
         setModalData({ modal, id });
     };
@@ -38,7 +97,11 @@ function PatientManagement() {
         },
         {
             title: 'Ngày sinh',
-            dataIndex: 'dob'
+            dataIndex: 'dob',
+            sorter: (a, b) =>
+                dayjs(a.dob, 'DD-MM-YYYY').unix() -
+                dayjs(b.dob, 'DD-MM-YYYY').unix(),
+            sortOrder: sortedInfo.columnKey === 'dob' ? sortedInfo.order : null
         },
         {
             title: 'Giới tính',
@@ -79,7 +142,12 @@ function PatientManagement() {
         },
         {
             title: 'Ngày tạo',
-            dataIndex: 'createdAt'
+            dataIndex: 'createdAt',
+            sorter: (a, b) =>
+                dayjs(a.createdAt, 'DD-MM-YYYY HH:mm').unix() -
+                dayjs(b.createdAt, 'DD-MM-YYYY HH:mm').unix(),
+            sortOrder:
+                sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null
         },
         {
             title: 'Actions',
@@ -94,16 +162,13 @@ function PatientManagement() {
                     </Button>
                     <Button
                         className='management__actions-btn'
-                        // onClick={() => showEditModal(record)}
+                        onClick={() => handleModal('patientModal', record?.id)}
                     >
                         <EditOutlined />
                     </Button>
                     <Button
                         className='management__actions-btn management__actions-btn--delete'
-                        // onClick={() => showEditModal(record)}
-                        onClick={() => {
-                            console.log(record.id);
-                        }}
+                        onClick={() => handleModal('patientDelete', record?.id)}
                     >
                         <DeleteOutlined />
                     </Button>
@@ -115,7 +180,13 @@ function PatientManagement() {
     return (
         <div className='patient-management'>
             <div className='management__act'>
-                <Button className='management__refetch' onClick={refetch}>
+                <Button
+                    className='management__refetch'
+                    onClick={() => {
+                        refetch();
+                        setSearchQuery('');
+                    }}
+                >
                     <img src={refreshIcon} alt='' />
                 </Button>
 
@@ -124,12 +195,15 @@ function PatientManagement() {
                     <input
                         type='text'
                         placeholder='Tìm nhanh bệnh nhân'
-                        // value={searchQuery}
-                        // onChange={(e) => setSearchQuery(e.target.value)}
+                        value={searchQuery}
+                        onChange={handleSearch}
                     />
                 </div>
 
-                <Button className='management__add'>
+                <Button
+                    className='management__add'
+                    onClick={() => handleModal('patientModal')}
+                >
                     <img src={addUserIcon} alt='' />
                     Thêm bệnh nhân
                 </Button>
@@ -139,9 +213,10 @@ function PatientManagement() {
                 className='management__table'
                 loading={isPending}
                 columns={columns}
-                dataSource={patients}
+                dataSource={filteredData}
+                onChange={handleTableChange}
                 pagination={{
-                    total: patients?.length,
+                    total: filteredData?.length,
                     pageSize: 10,
                     hideOnSinglePage: true
                 }}
@@ -149,6 +224,22 @@ function PatientManagement() {
 
             {modalData?.modal === 'patientInfo' && (
                 <InfoModal
+                    modal={modalData.modal}
+                    id={modalData.id}
+                    modalClose={() => setModalData(null)}
+                />
+            )}
+
+            {modalData?.modal === 'patientModal' && (
+                <PatientModal
+                    modal={modalData.modal}
+                    id={modalData.id}
+                    modalClose={() => setModalData(null)}
+                />
+            )}
+
+            {modalData?.modal === 'patientDelete' && (
+                <DeleteModal
                     modal={modalData.modal}
                     id={modalData.id}
                     modalClose={() => setModalData(null)}

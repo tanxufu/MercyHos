@@ -1,17 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 import { Space, Table, Layout, theme } from 'antd';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CloseOutlined, EditOutlined } from '@ant-design/icons';
+import { CloseOutlined, EditOutlined, FormOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
 import { getAppointmentsOnDoctor } from '../../apis/appointment.api';
 import Button from '../Button';
-import addAppointment from '../../assets/icons/add-appointment.svg';
+import addAppointment from '../../assets/icons/ticket.svg';
 // import refreshIcon from '../../assets/icons/refresh.svg';
 import searchIcon from '../../assets/icons/search.svg';
 import { useState } from 'react';
 import InfoModal from '../InfoModal';
 import AppointmentModal from '../AppointmentModal';
+import NoteModal from '../NoteModal/NoteModal';
 
 const { Content } = Layout;
 
@@ -143,24 +144,36 @@ function DoctorAppointmentManagement({ doctorId, hide = false, pageSize = 8 }) {
             : appointments?.some((record) => record?.visitStatus === 'Đã khám')
               ? {
                     title: 'Ghi chú',
-                    key: ''
-                    // render: (_, record) => {
-                    //     return record?.feeStatus === 'Đã thanh toán' ? (
-                    //         <p style={{ color: '#389e0d' }}>
-                    //             {record?.feeStatus}
-                    //         </p>
-                    //     ) : (
-                    //         <p style={{ color: '#cf1322' }}>
-                    //             {record?.feeStatus}
-                    //         </p>
-                    //     );
-                    // },
-                    // filters: [
-                    //     { text: 'Đã thanh toán', value: 'Đã thanh toán' },
-                    //     { text: 'Chưa thanh toán', value: 'Chưa thanh toán' }
-                    // ],
-                    // onFilter: (value, record) =>
-                    //     record.feeStatus.includes(value)
+                    key: 'note',
+                    render: (_, record) => (
+                        <Space
+                            style={{
+                                width: '100%',
+                                justifyContent: 'space-between'
+                            }}
+                        >
+                            <p
+                                style={{
+                                    display: '-webkit-box',
+                                    textOverflow: 'ellipsis',
+                                    overflow: 'hidden',
+                                    WebkitBoxOrient: 'vertical',
+                                    WebkitLineClamp: 2
+                                }}
+                            >
+                                {record?.note}
+                            </p>
+                            <Button
+                                className='management__actions-btn'
+                                style={{ marginLeft: 'auto' }}
+                                onClick={() =>
+                                    handleModal('noteModal', record?.id)
+                                }
+                            >
+                                <FormOutlined />
+                            </Button>
+                        </Space>
+                    )
                 }
               : {}
     ];
@@ -252,6 +265,14 @@ function DoctorAppointmentManagement({ doctorId, hide = false, pageSize = 8 }) {
                 {modalData?.modal === 'appointmentModal' && (
                     <AppointmentModal
                         doctorSite={true}
+                        modal={modalData.modal}
+                        id={modalData.id}
+                        modalClose={() => setModalData(null)}
+                    />
+                )}
+
+                {modalData?.modal === 'noteModal' && (
+                    <NoteModal
                         modal={modalData.modal}
                         id={modalData.id}
                         modalClose={() => setModalData(null)}

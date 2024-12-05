@@ -43,7 +43,9 @@ const schema = yup.object({
     province: yup.string().required('Vui lòng nhập Tỉnh/Thành phố!'),
     district: yup.string().required('Vui lòng nhập Quận/Huyện!'),
     ward: yup.string().required('Vui lòng nhập Phường/Xã!'),
-    address: yup.string().required('Vui lòng nhập địa chỉ!')
+    address: yup.string().required('Vui lòng nhập địa chỉ!'),
+    owner: yup.string().required('Vui lòng chọn tài khoản sử dụng!'),
+    active: yup.boolean()
 });
 
 export default schema;

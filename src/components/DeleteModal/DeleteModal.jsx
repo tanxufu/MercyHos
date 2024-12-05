@@ -7,6 +7,7 @@ import { deleteDoctor } from '../../apis/doctor.api';
 import { showNotification } from '../../utils/notification';
 import { deleteUser } from '../../apis/user.api';
 import { deleteAppointment } from '../../apis/appointment.api';
+import { deletePatientAdmin } from '../../apis/patient.api';
 
 function DeleteModal({ modal, modalClose, id }) {
     const queryClient = useQueryClient();
@@ -17,8 +18,8 @@ function DeleteModal({ modal, modalClose, id }) {
             const endpoints = {
                 doctorDelete: deleteDoctor,
                 userDelete: deleteUser,
-                appointmentDelete: deleteAppointment
-                // appointmentDelete: getAppointment
+                appointmentDelete: deleteAppointment,
+                patientDelete: deletePatientAdmin
             };
             const deleteFn = endpoints[modal];
             if (!deleteFn) {
@@ -63,7 +64,8 @@ function DeleteModal({ modal, modalClose, id }) {
                             {
                                 doctorDelete: 'Bác sĩ ',
                                 userDelete: 'Người dùng ',
-                                appointmentDelete: 'Lịch hẹn '
+                                appointmentDelete: 'Lịch hẹn ',
+                                patientDelete: 'Bệnh nhân '
                             }[modal]
                         }
                     </span>

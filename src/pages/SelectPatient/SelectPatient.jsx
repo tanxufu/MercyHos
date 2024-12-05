@@ -69,16 +69,7 @@ function SelectPatient() {
                                 return (
                                     <PatientCard
                                         key={patient?.id}
-                                        id={patient?.id}
-                                        name={patient?.name}
-                                        dob={patient?.dob}
-                                        phone={patient?.phone}
-                                        gender={patient?.gender}
-                                        occupation={patient?.occupation}
-                                        ward={patient?.ward}
-                                        district={patient?.district}
-                                        address={patient?.address}
-                                        province={patient?.province}
+                                        patient={patient}
                                         activePatientCard={activePatientCard}
                                         onPatientClick={handlePatientClick}
                                     />
@@ -116,6 +107,7 @@ function SelectPatient() {
                             <Button
                                 className='create-patient-btn'
                                 to='/create-patient-profile'
+                                state={{ prevPath: location.pathname }}
                             >
                                 <img src={createPatient} alt='' />
                                 Tạo hồ sơ

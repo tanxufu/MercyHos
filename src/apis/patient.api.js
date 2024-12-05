@@ -16,10 +16,18 @@ export const createPatientOnUser = async (userId, body) => {
     return await http.post(`/v1/users/${userId}/patients`, body);
 };
 
+export const createPatient = async (body) => {
+    return await http.post(`/v1/patients`, body);
+};
+
 export const updatePatient = async (patientId, body) => {
     return await http.patch(`/v1/patients/${patientId}`, body);
 };
 
 export const deletePatient = async (patientId) => {
     return await http.patch(`/v1/patients/deletePatient/${patientId}`);
+};
+
+export const deletePatientAdmin = async (patientId) => {
+    return await http.delete(`/v1/patients/${patientId}`);
 };

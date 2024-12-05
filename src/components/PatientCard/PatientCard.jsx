@@ -20,20 +20,7 @@ import { showNotification } from '../../utils/notification';
 import Button from '../Button';
 import AppContext from '../../contexts/app.context';
 
-function PatientCard({
-    id,
-    name,
-    dob,
-    phone,
-    gender,
-    occupation,
-    ward,
-    district,
-    address,
-    province,
-    activePatientCard,
-    onPatientClick
-}) {
+function PatientCard({ patient, activePatientCard, onPatientClick }) {
     const location = useLocation();
     const { user } = useContext(AppContext);
     const userId = user._id;
@@ -78,14 +65,14 @@ function PatientCard({
 
     return (
         <article
-            className={`patient-card ${activePatientCard === id ? 'patient-card--active' : ''} `}
-            onClick={() => onPatientClick(id)}
+            className={`patient-card ${activePatientCard === patient?.id ? 'patient-card--active' : ''} `}
+            onClick={() => onPatientClick(patient?.id)}
         >
             <div className='patient-card__info'>
                 <div className='patient-card__row'>
                     <div className='patient-card__label patient-card__name'>
                         <img src={userAvt} alt='' />
-                        <span>{name}</span>
+                        <span>{patient?.name}</span>
                     </div>
                 </div>
                 <div className='patient-card__row'>
@@ -94,7 +81,7 @@ function PatientCard({
                         <span>Ngày sinh</span>
                     </div>
                     <div className='patient-card__desc'>
-                        {dayjs(dob.split('T')[0]).format('DD-MM-YYYY')}
+                        {dayjs(patient?.dob.split('T')[0]).format('DD-MM-YYYY')}
                     </div>
                 </div>
                 <div className='patient-card__row'>
@@ -102,16 +89,18 @@ function PatientCard({
                         <img src={mobi} alt='' />
                         <span>Số điện thoại</span>
                     </div>
-                    <div className='patient-card__desc'>{phone}</div>
+                    <div className='patient-card__desc'>{patient?.phone}</div>
                 </div>
-                {activePatientCard === id && (
+                {activePatientCard === patient?.id && (
                     <>
                         <div className='patient-card__row'>
                             <div className='patient-card__label'>
                                 <img src={genderIcon} alt='' />
                                 <span>Giới tính</span>
                             </div>
-                            <div className='patient-card__desc'>{gender}</div>
+                            <div className='patient-card__desc'>
+                                {patient?.gender}
+                            </div>
                         </div>
                         <div className='patient-card__row'>
                             <div className='patient-card__label'>
@@ -119,7 +108,7 @@ function PatientCard({
                                 <span>Nghề Nghiệp</span>
                             </div>
                             <div className='patient-card__desc'>
-                                {occupation}
+                                {patient?.occupation}
                             </div>
                         </div>
                         <div className='patient-card__row'>
@@ -128,14 +117,14 @@ function PatientCard({
                                 <span>Địa chỉ</span>
                             </div>
                             <div className='patient-card__desc'>
-                                {`${address}, ${ward}, ${district}, ${province}`}
+                                {`${patient?.address}, ${patient?.ward}, ${patient?.district}, ${patient?.province}`}
                             </div>
                         </div>
                     </>
                 )}
             </div>
 
-            {activePatientCard === id && (
+            {activePatientCard === patient?.id && (
                 <div className='patient-card__act'>
                     <Button
                         className='patient-card__btn patient-card__delete'

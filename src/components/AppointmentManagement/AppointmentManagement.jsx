@@ -9,7 +9,7 @@ import { Space, Table, Tag } from 'antd';
 import dayjs from 'dayjs';
 
 import Button from '../Button';
-import addAppointment from '../../assets/icons/add-appointment.svg';
+import addAppointment from '../../assets/icons/ticket.svg';
 import refreshIcon from '../../assets/icons/refresh.svg';
 import searchIcon from '../../assets/icons/search.svg';
 import { getAllAppointments } from '../../apis/appointment.api';
@@ -215,15 +215,14 @@ function AppointmentManagement() {
             onFilter: (value, record) => record?.request?.includes(value),
             render: (_, record) =>
                 record?.changeRequest && (
-                    <Space style={{ alignItems: 'flex-end', gap: 12 }}>
-                        <Button
-                            className='management__actions-btn '
-                            onClick={() =>
-                                handleModal('requestModal', record?.id)
-                            }
-                        >
-                            <ExportOutlined />
-                        </Button>
+                    <Space
+                        style={{
+                            alignItems: 'flex-end',
+                            justifyContent: 'center',
+                            width: '100%'
+                            // justifyContent: 'space-between'
+                        }}
+                    >
                         {record?.changeRequest?.status === 'pending' ? (
                             <span style={{ color: '#1d39c4' }}>
                                 Đang đợi...
@@ -233,6 +232,15 @@ function AppointmentManagement() {
                         ) : (
                             <span style={{ color: '#d4380d' }}>Từ chối</span>
                         )}
+                        <Button
+                            className='management__actions-btn '
+                            style={{ marginLeft: 'auto' }}
+                            onClick={() =>
+                                handleModal('requestModal', record?.id)
+                            }
+                        >
+                            <ExportOutlined />
+                        </Button>
                     </Space>
                 )
         }

@@ -433,7 +433,10 @@ function AppointmentModal({ id, modalClose, doctorSite }) {
                                                               .startOf('day')
                                                         : null
                                                 }
-                                                disabled={doneAppointment}
+                                                disabled={
+                                                    doneAppointment ||
+                                                    doctorSite
+                                                }
                                                 disabledDate={disabledDate}
                                                 placement='bottomRight'
                                                 className='patient-form__date'
@@ -473,7 +476,10 @@ function AppointmentModal({ id, modalClose, doctorSite }) {
                                                 onChange={(value) => {
                                                     field.onChange(value);
                                                 }}
-                                                disabled={doneAppointment}
+                                                disabled={
+                                                    doneAppointment ||
+                                                    doctorSite
+                                                }
                                                 optionFilterProp='label'
                                                 filterSort={(
                                                     optionA,

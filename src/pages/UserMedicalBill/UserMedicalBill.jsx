@@ -177,6 +177,12 @@ function UserMedicalBill() {
                             Bệnh viện.
                         </p>
                     )}
+
+                    {appointment?.note && (
+                        <p className='user-medical-bill-info__note'>
+                            (*) Ghi chú: {appointment?.note}
+                        </p>
+                    )}
                 </>
             ) : (
                 <>
