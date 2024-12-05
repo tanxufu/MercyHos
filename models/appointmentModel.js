@@ -130,6 +130,7 @@ appointmentSchema.pre(/^find/, function (next) {
 // });
 
 appointmentSchema.pre('save', async function (next) {
+    // check duplicated appointment
     const existingAppointment = await this.constructor.findOne({
         dateVisit: this.dateVisit,
         doctor: this.doctor,

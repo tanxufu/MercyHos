@@ -16,6 +16,7 @@ exports.getPatient = factory.getOne(Patient, {
 exports.getAllPatients = factory.getAll(Patient);
 exports.createPatient = factory.createOne(Patient);
 exports.updatePatient = factory.updateOne(Patient);
+exports.deletePatientAdmin = factory.deleteOne(Patient);
 
 exports.deletePatient = catchAsync(async (req, res, next) => {
     const doctor = await Patient.findByIdAndUpdate(req.params.id, {

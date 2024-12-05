@@ -33,6 +33,8 @@ exports.getAll = (Model) =>
 
         // console.log(filter);
 
+        const total = await Model.countDocuments(filter);
+
         const features = new APIFeatures(Model.find(filter), req.query)
             .filter()
             .sort()
@@ -51,7 +53,8 @@ exports.getAll = (Model) =>
             result: document.length,
             data: {
                 data: document
-            }
+            },
+            total: total
         });
     });
 
