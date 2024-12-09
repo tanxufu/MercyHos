@@ -33,13 +33,14 @@ exports.getAll = (Model) =>
 
         // console.log(filter);
 
-        const total = await Model.countDocuments(filter);
-
         const features = new APIFeatures(Model.find(filter), req.query)
             .filter()
             .sort()
-            .limitFields()
-            .paginate();
+            .limitFields();
+
+        const total = await features.query.clone().countDocuments();
+
+        features.paginate();
 
         const document = await features.query;
 
