@@ -130,7 +130,7 @@ function UserNotification() {
                 className='user-medical-bill__pagination'
                 align='end'
                 pageSize={6}
-                total={appointments?.length > 1 ? totalPages : 0}
+                total={appointments?.length >= 1 ? totalPages : 0}
                 onChange={handlePaginationChange}
                 hideOnSinglePage={true}
             />

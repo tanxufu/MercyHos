@@ -206,8 +206,6 @@ function AppointmentModal({ id, modalClose, doctorSite }) {
             }
         },
         onSuccess: () => {
-            // console.log('success');
-
             showNotification(
                 'success',
                 'Thành công!',
@@ -227,7 +225,6 @@ function AppointmentModal({ id, modalClose, doctorSite }) {
     });
 
     const onSubmit = handleSubmit((data) => {
-        console.log(data);
         let appointmentData = {};
 
         if (id) {
@@ -264,7 +261,6 @@ function AppointmentModal({ id, modalClose, doctorSite }) {
             };
         }
 
-        console.log(appointmentData);
         mutation.mutate(appointmentData);
     });
 
@@ -304,7 +300,9 @@ function AppointmentModal({ id, modalClose, doctorSite }) {
                                                     field.onChange(value);
                                                     handlePatientChange(value);
                                                 }}
-                                                disabled={doctorSite || id}
+                                                disabled={
+                                                    (doctorSite && id) || id
+                                                }
                                                 optionFilterProp='label'
                                                 filterSort={(
                                                     optionA,
@@ -359,7 +357,7 @@ function AppointmentModal({ id, modalClose, doctorSite }) {
                                                     handleDoctorChange(value);
                                                 }}
                                                 disabled={
-                                                    doctorSite ||
+                                                    (doctorSite && id) ||
                                                     doneAppointment
                                                 }
                                                 optionFilterProp='label'
@@ -435,7 +433,7 @@ function AppointmentModal({ id, modalClose, doctorSite }) {
                                                 }
                                                 disabled={
                                                     doneAppointment ||
-                                                    doctorSite
+                                                    (doctorSite && id)
                                                 }
                                                 disabledDate={disabledDate}
                                                 placement='bottomRight'
@@ -478,7 +476,7 @@ function AppointmentModal({ id, modalClose, doctorSite }) {
                                                 }}
                                                 disabled={
                                                     doneAppointment ||
-                                                    doctorSite
+                                                    (doctorSite && id)
                                                 }
                                                 optionFilterProp='label'
                                                 filterSort={(

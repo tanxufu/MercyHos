@@ -511,7 +511,7 @@ function UserMedicalBill() {
                         className='user-medical-bill__pagination'
                         align='end'
                         pageSize={3}
-                        total={appointments?.length > 1 ? totalPages : 0}
+                        total={appointments?.length > 0 ? totalPages : 0}
                         onChange={handlePaginationChange}
                         hideOnSinglePage={true}
                     />

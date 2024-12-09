@@ -201,7 +201,10 @@ function DoctorAppointmentManagement({ doctorId, hide = false, pageSize = 8 }) {
                         />
                     </div>
 
-                    <Button className='management__add'>
+                    <Button
+                        className='management__add'
+                        onClick={() => handleModal('appointmentModal')}
+                    >
                         <img src={addAppointment} alt='' />
                         Thêm lịch khám
                     </Button>
